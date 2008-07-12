@@ -1006,6 +1006,10 @@ extern char *format_s_Shield (int x);
 extern char *format_s_Beam (int x, int a);
 extern char *format_s_Missile (int x, int a);
 
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
+
 /* ------------------------------------------------------------------------ */
 
 #endif    /* _SPACE_H_ */

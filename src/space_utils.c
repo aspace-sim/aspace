@@ -122,17 +122,6 @@ double xyz2range (double xa, double ya, double za, double xb, double yb, double 
 	return sqrt(x * x + y * y + z * z);
 }
 
-#ifdef WIN32
-static int round (double x)
-{
-	if (x < 0.0) {
-		return (int) (x - 0.5);
-	} else {
-		return (int) (x + 0.5);
-	}
-}
-#endif
-
 double xyz2vis (double x, double y, double z)
 {
 	double px = x / PARSEC;
