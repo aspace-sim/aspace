@@ -630,7 +630,6 @@ extern double repair_mult[];
 
 /* from space_main.c */
 extern void initSpace();
-extern return_t crack_list(char *clist, int min_list, int max_list, int actual, array_t array);
 extern return_t convert_double (input, min, max, deflt, output);
 extern return_t convert_long (input, min, max, deflt, output);
 
