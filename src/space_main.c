@@ -15,6 +15,13 @@ struct pennmush_flag_info
 	const char* description;
 };
 
+struct pennmush_flag_info aspace_power_table[] =
+{
+     {"SDB-READ", '\0', NOTYPE, F_WIZARD | F_LOG, F_WIZARD, "Can use sdb(read)"},
+     {"SDB-OK", '\0', NOTYPE, F_WIZARD | F_LOG, F_WIZARD, "Can use sdb functions"},
+     {NULL,'0',0,0,0}
+};
+
 struct pennmush_flag_info aspace_flag_table[] = 
 {
 	{"SPACE-OBJECT", '+', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD, "General Space-Object flag"},
@@ -126,12 +133,7 @@ return_t crack_list(char *clist, int min_list, int max_list, int actual, array_t
 /* ------------------------------------------------------------------------ */
 
 return_t
-  convert_double (input, min, max, deflt, output)
-char *input;
-double min;
-double max;
-double deflt;
-double *output;
+  convert_double (char *input, double min, double max, double deflt, double *output)
 {
   if (is_number(input)) {
     *output = atof(input);
@@ -171,7 +173,7 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 	double a;
 	static char blank[] = "   \0";
 
-	if (!Wizard(executor)) {
+	if (!Wizard(executor) && !has_power_by_name(executor, "SDB-OK", NOTYPE) && !has_power_by_name(executor, "SDB-READ", NOTYPE)) {
 		/* Mordak Aspace v1.0.0p1 Removed Cursing from a major function call*/
 		safe_str("#-1 Permission Denied", buff, bp);
 		/* End Aspace v1.0.0p1 */
@@ -244,7 +246,7 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				case 54: safe_str(unparse_integer(do_set_pitch(parse_number(args[3]), enactor)), buff, bp); break;
 				case 55: safe_str(unparse_integer(do_set_roll(parse_number(args[3]), enactor)), buff, bp); break;
 				case 56: safe_str(unparse_integer(do_set_coords_engage(enactor)), buff, bp); break;
-
+	
 				case 58: safe_str(unparse_integer(do_set_parallel(parse_integer(args[3]), enactor)), buff, bp); break;
 				default: safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 			} break;
@@ -367,6 +369,10 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				safe_str("#-1 SDB OUT OF RANGE", buff, bp); return; }
 			do_space_db_put(x, args[2], args[3], args[4], args[5], args[6], buff, bp); break;
 		case 'r': /* read */
+	                if (!Wizard(executor) && !has_power_by_name(executor, "SDB-READ", NOTYPE))
+	                {
+			   safe_str("#-1 Permission Denied", buff, bp);
+			}
 			ship = parse_dbref(args[1]);
 			if (!SpaceObj(ship) || !GoodObject(ship)) {
 				safe_str("#-1 INVALID SPACE OBJECT", buff, bp); return; }
@@ -479,6 +485,255 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 }
 
 /* ------------------------------------------------------------------------ */
+
+FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,...]]]]]) */
+{
+	register int i, x, y, e;
+	double range, max_range, freq;
+	dbref zone;
+	char *tptr[10];
+	char const *tp, *tbuf;
+	static char ibuf1[20], ibuf2[20];
+	static char dbuf1[20], dbuf2[10], dbuf3[10];
+	static char nbuf1[20], nbuf2[20], nbuf3[20];
+	static char msg[BUFFER_LEN];
+	char *mp = msg;
+	ATTR *a;
+
+	if (!Wizard(Owner(executor))) {
+		safe_str("#-1 PERMISSION DENIED", buff, bp);
+	} else {
+		switch (args[0][0]) {
+			case 'a': /* add to CDB <void> */
+			 	if (Typeof(executor) != TYPE_THING) {
+			 		safe_str("#-1 INVALID TYPE", buff, bp);
+					return;
+				}
+				for (i = MIN_COMMS_OBJECTS; i <= MAX_COMMS_OBJECTS; ++i)
+					if (cdb[i].object == executor) {
+						safe_str("#-1 OBJECT ALREADY IN CDB", buff, bp);
+						return;
+					} else if (cdb[i].object == 0) {
+						if (i > max_comms_objects)
+							max_comms_objects = i;
+						cdb[i].object = executor;
+						cdb[i].lower = MIN_COMMS_FREQUENCY;
+						cdb[i].upper = MAX_COMMS_FREQUENCY;
+						safe_chr('1', buff, bp);
+						notify(executor, tprintf("#%d/%d: object added.", cdb[i].object, i));
+						return;
+					}
+				safe_str("#-1 OUT OF CDB SPACE", buff, bp);
+				break;
+			case 'b': /* bug fixing <void> */
+				for (i = MIN_COMMS_OBJECTS; i <= MAX_COMMS_OBJECTS; ++i)
+					if (cdb[i].object) {
+						if (!GoodObject(cdb[i].object) || !Hasprivs(Owner(cdb[i].object))) {
+							notify(executor, tprintf("#%d/%d: bad object deleted.", cdb[i].object, i));
+							cdb[i].object = 0;
+							cdb[i].lower = 0.0;
+							cdb[i].upper = 0.0;
+						} else {
+							max_comms_objects = i;
+							if (cdb[i].lower < MIN_COMMS_FREQUENCY) {
+								notify(executor, tprintf("#%d/%d: bad lower bandpass fixed.", cdb[i].object, i));
+								cdb[i].lower = MIN_COMMS_FREQUENCY;
+							}
+							if (cdb[i].upper > MAX_COMMS_FREQUENCY) {
+								notify(executor, tprintf("#%d/%d: bad upper bandpass fixed.", cdb[i].object, i));
+								cdb[i].upper = MAX_COMMS_FREQUENCY;
+							}
+							if (cdb[i].upper < cdb[i].lower) {
+								notify(executor, tprintf("#%d/%d: bad bandpass fixed.", cdb[i].object, i));
+								cdb[i].upper = cdb[i].lower;
+							}
+						}
+					}
+				safe_str(unparse_integer(max_comms_objects), buff, bp);
+				break;
+			case 'c': /* check the CDB <void> */
+				for (i = MIN_COMMS_OBJECTS; i <= max_comms_objects; ++i)
+					if (cdb[i].object == executor) {
+						safe_str(unparse_integer(i), buff, bp);
+						return;
+					}
+				safe_str("#-1 OBJECT NOT IN CDB", buff, bp);
+				break;
+			case 'd': /* delete from CDB <void> */
+				for (i = MIN_COMMS_OBJECTS; i <= max_comms_objects; ++i)
+					if (cdb[i].object == executor) {
+						notify(executor, tprintf("#%d/%d: object deleted.", cdb[i].object, i));
+						cdb[i].object = 0;
+						cdb[i].lower = 0.0;
+						cdb[i].upper = 0.0;
+						safe_chr('1', buff, bp);
+						return;
+					}
+				safe_str("#-1 OBJECT NOT IN CDB", buff, bp);
+				break;
+			case 'l': /* list <void> */
+				for (i = MIN_COMMS_OBJECTS; i <= max_comms_objects; ++i)
+					if (cdb[i].object == executor) {
+						safe_str(tprintf("#%d %d %f %f", cdb[i].object, i, cdb[i].lower, cdb[i].upper), buff, bp);
+						return;
+					}
+				safe_str("#-1 OBJECT NOT IN CDB", buff, bp);
+				break;
+			case 's': /* set bandpass <lower> <upper> */
+				for (i = MIN_COMMS_OBJECTS; i <= max_comms_objects; ++i)
+					if (cdb[i].object == executor) {
+						cdb[i].lower = parse_number(args[1]);
+						cdb[i].upper = parse_number(args[2]);
+						if (cdb[i].lower < MIN_COMMS_FREQUENCY)
+							cdb[i].lower = MIN_COMMS_FREQUENCY;
+						if (cdb[i].upper > MAX_COMMS_FREQUENCY)
+							cdb[i].upper = MAX_COMMS_FREQUENCY;
+						if (cdb[i].upper < cdb[i].lower)
+							cdb[i].upper = cdb[i].lower;
+						safe_str(tprintf("%f %f", cdb[i].lower, cdb[i].upper), buff, bp);
+						notify(executor, tprintf("#%d/%d: bandpass set to %f (lower) and %f (upper).", cdb[i].object, i, cdb[i].lower, cdb[i].upper));
+						return;
+					}
+				safe_str("#-1 OBJECT NOT IN CDB", buff, bp);
+				break;
+			case 't': /* transmit <freq> <max range> <code> <message> */
+				freq = parse_number(args[1]);
+				if (freq < MIN_COMMS_FREQUENCY || freq > MAX_COMMS_FREQUENCY) {
+					safe_str("#-1 BAD FREQUENCY VALUE", buff, bp);
+					return;
+				}
+				max_range = parse_number(args[2]);
+				if (max_range <= 0) {
+					safe_str("#-1 BAD RANGE VALUE", buff, bp);
+					return;
+				}
+				zone = Location(executor);
+				if (Typeof(zone) != TYPE_ROOM) {
+					zone = Location(zone);
+					if (Typeof(zone) != TYPE_ROOM) {
+						zone = Location(zone);
+						if (Typeof(zone) != TYPE_ROOM) {
+							safe_str("#-1 BAD LOCATION", buff, bp);
+							return;
+						} else
+							zone = Zone(zone);
+					} else
+						zone = Zone(zone);
+				} else
+					zone = Zone(zone);
+				if (!SpaceObj(zone)) {
+					safe_str("#-1 BAD SPACE OBJECT", buff, bp);
+					return;
+				}
+				a = atr_get(zone, SDB_ATTR_NAME);
+				if (a == NULL) {
+					safe_str("#-1 NO SDB NUMBER", buff, bp);
+					return;
+				}
+				x = parse_integer(atr_value(a));
+				if (!GoodSDB(x)) {
+					safe_str("#-1 BAD SDB NUMBER", buff, bp);
+					return;
+				}
+				/* save the stack */
+				for (i = 0; i < 10; i++)
+    				tptr[i] = global_eval_context.wenv[i];
+				snprintf(ibuf1, sizeof(ibuf1), "%d", x);
+				snprintf(dbuf1, sizeof(dbuf1), "#%d", enactor);
+				snprintf(dbuf2, sizeof(dbuf2), "#%d", executor);
+				snprintf(nbuf1, sizeof(nbuf1), "%g", freq);
+				snprintf(nbuf2, sizeof(nbuf2), "%.0f", max_range);
+    			global_eval_context.wenv[0] = nbuf1;
+    			global_eval_context.wenv[1] = dbuf1;
+				global_eval_context.wenv[2] = dbuf2;
+				global_eval_context.wenv[4] = ibuf1;
+				global_eval_context.wenv[6] = nbuf2;
+				global_eval_context.wenv[8] = args[3];
+				a = atr_get(executor, ENCRYPTION_ATTR_NAME);
+				if (a == NULL) {
+					safe_str(args[4], msg, &mp);
+					e = 0;
+				} else {
+					safe_str(space_crypt_code(atr_value(a), args[4], 1), msg, &mp);
+					e = 1;
+				}
+				*mp = '\0';
+				for (i = MIN_COMMS_OBJECTS; i <= max_comms_objects; ++i)
+					if (cdb[i].object) {
+						if (freq < cdb[i].lower || freq > cdb[i].upper)
+							continue;
+						zone = Location(cdb[i].object);
+						if (GoodObject(zone)) {
+							if (Typeof(zone) != TYPE_ROOM) {
+								zone = Location(zone);
+								if (GoodObject(zone)) {
+									if (Typeof(zone) != TYPE_ROOM) {
+										zone = Location(zone);
+										if (GoodObject(zone)) {
+											if (Typeof(zone) != TYPE_ROOM) {
+												continue;
+											} else
+												zone = Zone(zone);
+										} else
+											continue;
+									} else
+										zone = Zone(zone);
+								} else
+									continue;
+							} else
+								zone = Zone(zone);
+						} else
+							continue;
+						if (!SpaceObj(zone))
+							continue;
+						a = atr_get(zone, SDB_ATTR_NAME);
+						if (a == NULL)
+							continue;
+						y = parse_integer(atr_value(a));
+						if (!GoodSDB(y))
+							continue;
+						range = sdb2range(x, y);
+						if (range > max_range)
+							continue;
+						a = atr_get(cdb[i].object, EXECUTE_ATTR_NAME);
+						if (a == NULL)
+							continue;
+						tp = tbuf = safe_atr_value(a);
+						snprintf(dbuf3, sizeof(dbuf3), "#%d", cdb[i].object);
+						snprintf(ibuf2, sizeof(ibuf2), "%d", y);
+						snprintf(nbuf3, sizeof(nbuf3), "%.0f", range);
+						global_eval_context.wenv[3] = dbuf3;
+						global_eval_context.wenv[5] = ibuf2;
+						global_eval_context.wenv[7] = nbuf3;
+						if (e) {
+							a = atr_get(cdb[i].object, ENCRYPTION_ATTR_NAME);
+							if (a == NULL) {
+								global_eval_context.wenv[9] = msg;
+							} else
+								global_eval_context.wenv[9] = space_crypt_code(atr_value(a), msg, 0);
+						} else
+							global_eval_context.wenv[9] = msg;
+						process_expression(buff, bp, &tp, cdb[i].object, executor, enactor,
+						  PE_DEFAULT, PT_DEFAULT, pe_info);
+						free((Malloc_t) tbuf);
+					}
+				/* restore the stack */
+				for (i = 0; i < 10; i++)
+    				global_eval_context.wenv[i] = tptr[i];
+				safe_chr('1', buff, bp);
+				notify(executor, "transmission sent.");
+				break;
+			default:
+				safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp);
+				break;
+		}
+	}
+
+	return;
+}
+
+/* ------------------------------------------------------------------------ */
+
 
 /* ARGSUSED */
 FUNCTION(local_fun_deg2rad)
@@ -769,16 +1024,21 @@ FUNCTION(local_fun_xyz2sph)
 	return;
 }
 
-static int round3 (double x)
+FUNCTION(local_fun_coords)
 {
+   int sdb_num = parse_integer(args[0]);
+   int c_type = parse_integer(args[1]);
    
-   if (x < 0.0) 
-     {
-	
-	return (int) (x - 0.5);
-     }
-    else
-     return (int) (x + 0.5);
+   if (!GoodSDB(sdb_num))
+	safe_str("#-1 SDB OUT OF RANGE", buff, bp);
+   else {
+	if (c_type) 
+	    safe_str(tprintf("%f %f %f", sdb[sdb_num].coords.x / PARSEC, sdb[sdb_num].coords.y / PARSEC, 
+sdb[sdb_num].coords.z / PARSEC), buff, bp);
+	else
+	    safe_str(tprintf("%f %f %f", sdb[sdb_num].coords.x, sdb[sdb_num].coords.y, sdb[sdb_num].coords.z), buff, 
+bp);
+   }
 }
 
 /* ------------------------------------------------------------------------ */
@@ -804,9 +1064,8 @@ FUNCTION(local_fun_inrange)
 	r = parse_integer(args[2]);
 	s = args[3];
 
-	if (Hasprivs(executor) || 
-		has_power_by_name(executor, "SDB-OK", NOTYPE) || 
-		has_power_by_name(executor, "SDB-READ", NOTYPE))
+	if (Hasprivs(executor) || has_power_by_name(executor, "SDB-OK", NOTYPE) || has_power_by_name(executor, 
+"SDB-READ", NOTYPE))
 	{
 		if (GoodSDB(n))
 		{
@@ -841,15 +1100,22 @@ FUNCTION(local_fun_inrange)
 							{
 								if (args[4] != NULL)
 								{
-									if (parse_number(relay) == parse_number(args[4]))
+									if (parse_number(relay) == 
+parse_number(args[4]))
 									{
-										strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer));
+										strncat(buffer, 
+											tprintf("#%d|%d|%f", 
+sdb[i].object, i, sdb2range(n, i)), 
+											sizeof(buffer));
 										strncat(buffer, " ", sizeof(buffer));
 									}
 								}
 								else
 								{
-									strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer));
+									strncat(buffer, 
+										tprintf("#%d|%d|%f", sdb[i].object, 
+i, sdb2range(n, i)), 
+										sizeof(buffer));
 									strncat(buffer, " ", sizeof(buffer));
 								}
 							}
@@ -860,7 +1126,10 @@ FUNCTION(local_fun_inrange)
 					{
 						if(the_range <= q)
 						{
-							strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer));
+							strncat(buffer, 
+								tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, 
+i)), 
+								sizeof(buffer));
 							strncat(buffer, " ", sizeof(buffer));
 						}
 					}
@@ -901,7 +1170,9 @@ FUNCTION(local_fun_aspaceFlags)
 
 void setupAspaceFunctions()
 {
+	function_add((char *) "CDB", local_fun_cdb, 1, 5, FN_REG);
 	function_add("INRANGE", local_fun_inrange, 2, 5, FN_REG);
+	function_add("COORDS", local_fun_coords, 2, 2, FN_REG);
 	function_add("ASPACEFLAGS", local_fun_aspaceFlags, 0, 0, FN_REG);
 	function_add("DEG2RAD", local_fun_deg2rad, 1, 1, FN_REG);
 	function_add("LY2PC", local_fun_ly2pc, 1, 1, FN_REG);
@@ -930,6 +1201,17 @@ void setupAspaceFlags()
 		add_flag(pFlagInfo->name, pFlagInfo->letter, pFlagInfo->type, 
 			pFlagInfo->perms, pFlagInfo->negate_perms);
 	}
+}
+
+void setupAspacePowers()
+{
+   struct pennmush_flag_info* pFlagInfo;
+   
+   for (pFlagInfo = aspace_power_table; pFlagInfo->name; pFlagInfo++)
+     {
+	add_power(pFlagInfo->name, pFlagInfo->letter, pFlagInfo->type,
+		  pFlagInfo->perms, pFlagInfo->negate_perms);
+     }
 }
 
 void initSpace()
