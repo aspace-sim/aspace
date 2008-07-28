@@ -116,7 +116,10 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[1], -MAX_DOUBLE, MAX_DOUBLE, 0.0, &sdb[x].beam.out);
 	result += convert_double(array[2], -MAX_DOUBLE, MAX_DOUBLE, 0.0, &sdb[x].beam.freq);
 	result += convert_long(array[3], 0, MAX_LONG, 0, &sdb[x].beam.exist);
-	result += convert_long(array[4], 0, MAX_LONG, 0, &sdb[x].beam.banks);
+	if (sdb[x].beam.exist)
+		result += convert_long(array[4], 0, MAX_LONG, 0, &sdb[x].beam.banks);
+	else
+		sdb[x].beam.banks = 0;
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: unable to convert BEAM attribute.");
 		return 0;
@@ -398,7 +401,10 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[1], -MAX_DOUBLE, MAX_DOUBLE, 0.0, &sdb[x].missile.out);
 	result += convert_double(array[2], -MAX_DOUBLE, MAX_DOUBLE, 0.0, &sdb[x].missile.freq);
 	result += convert_long(array[3], 0, MAX_LONG, 0, &sdb[x].missile.exist);
-	result += convert_long(array[4], 0, MAX_LONG, 0, &sdb[x].missile.tubes);
+	if (sdb[x].missile.exist)
+		result += convert_long(array[4], 0, MAX_LONG, 0, &sdb[x].missile.tubes);
+	else
+		sdb[x].missile.tubes = 0;
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: unable to convert MISSILE attribute.");
 		return 0;
