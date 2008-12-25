@@ -895,6 +895,18 @@ int do_set_cloak (int active, dbref enactor)
 			notify(enactor, ansi_red("Cloaking device is already offline."));
 			return 0;
 		} else {
+			if (sdb[n].tech.cloak < 2.0) {
+				if ( ! sdb[n].sensor.srs_active) {
+					sdb[n].sensor.srs_active = 1;
+					do_console_notify(n, console_helm, console_science, console_tactical,
+						ansi_cmd(enactor, "Short-range sensors online"));
+				}
+				if ( ! sdb[n].sensor.ew_active) {
+					sdb[n].sensor.ew_active = 1;
+					do_console_notify(n, console_helm, console_science, console_tactical,
+						ansi_cmd(enactor, "Electronic warfare systems online"));
+				}
+			}
 			sdb[n].cloak.active = 0;
 			sdb[n].sensor.version = 1;
 			sdb[n].engine.version = 1;
@@ -2996,7 +3008,7 @@ void up_wormhole (int n1, int n2)
 	return;
 }
 
-int do_set_enter_wormhole (int contact, dbref enactor)
+int do_set_enter_wormhole (int contact, dbref executor, dbref enactor)
 {
 	//register int i;
 	int x, t;
