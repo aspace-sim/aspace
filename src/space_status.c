@@ -1011,11 +1011,8 @@ int do_fighter_status (dbref enactor)
 
 int do_scanner_report (int a, char *s, dbref enactor)
 {
-	static char buffer[BUFFER_LEN], desc[BUFFER_LEN];
-	char *dp = desc;
-	char const *sp, *sbuf;
+	static char buffer[BUFFER_LEN];
 	int x, f, y;
-	ATTR *d;
 
 	switch (s[0]) {
 		case 'b': case 'B': f = 1; break; /* beam */

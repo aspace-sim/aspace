@@ -36,8 +36,6 @@ void up_alloc_balance (void)
 
 void up_main_io (void)
 {
-	int main_balance = 0;
-
 	if (sdb[n].main.gw) {
 		if (sdb[n].main.out > sdb[n].main.in) {
 			sdb[n].main.out -= sdb[n].move.dt / 30.0;

@@ -23,18 +23,149 @@ struct aspace_empire_info aspace_empire_table[MAX_EMPIRE_NAME] =
 	{NULL,					0.0,				  0.0,					0.0,			   0.0}
 };
 
+/* New functions for dealing with the new border system */
+
+void
+free_borderinfo(void *ptr) {
+  spaceborder_info *si = (spaceborder_info *) ptr;
+  mush_free(si->data, "border_info");
+  mush_free(si->border_id, "spaceborder_id");
+  mush_free(si, "spaceborder_info");
+}
+
+char* addNewBorder(const char* name, double radius, double x, double y, double z)
+{
+	spaceborder_info *si = NULL;
+	struct aspace_border_info* newBorder;
+	
+	static char addBuffer[1000];
+	
+	newBorder = mush_malloc(sizeof(struct aspace_border_info), "border_info");
+	
+	newBorder->name = mush_strdup(name, "spaceborder_name");
+	newBorder->empire_id = 0;
+	newBorder->radius = radius;
+	newBorder->x = x;
+	newBorder->y = y;
+	newBorder->z = z;
+
+	si = mush_malloc(sizeof(spaceborder_info), "spaceborder_info");
+	si->data = newBorder;
+	si->border_id = mush_strdup(unparse_integer(border_id),"spaceborder_id");
+	
+	border_id++;
+	
+	addBuffer[0] = '\0';
+	
+	if( hash_add(&aspace_borders, si->border_id, si) )
+		strncat(addBuffer, "New Border Created.", sizeof(addBuffer) - 1);
+	else
+		strncat(addBuffer, "#-1 BORDER NOT CREATED.", sizeof(addBuffer) - 1);
+		
+	return addBuffer;
+}
+
+char *deleteBorder(const char* border)
+{
+	static char deleteBuffer[1000];
+	
+	deleteBuffer[0] = '\0';
+
+	if (!border || !*border) {
+		strncat(deleteBuffer, "#-1 BORDER NOT SUPPLIED", sizeof(deleteBuffer) - 1);
+		return deleteBuffer;
+	}
+	
+	hashdelete(border, &aspace_borders);
+	
+	return "";
+}
+
+char *list_borders()
+{
+        spaceborder_info *sbi = NULL;
+		static char listBuffer[1000];
+        
+		listBuffer[0] = '\0';
+		
+        for (sbi = (spaceborder_info *) hash_firstentry(&aspace_borders); sbi != NULL; sbi = (spaceborder_info *) hash_nextentry(&aspace_borders)) {
+			strncat(listBuffer, tprintf("(%d) %s - %f", parse_integer(sbi->border_id), sbi->data->name, sbi->data->radius), sizeof(listBuffer) - 1);
+			strncat(listBuffer, "|", sizeof(listBuffer) - 1);
+        }
+		
+		return listBuffer;
+}
+
+char *edit_border(const char* border_id, const char* setting, const char* new_value)
+{
+	spaceborder_info *si = NULL;
+	static char editBuffer[1000];
+
+	si = hashfind(border_id,&aspace_borders);
+	
+	editBuffer[0] = '\0';
+	
+	if (si != NULL)
+	{
+		switch (setting[0]) {
+			case 'n': /* Name */
+					si->data->name = mush_strdup(new_value, "spaceborder_name");
+				break;
+			case 'r': /* Radius */
+					si->data->radius = parse_number(new_value);
+				break;
+			case 'x': /* X Coordinate of Centre */
+					si->data->x = parse_number(new_value);
+				break;
+			case 'y': /* Y Coordinate of Centre */
+					si->data->y = parse_number(new_value);
+				break;
+			case 'z': /* Z Coordinate of Centre */
+					si->data->z = parse_number(new_value);
+				break;
+			default: strncat(editBuffer, "#-1 BORDER SETTING NOT FOUND.", sizeof(editBuffer) - 1);
+				break;
+		}
+	} else {
+		strncat(editBuffer, "#-1 BORDER NOT FOUND.", sizeof(editBuffer) - 1);
+	}
+	
+	return editBuffer;
+}
+
 /* Used for returning the empire name that the space-object is in */
+/*char *unparse_empire (int x)
+{
+	spaceborder_info *si;
+
+	si = hashfind(unparse_integer(sdb[x].move.empire),&aspace_borders);
+	
+	if (si != NULL)
+	{
+		return (char *) si->data->name;
+	} else {
+		return (char *) "#-1 BAD TERRITORY";
+	}
+}*/
+
 char *unparse_empire (int x)
 {
-	struct aspace_empire_info* aEmpInfo;
-	aEmpInfo = aspace_empire_table;
-
-	if (sdb[x].move.empire < 0 || sdb[x].move.empire >= MAX_EMPIRE_NAME) {
-		return (char *) "#-1 BAD TERRITORY";
-	} else {
-		return (char *) aEmpInfo[sdb[x].move.empire].name;
-		//return (char *) empire_name[sdb[x].move.empire];
-	}
+	double dx, dy, dz;
+	spaceborder_info *si;
+	char* empire_name;
+	
+	for (si = (spaceborder_info *) hash_firstentry(&aspace_borders); si != NULL; si = (spaceborder_info *) hash_nextentry(&aspace_borders)) {
+	
+		dx = (si->data->x - sdb[x].coords.x) / PARSEC;
+		dy = (si->data->y - sdb[x].coords.y) / PARSEC;
+		dz = (si->data->z - sdb[x].coords.z) / PARSEC;
+		if ((dx * dx + dy * dy + dz * dz) < (si->data->radius * si->data->radius)) {
+			empire_name = (char *) si->data->name;
+			break;
+		}
+    }
+	
+	return empire_name;
 }
 
 /* Alerts the ship when it has entered an empires space */
@@ -90,21 +221,20 @@ void alert_border_cross (int x, int a, int way)
 void up_empire (void)
 {
 	double dx, dy, dz;
-	register int empire = 0;
-	struct aspace_empire_info* aEmpInfo;
+	spaceborder_info *si;
 
-	for (aEmpInfo = aspace_empire_table; aEmpInfo->name ; aEmpInfo++)
+	for (si = (spaceborder_info *) hash_firstentry(&aspace_borders); si != NULL; si = (spaceborder_info *) hash_nextentry(&aspace_borders))
 	{
-		dx = (aEmpInfo->x - sdb[n].coords.x) / PARSEC;
-		dy = (aEmpInfo->y - sdb[n].coords.y) / PARSEC;
-		dz = (aEmpInfo->z - sdb[n].coords.z) / PARSEC;
-		if ((dx * dx + dy * dy + dz * dz) < (aEmpInfo->radius * aEmpInfo->radius)) {
-			if (sdb[n].move.empire != empire) {
+		dx = (si->data->x - sdb[n].coords.x) / PARSEC;
+		dy = (si->data->y - sdb[n].coords.y) / PARSEC;
+		dz = (si->data->z - sdb[n].coords.z) / PARSEC;
+		if ((dx * dx + dy * dy + dz * dz) < (si->data->radius * si->data->radius)) {
+			if (sdb[n].move.empire != parse_integer(si->border_id)) {
 				if (get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
 					alert_exit_empire(n);
 					alert_border_cross (n, sdb[n].move.empire, 0);
 				}
-				sdb[n].move.empire = empire;
+				sdb[n].move.empire = parse_integer(si->border_id);
 				if (get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
 					alert_enter_empire(n);
 					alert_border_cross (n, sdb[n].move.empire, 1);
@@ -112,7 +242,6 @@ void up_empire (void)
 			}
 			break;
 		}
-		empire++;
 	}
 	return;
 }
@@ -123,8 +252,8 @@ void up_empire (void)
 int do_border_report (dbref enactor)
 {
 	static char buffer[BUFFER_LEN];
-	struct aspace_empire_info* aEmpInfo;
-
+	spaceborder_info *sbi;
+	
 	double range;
 
 	if (error_on_console(enactor)) {
@@ -139,27 +268,27 @@ int do_border_report (dbref enactor)
 		  ANSI_HILITE, ANSI_BLUE, ANSI_YELLOW, ANSI_BLUE, ANSI_NORMAL,
 		  ANSI_CYAN, ANSI_WHITE, ANSI_BLUE, ANSI_WHITE);
 
-		for (aEmpInfo = aspace_empire_table; aEmpInfo->name; aEmpInfo++)
+		for (sbi = (spaceborder_info *) hash_firstentry(&aspace_borders); sbi != NULL; sbi = (spaceborder_info *) hash_nextentry(&aspace_borders))
 		{
-			range = xyz2range(sdb[n].coords.x, sdb[n].coords.y, sdb[n].coords.z, aEmpInfo->x, aEmpInfo->y, aEmpInfo->z) / PARSEC;
-			if (fabs(range - aEmpInfo->radius) >= 100.0)
+			range = xyz2range(sdb[n].coords.x, sdb[n].coords.y, sdb[n].coords.z, sbi->data->x, sbi->data->y, sbi->data->z) / PARSEC;
+			if (fabs(range - sbi->data->radius) >= 100.0)
 				continue;
-			strncat(buffer, tprintf("%-20.20s ", aEmpInfo->name), sizeof(buffer) - 1);
-			if (range > aEmpInfo->radius) {
+			strncat(buffer, tprintf("%-20.20s ", sbi->data->name), sizeof(buffer) - 1);
+			if (range > sbi->data->radius) {
 				strncat(buffer, tprintf("%3d %-3d %-7.7s Outside  ",
-				  (int) xy2bearing((aEmpInfo->x - sdb[n].coords.x), (aEmpInfo->y - sdb[n].coords.y)),
-				  (int) xyz2elevation((aEmpInfo->x - sdb[n].coords.x), (aEmpInfo->y - sdb[n].coords.y), (aEmpInfo->z - sdb[n].coords.z)),
-				  unparse_range((range - aEmpInfo->radius) * PARSEC)), sizeof(buffer) - 1);
+				  (int) xy2bearing((sbi->data->x - sdb[n].coords.x), (sbi->data->y - sdb[n].coords.y)),
+				  (int) xyz2elevation((sbi->data->x - sdb[n].coords.x), (sbi->data->y - sdb[n].coords.y), (sbi->data->z - sdb[n].coords.z)),
+				  unparse_range((range - sbi->data->radius) * PARSEC)), sizeof(buffer) - 1);
 			} else {
 				strncat(buffer, tprintf("%3d %-3d %-7.7s Inside   ",
-				  (int) xy2bearing((sdb[n].coords.x - aEmpInfo->x), (sdb[n].coords.y - aEmpInfo->y)),
-				  (int) xyz2elevation((sdb[n].coords.x - aEmpInfo->x), (sdb[n].coords.y - aEmpInfo->y), (sdb[n].coords.z - aEmpInfo->z)),
-				  unparse_range((aEmpInfo->radius - range) * PARSEC)), sizeof(buffer) - 1);
+				  (int) xy2bearing((sdb[n].coords.x - sbi->data->x), (sdb[n].coords.y - sbi->data->y)),
+				  (int) xyz2elevation((sdb[n].coords.x - sbi->data->x), (sdb[n].coords.y - sbi->data->y), (sdb[n].coords.z - sbi->data->z)),
+				  unparse_range((sbi->data->radius - range) * PARSEC)), sizeof(buffer) - 1);
 			}
 			strncat(buffer, tprintf("%10.3f %10.3f %10.3f\n",
-			  (aEmpInfo->x - sdb[n].coords.xo) / PARSEC,
-			  (aEmpInfo->y - sdb[n].coords.yo) / PARSEC,
-			  (aEmpInfo->z - sdb[n].coords.zo) / PARSEC), sizeof(buffer) - 1);
+			  (sbi->data->x - sdb[n].coords.xo) / PARSEC,
+			  (sbi->data->y - sdb[n].coords.yo) / PARSEC,
+			  (sbi->data->z - sdb[n].coords.zo) / PARSEC), sizeof(buffer) - 1);
 		}
 
 		strncat(buffer, format_l_line(), sizeof(buffer) - 1);

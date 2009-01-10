@@ -1164,7 +1164,7 @@ char *format_s_Beam (int x, int a)
 		    if(!(sdb[x].blist.load[i] + sdb[x].blist.recycle[i] > time(NULL)))
   				strncat(buffer, tprintf("RR "), sizeof(buffer) -1);
   			else
-				strncat(buffer, tprintf("%02d ", (sdb[x].blist.recycle[i] + sdb[x].blist.load[i] - time(NULL))), sizeof(buffer) - 1);
+				strncat(buffer, tprintf("%02ld ", (sdb[x].blist.recycle[i] + sdb[x].blist.load[i] - time(NULL))), sizeof(buffer) - 1);
   			/* END Aspace v1.0.0p1  */
   		if (fabs(sdb[x].move.out) < 1.0) {
   			range = sdb[x].blist.range[i] * 10.0;
@@ -1238,7 +1238,7 @@ char *format_s_Missile (int x, int a)
  			if(!(sdb[x].mlist.load[i] + sdb[x].mlist.recycle[i] > time(NULL)))
   				strncat(buffer, tprintf("RR "), sizeof(buffer) -1);
   			else
- 				strncat(buffer, tprintf("%02d ", (sdb[x].mlist.recycle[i] + sdb[x].mlist.load[i] - time(NULL))), sizeof(buffer) - 1);
+ 				strncat(buffer, tprintf("%02ld ", (sdb[x].mlist.recycle[i] + sdb[x].mlist.load[i] - time(NULL))), sizeof(buffer) - 1);
   			/* END Aspace v1.0.0p1  */
   
   		if (fabs(sdb[x].move.out) >= 1.0) {

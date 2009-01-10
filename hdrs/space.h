@@ -91,6 +91,8 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 
 #define SUCCESS				((return_t) 0)
 
+#define EMPTY_LIST 0
+
 #define CONVERSION_ERROR	501
 #define CANT_UPDATE			502
 
@@ -285,6 +287,24 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 
 struct aspace_empire_info {
 	const char* name;
+	double radius;
+	double x;
+	double y;
+	double z;
+};
+
+HASHTAB aspace_borders;
+
+int border_id;
+
+typedef struct _space_border_info_ {
+	char* border_id;
+	struct aspace_border_info* data;
+} spaceborder_info;
+
+struct aspace_border_info {
+	const char *name;
+	int empire_id;
 	double radius;
 	double x;
 	double y;
@@ -595,6 +615,13 @@ struct comms_database_t {
 
 /* ------------------------------------------------------------------------ */
 
+/* from space_border.c - not everything yet */
+extern void free_borderinfo(void *ptr);
+extern char* addNewBorder(const char* name, double radius, double x, double y, double z);
+extern char *deleteBorder(const char* border);
+extern char *list_borders();
+extern char *edit_border(const char* border_id, const char* setting, const char* new_value);
+
 /* from space_convert.c */
 extern int convert_weapons(dbref ship, dbref executor, char *weaponType, char *weaponCountAttr, char *newAttr, char *oldAttr);
 extern int do_space_db_convert (dbref ship, dbref executor);
@@ -630,8 +657,8 @@ extern double repair_mult[];
 
 /* from space_main.c */
 extern void initSpace();
-extern return_t convert_double (input, min, max, deflt, output);
-extern return_t convert_long (input, min, max, deflt, output);
+extern return_t convert_double (char *input, double deflt, double *output);
+extern return_t convert_long (char *input, long deflt, int *output);
 
 /* from space_log.c */
 extern void write_spacelog(dbref executor, dbref object, const char *fmt);

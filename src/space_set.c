@@ -10,7 +10,7 @@ struct db_stat_info current_state;
 int do_set_fire (int first, int last, int weapon, int mode, dbref enactor)
 {
 	static char buff_n[1000], buff_x[MAX_SENSOR_CONTACTS][1000];
-	register int a, b, i, j, k, x, flag = 0;
+	int a, b, i, j, k, x, flag = 0;
 	int is_b_active = 0, is_b_lock = 0, is_b_load = 0, is_b_arm = 0, is_b_arc = 0, is_b_range = 0;
 	int is_m_active = 0, is_m_lock = 0, is_m_load = 0, is_m_arm = 0, is_m_arc = 0, is_m_range = 0;
 	double range, prob, dmg_b[MAX_BEAM_BANKS], dmg_m[MAX_MISSILE_TUBES];
@@ -3008,9 +3008,8 @@ void up_wormhole (int n1, int n2)
 	return;
 }
 
-int do_set_enter_wormhole (int contact, dbref executor, dbref enactor)
+int do_set_enter_wormhole (int contact, dbref enactor)
 {
-	//register int i;
 	int x, t;
 	
 	if (error_on_console(enactor)) {

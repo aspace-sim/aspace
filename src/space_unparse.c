@@ -40,8 +40,6 @@ char *unparse_percent_6 (double a)
 
 char *unparse_damage (double a)
 {
-	static char buffer[50];
-
 	if (a == 1.0) {
 		return (char *) damage_name[0];
 	} else if (a > 0.95) {

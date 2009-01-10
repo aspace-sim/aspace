@@ -12,18 +12,25 @@ struct pennmush_flag_info
 	int type;
 	int perms;
 	int negate_perms;
-	const char* description;
 };
 
 struct pennmush_flag_info aspace_power_table[] =
 {
-     {"SDB-READ", '\0', NOTYPE, F_WIZARD | F_LOG, F_WIZARD, "Can use sdb(read)"},
-     {"SDB-OK", '\0', NOTYPE, F_WIZARD | F_LOG, F_WIZARD, "Can use sdb functions"},
+     {"SDB-READ", '\0', NOTYPE, F_WIZARD | F_LOG, F_WIZARD},
+     {"SDB-OK", '\0', NOTYPE, F_WIZARD | F_LOG, F_WIZARD},
      {NULL,'0',0,0,0}
 };
 
 struct pennmush_flag_info aspace_flag_table[] = 
 {
+<<<<<<< .mine
+	{"SPACE-OBJECT", '+', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD},
+	{"PLANET", 'P', TYPE_THING, F_WIZARD, F_WIZARD},
+	{"NEBULA", 'N', TYPE_THING, F_WIZARD, F_WIZARD},
+	{"ANOMALY", 'Y', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD},
+	{"BASE", 'B', TYPE_THING, F_WIZARD, F_WIZARD},
+	{"SHIP", 'p', TYPE_THING, F_WIZARD, F_WIZARD},
+=======
 	{"SPACE-OBJECT", '+', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD, "General Space-Object flag"},
 	// Extra, Unreferenced flags added by Ray.
 	//{"PLANET", 'P', TYPE_THING, F_WIZARD, F_WIZARD, "Tells Aspace that the object is a Planet"},
@@ -31,8 +38,12 @@ struct pennmush_flag_info aspace_flag_table[] =
 	//{"ANOMALY", 'Y', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD, "Tells Aspace that the object is an Anomaly"},
 	//{"BASE", 'B', TYPE_THING, F_WIZARD, F_WIZARD, "Tells Aspace that the object is a Base"},
 	//{"SHIP", 'p', TYPE_THING, F_WIZARD, F_WIZARD, "Tells Aspace that the object is a Ship"},
+>>>>>>> .r15
 	{NULL,'0',0,0,0}
 };
+
+/* border stuff */
+
 
 /* ------------------------------------------------------------------------ */
 
@@ -63,7 +74,7 @@ void lookup_space (const char *name, dbref *space)
 /* ------------------------------------------------------------------------ */
 
 return_t
-  convert_double (char *input, double min, double max, double deflt, double *output)
+  convert_double (char *input, double deflt, double *output)
 {
   if (is_number(input)) {
     *output = atof(input);
@@ -77,12 +88,7 @@ return_t
 /* ------------------------------------------------------------------------ */
 
 return_t
-  convert_long (input, min, max, deflt, output)
-char *input;
-long min;
-long max;
-long deflt;
-long *output;
+  convert_long (char *input, long deflt, int *output)
 {
   if (is_number(input)) {
     *output = atoi(input);
@@ -978,7 +984,7 @@ FUNCTION(local_fun_inrange)
 	register int i;
 	int r;
 	double q, the_range;
-	static char* buffer[1000];
+	static char buffer[1000];
 	char *relay, *s;
 	ATTR *a;
 
@@ -994,12 +1000,11 @@ FUNCTION(local_fun_inrange)
 	r = parse_integer(args[2]);
 	s = args[3];
 
-	if (Hasprivs(executor) || has_power_by_name(executor, "SDB-OK", NOTYPE) || has_power_by_name(executor, 
-"SDB-READ", NOTYPE))
+	if (Hasprivs(executor) || has_power_by_name(executor, "SDB-OK", NOTYPE) || has_power_by_name(executor, "SDB-READ", NOTYPE))
 	{
 		if (GoodSDB(n))
 		{
-			snprintf(buffer, sizeof(buffer), "\0");
+			buffer[0] = '\0';
 
 			switch (r)
 			{
@@ -1030,22 +1035,15 @@ FUNCTION(local_fun_inrange)
 							{
 								if (args[4] != NULL)
 								{
-									if (parse_number(relay) == 
-parse_number(args[4]))
+									if (parse_number(relay) == parse_number(args[4]))
 									{
-										strncat(buffer, 
-											tprintf("#%d|%d|%f", 
-sdb[i].object, i, sdb2range(n, i)), 
-											sizeof(buffer));
+										strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer) - 1);
 										strncat(buffer, " ", sizeof(buffer));
 									}
 								}
 								else
 								{
-									strncat(buffer, 
-										tprintf("#%d|%d|%f", sdb[i].object, 
-i, sdb2range(n, i)), 
-										sizeof(buffer));
+									strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer) - 1);
 									strncat(buffer, " ", sizeof(buffer));
 								}
 							}
@@ -1056,10 +1054,7 @@ i, sdb2range(n, i)),
 					{
 						if(the_range <= q)
 						{
-							strncat(buffer, 
-								tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, 
-i)), 
-								sizeof(buffer));
+							strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer) - 1);
 							strncat(buffer, " ", sizeof(buffer));
 						}
 					}
@@ -1078,32 +1073,53 @@ i)),
 	return;
 }
 
-/* ------------------------------------------------------------------------ */
-
-FUNCTION(local_fun_aspaceFlags)
+FUNCTION(local_fun_border)
 {
-	struct pennmush_flag_info* pFlagInfo;
-
-	safe_str("\n*********** Aspace Flag Listings *********\n", buff, bp);
-	safe_str("\n", buff, bp);
-
-	for (pFlagInfo = aspace_flag_table; pFlagInfo->name; pFlagInfo++)
-	{
-		safe_str(tprintf("Flag: %s (%c) - %s\n", pFlagInfo->name, 
-			pFlagInfo->letter, pFlagInfo->description), buff, bp);
+	if (!args[0] || !*args[0]) {
+		safe_str("#-1 NO FUNCTION NAME GIVEN", buff, bp);
+		return;
 	}
-
-	safe_str("\n********** End Aspace Flag Output ********\n", buff, bp);
+	
+	nargs -= 1;
+	
+	switch (args[0][0]) {
+		case 'a': 
+				if (nargs != 5) {
+					safe_str(tprintf("#-1 INVALID NUMBER OF ARGUMENTS %d REQUIRES 5", nargs), buff, bp);
+					return;
+				}
+				addNewBorder(args[1], parse_number(args[2]), parse_number(args[3]), parse_number(args[4]), parse_number(args[5])); 
+			break;
+		case 'd': 
+				if (nargs != 1) {
+					safe_str(tprintf("#-1 INVALID NUMBER OF ARGUMENTS %d REQUIRES 1", nargs), buff, bp);
+					return;
+				}
+				safe_str(deleteBorder(args[1]), buff, bp); 
+			break;
+		case 'e': 
+				if (nargs != 3) {
+					safe_str(tprintf("#-1 INVALID NUMBER OF ARGUMENTS %d REQUIRES 3", nargs), buff, bp);
+					return;
+				}
+				safe_str(edit_border(args[1], args[2], args[3]), buff, bp); 
+			break;
+		case 'l': safe_str(list_borders(), buff, bp); break;
+	}
+	
+	return;
 }
 
 /* ------------------------------------------------------------------------ */
 
+
+
 void setupAspaceFunctions()
 {
+	function_add("BORDER", local_fun_border, 1, 6, FN_REG);
 	function_add((char *) "CDB", local_fun_cdb, 1, 5, FN_REG);
 	function_add("INRANGE", local_fun_inrange, 2, 5, FN_REG);
 	function_add("COORDS", local_fun_coords, 2, 2, FN_REG);
-	function_add("ASPACEFLAGS", local_fun_aspaceFlags, 0, 0, FN_REG);
 	function_add("DEG2RAD", local_fun_deg2rad, 1, 1, FN_REG);
 	function_add("LY2PC", local_fun_ly2pc, 1, 1, FN_REG);
 	function_add("LY2SU", local_fun_ly2su, 1, 1, FN_REG);
@@ -1146,6 +1162,8 @@ void setupAspacePowers()
 
 void initSpace()
 {
+	hash_init(&aspace_borders, 256, free_borderinfo);
+	
 	(void) setupAspaceFunctions();
 	(void) setupAspaceFlags();
 	(void) dump_space(GOD);
