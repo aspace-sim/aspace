@@ -134,7 +134,7 @@ char *edit_border(const char* border_id, const char* setting, const char* new_va
 }
 
 /* Used for returning the empire name that the space-object is in */
-/*char *unparse_empire (int x)
+char *unparse_empire (int x)
 {
 	spaceborder_info *si;
 
@@ -146,9 +146,9 @@ char *edit_border(const char* border_id, const char* setting, const char* new_va
 	} else {
 		return (char *) "#-1 BAD TERRITORY";
 	}
-}*/
+}
 
-char *unparse_empire (int x)
+/*char *unparse_empire (int x)
 {
 	double dx, dy, dz;
 	spaceborder_info *si;
@@ -166,7 +166,7 @@ char *unparse_empire (int x)
     }
 	
 	return empire_name;
-}
+}*/
 
 /* Alerts the ship when it has entered an empires space */
 void alert_enter_empire (int x)
