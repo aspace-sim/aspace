@@ -1011,8 +1011,11 @@ int do_fighter_status (dbref enactor)
 
 int do_scanner_report (int a, char *s, dbref enactor)
 {
-	static char buffer[BUFFER_LEN];
+	static char buffer[BUFFER_LEN], desc[BUFFER_LEN];
+	char *dp = desc;
+	char const *sp, *sbuf;
 	int x, f, y;
+	ATTR *d;
 
 	switch (s[0]) {
 		case 'b': case 'B': f = 1; break; /* beam */
@@ -1154,7 +1157,7 @@ int do_scanner_report (int a, char *s, dbref enactor)
 				strncat(buffer, format_Operations_Power(x), sizeof(buffer) - 1);
 				strncat(buffer, "\n", sizeof(buffer) - 1);
 				break;
-			/*case 9:
+			case 9:
 				d = atr_get(sdb[x].object, "DESCRIBE");
 				if (d) {
 					sp = sbuf = safe_atr_value(d);
@@ -1167,7 +1170,7 @@ int do_scanner_report (int a, char *s, dbref enactor)
 				} else {
 					strncat(buffer, ansi_red("No visible features detected."), sizeof(buffer) - 1);
 					strncat(buffer, "\n", sizeof(buffer) - 1);
-				} break;*/
+				} break;
 		}
 		strncat(buffer, format_l_end(), sizeof(buffer) - 1);
 
