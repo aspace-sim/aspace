@@ -23,22 +23,12 @@ struct pennmush_flag_info aspace_power_table[] =
 
 struct pennmush_flag_info aspace_flag_table[] = 
 {
-<<<<<<< .mine
 	{"SPACE-OBJECT", '+', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD},
 	{"PLANET", 'P', TYPE_THING, F_WIZARD, F_WIZARD},
 	{"NEBULA", 'N', TYPE_THING, F_WIZARD, F_WIZARD},
 	{"ANOMALY", 'Y', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD},
 	{"BASE", 'B', TYPE_THING, F_WIZARD, F_WIZARD},
 	{"SHIP", 'p', TYPE_THING, F_WIZARD, F_WIZARD},
-=======
-	{"SPACE-OBJECT", '+', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD, "General Space-Object flag"},
-	// Extra, Unreferenced flags added by Ray.
-	//{"PLANET", 'P', TYPE_THING, F_WIZARD, F_WIZARD, "Tells Aspace that the object is a Planet"},
-	//{"NEBULA", 'N', TYPE_THING, F_WIZARD, F_WIZARD, "Tells Aspace that the object is a Nebula"},
-	//{"ANOMALY", 'Y', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD, "Tells Aspace that the object is an Anomaly"},
-	//{"BASE", 'B', TYPE_THING, F_WIZARD, F_WIZARD, "Tells Aspace that the object is a Base"},
-	//{"SHIP", 'p', TYPE_THING, F_WIZARD, F_WIZARD, "Tells Aspace that the object is a Ship"},
->>>>>>> .r15
 	{NULL,'0',0,0,0}
 };
 
