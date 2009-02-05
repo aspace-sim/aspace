@@ -632,7 +632,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: unable to crack MISSILE_LOAD attribute.");
 			return 0;
 		}
-		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
+		for (i = 0 ; i < sdb[x].missile.tubes ; i++) {
 			result += convert_long(array[i], 0, &sdb[x].mlist.load[i]);
 		}
 		if (result == 0) {
