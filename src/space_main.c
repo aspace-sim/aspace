@@ -80,7 +80,10 @@ return_t
 return_t
   convert_long (char *input, long deflt, int *output)
 {
-  if (is_number(input)) {
+   if (input==NULL) {
+    *output = deflt;
+    return CONVERSION_ERROR;;
+   } else if (is_number(input)) {
     *output = atoi(input);
     return SUCCESS;
   } else {
