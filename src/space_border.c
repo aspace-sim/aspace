@@ -33,7 +33,7 @@ free_borderinfo(void *ptr) {
   mush_free(si, "spaceborder_info");
 }
 
-char* addNewBorder(const char* name, double radius, double x, double y, double z)
+char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z)
 {
 	spaceborder_info *si = NULL;
 	struct aspace_border_info* newBorder;
@@ -51,9 +51,7 @@ char* addNewBorder(const char* name, double radius, double x, double y, double z
 
 	si = mush_malloc(sizeof(spaceborder_info), "spaceborder_info");
 	si->data = newBorder;
-	si->border_id = mush_strdup(unparse_integer(border_id),"spaceborder_id");
-	
-	border_id++;
+	si->border_id = mush_strdup(unparse_integer(border_number),"spaceborder_id");
 	
 	addBuffer[0] = '\0';
 	

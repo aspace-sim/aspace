@@ -1077,11 +1077,11 @@ FUNCTION(local_fun_border)
 	
 	switch (args[0][0]) {
 		case 'a': 
-				if (nargs != 5) {
+				if (nargs != 6) {
 					safe_str(tprintf("#-1 INVALID NUMBER OF ARGUMENTS %d REQUIRES 5", nargs), buff, bp);
 					return;
 				}
-				addNewBorder(args[1], parse_number(args[2]), parse_number(args[3]), parse_number(args[4]), parse_number(args[5])); 
+				addNewBorder(parse_integer(args[1]), args[2], parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6])); 
 			break;
 		case 'd': 
 				if (nargs != 1) {
@@ -1109,7 +1109,7 @@ FUNCTION(local_fun_border)
 
 void setupAspaceFunctions()
 {
-	function_add("BORDER", local_fun_border, 1, 6, FN_REG);
+	function_add("BORDER", local_fun_border, 1, 7, FN_REG);
 	function_add((char *) "CDB", local_fun_cdb, 1, 5, FN_REG);
 	function_add("INRANGE", local_fun_inrange, 2, 5, FN_REG);
 	function_add("COORDS", local_fun_coords, 2, 2, FN_REG);
