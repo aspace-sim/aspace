@@ -79,16 +79,35 @@ char *deleteBorder(const char* border)
 	return "";
 }
 
+char *border_line_bot (spaceborder_info *sbi)
+{
+	static char buffer[1000];
+
+	snprintf(buffer, sizeof(buffer), "%d|%s|%.1f|%.1f|%.1f|%.1f",
+	  parse_integer(sbi->border_id),
+	  sbi->data->name,
+	  sbi->data->radius,
+	  sbi->data->x,
+	  sbi->data->y,
+	  sbi->data->z);
+
+	return (buffer);
+}
+
 char *list_borders()
 {
         spaceborder_info *sbi = NULL;
-		static char listBuffer[1000];
+		static char listBuffer[BUFFER_LEN];
+		int first = 0;
         
 		listBuffer[0] = '\0';
 		
         for (sbi = (spaceborder_info *) hash_firstentry(&aspace_borders); sbi != NULL; sbi = (spaceborder_info *) hash_nextentry(&aspace_borders)) {
-			strncat(listBuffer, tprintf("(%d) %s - %f", parse_integer(sbi->border_id), sbi->data->name, sbi->data->radius), sizeof(listBuffer) - 1);
-			strncat(listBuffer, "|", sizeof(listBuffer) - 1);
+			if (first)
+				strncat(listBuffer, "~", sizeof(listBuffer) - 1);
+			
+			strncat(listBuffer, border_line_bot(sbi), sizeof(listBuffer) - 1);
+			++first;
         }
 		
 		return listBuffer;
