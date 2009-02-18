@@ -4,24 +4,6 @@
 #include "space.h"
 
 /* ------------------------------------------------------------------------ */
-/* Border table: Format: Empire Name, Radius, X (SU), Y (SU), Z(SU)
- *
- * Please Note: The NULL at the bottom IS REQUIRED
- */
-struct aspace_empire_info aspace_empire_table[MAX_EMPIRE_NAME] =
-{
-	{"Terran",				7.0,	-28307977141382.1,					0.0,	-37716017559.8},
-	{"Vulcan",			   10.0,	-28342323618634.8,		  57217386371.0,	-26203421510.1},
-	{"Andorian",			4.0,	-28150809068534.8,		 167825941181.7,	 -3671934950.1},
-	{"Nausicaan",			3.0,	-28075120923666.4,		-402515040712.8,	 56893392110.6},
-	{"Tellarite",			3.0,	-28286809516375.1,		-140079689860.5,	 50324022775.4},
-	{"Klingon",			   20.0,	-28213327618136.5,		 794517239093.5,	-71649016423.1},
-	{"Suliban",				5.0,	-27988981649658.3,		  83596690479.6,	 52672209747.7},
-	{"Orion",				5.0,	-28240515365066.0,		 579934297659.4,	-71855755617.8},
-	{"Romulan",			   15.0,	-28867086322252.6,		 718341560004.9,	 -5554187319.6},
-	{"(Unclaimed)",		15000.0,				  0.0,					0.0,			   0.0},
-	{NULL,					0.0,				  0.0,					0.0,			   0.0}
-};
 
 /* New functions for dealing with the new border system */
 
@@ -35,12 +17,11 @@ free_borderinfo(void *ptr) {
 
 char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z)
 {
-	spaceborder_info *si = NULL;
-	struct aspace_border_info* newBorder;
+	aspace_borders* newBorder;
 	
 	static char addBuffer[1000];
 	
-	newBorder = mush_malloc(sizeof(struct aspace_border_info), "border_info");
+	newBorder = mush_malloc(sizeof(aspace_borders), "border_info");
 	
 	newBorder->name = mush_strdup(name, "spaceborder_name");
 	newBorder->empire_id = 0;
@@ -48,14 +29,10 @@ char* addNewBorder(int border_number, const char* name, double radius, double x,
 	newBorder->x = x;
 	newBorder->y = y;
 	newBorder->z = z;
-
-	si = mush_malloc(sizeof(spaceborder_info), "spaceborder_info");
-	si->data = newBorder;
-	si->border_id = mush_strdup(unparse_integer(border_number),"spaceborder_id");
 	
 	addBuffer[0] = '\0';
 	
-	if( hash_add(&aspace_borders, si->border_id, si) )
+	if( im_insert(border_map, border_number, newBorder ))
 		strncat(addBuffer, "New Border Created.", sizeof(addBuffer) - 1);
 	else
 		strncat(addBuffer, "#-1 BORDER NOT CREATED.", sizeof(addBuffer) - 1);
@@ -63,62 +40,70 @@ char* addNewBorder(int border_number, const char* name, double radius, double x,
 	return addBuffer;
 }
 
-char *deleteBorder(const char* border)
+char *deleteBorder(int border)
 {
 	static char deleteBuffer[1000];
+	aspace_borders *theBorder;
 	
 	deleteBuffer[0] = '\0';
 
-	if (!border || !*border) {
+	if (!border) {
 		strncat(deleteBuffer, "#-1 BORDER NOT SUPPLIED", sizeof(deleteBuffer) - 1);
 		return deleteBuffer;
 	}
 	
-	hashdelete(border, &aspace_borders);
+	theBorder = im_find(border_map, border);
+	
+	if (theBorder != NULL)
+		free_borderinfo(theBorder);
+		
+	im_delete(border_map, border);
 	
 	return "";
 }
 
-char *border_line_bot (spaceborder_info *sbi)
+char *border_line_bot (int border_id, aspace_borders *sbi)
 {
 	static char buffer[1000];
 
-	snprintf(buffer, sizeof(buffer), "%d|%s|%.1f|%.1f|%.1f|%.1f",
-	  parse_integer(sbi->border_id),
-	  sbi->data->name,
-	  sbi->data->radius,
-	  sbi->data->x,
-	  sbi->data->y,
-	  sbi->data->z);
-
+	if (sbi != NULL) {
+		snprintf(buffer, sizeof(buffer), "%d|%s|%.1f|%.1f|%.1f|%.1f",
+			border_id,
+			sbi->name,
+			sbi->radius,
+			sbi->x,
+			sbi->y,
+			sbi->z);
+	}
+	
 	return (buffer);
 }
 
 char *list_borders()
 {
-        spaceborder_info *sbi = NULL;
 		static char listBuffer[BUFFER_LEN];
 		int first = 0;
+		int index = 0;
         
 		listBuffer[0] = '\0';
 		
-        for (sbi = (spaceborder_info *) hash_firstentry(&aspace_borders); sbi != NULL; sbi = (spaceborder_info *) hash_nextentry(&aspace_borders)) {
+        for (index = 1; index <= im_count(border_map); index++) {
 			if (first)
 				strncat(listBuffer, "~", sizeof(listBuffer) - 1);
 			
-			strncat(listBuffer, border_line_bot(sbi), sizeof(listBuffer) - 1);
+			strncat(listBuffer, border_line_bot(index, im_find(border_map, index)), sizeof(listBuffer) - 1);
 			++first;
         }
 		
 		return listBuffer;
 }
 
-char *edit_border(const char* border_id, const char* setting, const char* new_value)
+char *edit_border(int border_id, const char* setting, const char* new_value)
 {
-	spaceborder_info *si = NULL;
+	aspace_borders *si = NULL;
 	static char editBuffer[1000];
 
-	si = hashfind(border_id,&aspace_borders);
+	si = im_find(border_map, border_id);
 	
 	editBuffer[0] = '\0';
 	
@@ -126,19 +111,19 @@ char *edit_border(const char* border_id, const char* setting, const char* new_va
 	{
 		switch (setting[0]) {
 			case 'n': /* Name */
-					si->data->name = mush_strdup(new_value, "spaceborder_name");
+					si->name = mush_strdup(new_value, "spaceborder_name");
 				break;
 			case 'r': /* Radius */
-					si->data->radius = parse_number(new_value);
+					si->radius = parse_number(new_value);
 				break;
 			case 'x': /* X Coordinate of Centre */
-					si->data->x = parse_number(new_value);
+					si->x = parse_number(new_value);
 				break;
 			case 'y': /* Y Coordinate of Centre */
-					si->data->y = parse_number(new_value);
+					si->y = parse_number(new_value);
 				break;
 			case 'z': /* Z Coordinate of Centre */
-					si->data->z = parse_number(new_value);
+					si->z = parse_number(new_value);
 				break;
 			default: strncat(editBuffer, "#-1 BORDER SETTING NOT FOUND.", sizeof(editBuffer) - 1);
 				break;
@@ -153,37 +138,17 @@ char *edit_border(const char* border_id, const char* setting, const char* new_va
 /* Used for returning the empire name that the space-object is in */
 char *unparse_empire (int x)
 {
-	spaceborder_info *si;
+	aspace_borders *si;
 
-	si = hashfind(unparse_integer(sdb[x].move.empire),&aspace_borders);
+	si = im_find(border_map, sdb[x].move.empire);
 	
 	if (si != NULL)
 	{
-		return (char *) si->data->name;
+		return (char *) si->name;
 	} else {
 		return (char *) "#-1 BAD TERRITORY";
 	}
 }
-
-/*char *unparse_empire (int x)
-{
-	double dx, dy, dz;
-	spaceborder_info *si;
-	char* empire_name;
-	
-	for (si = (spaceborder_info *) hash_firstentry(&aspace_borders); si != NULL; si = (spaceborder_info *) hash_nextentry(&aspace_borders)) {
-	
-		dx = (si->data->x - sdb[x].coords.x) / PARSEC;
-		dy = (si->data->y - sdb[x].coords.y) / PARSEC;
-		dz = (si->data->z - sdb[x].coords.z) / PARSEC;
-		if ((dx * dx + dy * dy + dz * dz) < (si->data->radius * si->data->radius)) {
-			empire_name = (char *) si->data->name;
-			break;
-		}
-    }
-	
-	return empire_name;
-}*/
 
 /* Alerts the ship when it has entered an empires space */
 void alert_enter_empire (int x)
@@ -238,26 +203,32 @@ void alert_border_cross (int x, int a, int way)
 void up_empire (void)
 {
 	double dx, dy, dz;
-	spaceborder_info *si;
+	int index = 0;
+	aspace_borders *si = NULL;
 
-	for (si = (spaceborder_info *) hash_firstentry(&aspace_borders); si != NULL; si = (spaceborder_info *) hash_nextentry(&aspace_borders))
+	for (index = 1; index <= im_count(border_map); index++)
 	{
-		dx = (si->data->x - sdb[n].coords.x) / PARSEC;
-		dy = (si->data->y - sdb[n].coords.y) / PARSEC;
-		dz = (si->data->z - sdb[n].coords.z) / PARSEC;
-		if ((dx * dx + dy * dy + dz * dz) < (si->data->radius * si->data->radius)) {
-			if (sdb[n].move.empire != parse_integer(si->border_id)) {
-				if (get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
-					alert_exit_empire(n);
-					alert_border_cross (n, sdb[n].move.empire, 0);
+		si = im_find(border_map, index);
+		
+		if (si != NULL) {
+			dx = (si->x - sdb[n].coords.x) / PARSEC;
+			dy = (si->y - sdb[n].coords.y) / PARSEC;
+			dz = (si->z - sdb[n].coords.z) / PARSEC;
+			if ((dx * dx + dy * dy + dz * dz) < (si->radius * si->radius)) {
+	
+				if (sdb[n].move.empire != index) {
+					if (get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
+						alert_exit_empire(n);
+						alert_border_cross (n, sdb[n].move.empire, 0);
+					}
+					sdb[n].move.empire = index;
+					if (get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
+						alert_enter_empire(n);
+						alert_border_cross (n, sdb[n].move.empire, 1);
+					}
 				}
-				sdb[n].move.empire = parse_integer(si->border_id);
-				if (get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
-					alert_enter_empire(n);
-					alert_border_cross (n, sdb[n].move.empire, 1);
-				}
+				break;
 			}
-			break;
 		}
 	}
 	return;
@@ -269,7 +240,8 @@ void up_empire (void)
 int do_border_report (dbref enactor)
 {
 	static char buffer[BUFFER_LEN];
-	spaceborder_info *sbi;
+	int index = 0;
+	aspace_borders *sbi;
 	
 	double range;
 
@@ -285,27 +257,31 @@ int do_border_report (dbref enactor)
 		  ANSI_HILITE, ANSI_BLUE, ANSI_YELLOW, ANSI_BLUE, ANSI_NORMAL,
 		  ANSI_CYAN, ANSI_WHITE, ANSI_BLUE, ANSI_WHITE);
 
-		for (sbi = (spaceborder_info *) hash_firstentry(&aspace_borders); sbi != NULL; sbi = (spaceborder_info *) hash_nextentry(&aspace_borders))
+		for (index = 1; index <= im_count(border_map); index++)
 		{
-			range = xyz2range(sdb[n].coords.x, sdb[n].coords.y, sdb[n].coords.z, sbi->data->x, sbi->data->y, sbi->data->z) / PARSEC;
-			if (fabs(range - sbi->data->radius) >= 100.0)
-				continue;
-			strncat(buffer, tprintf("%-20.20s ", sbi->data->name), sizeof(buffer) - 1);
-			if (range > sbi->data->radius) {
-				strncat(buffer, tprintf("%3d %-3d %-7.7s Outside  ",
-				  (int) xy2bearing((sbi->data->x - sdb[n].coords.x), (sbi->data->y - sdb[n].coords.y)),
-				  (int) xyz2elevation((sbi->data->x - sdb[n].coords.x), (sbi->data->y - sdb[n].coords.y), (sbi->data->z - sdb[n].coords.z)),
-				  unparse_range((range - sbi->data->radius) * PARSEC)), sizeof(buffer) - 1);
-			} else {
-				strncat(buffer, tprintf("%3d %-3d %-7.7s Inside   ",
-				  (int) xy2bearing((sdb[n].coords.x - sbi->data->x), (sdb[n].coords.y - sbi->data->y)),
-				  (int) xyz2elevation((sdb[n].coords.x - sbi->data->x), (sdb[n].coords.y - sbi->data->y), (sdb[n].coords.z - sbi->data->z)),
-				  unparse_range((sbi->data->radius - range) * PARSEC)), sizeof(buffer) - 1);
+			sbi = im_find(border_map, index);
+		
+			if (sbi != NULL) {
+				range = xyz2range(sdb[n].coords.x, sdb[n].coords.y, sdb[n].coords.z, sbi->x, sbi->y, sbi->z) / PARSEC;
+				if (fabs(range - sbi->radius) >= 100.0)
+					continue;
+				strncat(buffer, tprintf("%-20.20s ", sbi->name), sizeof(buffer) - 1);
+				if (range > sbi->radius) {
+					strncat(buffer, tprintf("%3d %-3d %-7.7s Outside  ",
+					  (int) xy2bearing((sbi->x - sdb[n].coords.x), (sbi->y - sdb[n].coords.y)),
+					  (int) xyz2elevation((sbi->x - sdb[n].coords.x), (sbi->y - sdb[n].coords.y), (sbi->z - sdb[n].coords.z)),
+					  unparse_range((range - sbi->radius) * PARSEC)), sizeof(buffer) - 1);
+				} else {
+					strncat(buffer, tprintf("%3d %-3d %-7.7s Inside   ",
+					  (int) xy2bearing((sdb[n].coords.x - sbi->x), (sdb[n].coords.y - sbi->y)),
+					  (int) xyz2elevation((sdb[n].coords.x - sbi->x), (sdb[n].coords.y - sbi->y), (sdb[n].coords.z - sbi->z)),
+					  unparse_range((sbi->radius - range) * PARSEC)), sizeof(buffer) - 1);
+				}
+				strncat(buffer, tprintf("%10.3f %10.3f %10.3f\n",
+				  (sbi->x - sdb[n].coords.xo) / PARSEC,
+				  (sbi->y - sdb[n].coords.yo) / PARSEC,
+				  (sbi->z - sdb[n].coords.zo) / PARSEC), sizeof(buffer) - 1);
 			}
-			strncat(buffer, tprintf("%10.3f %10.3f %10.3f\n",
-			  (sbi->data->x - sdb[n].coords.xo) / PARSEC,
-			  (sbi->data->y - sdb[n].coords.yo) / PARSEC,
-			  (sbi->data->z - sdb[n].coords.zo) / PARSEC), sizeof(buffer) - 1);
 		}
 
 		strncat(buffer, format_l_line(), sizeof(buffer) - 1);

@@ -1154,9 +1154,10 @@ void setupAspacePowers()
 }
 
 void initSpace()
-{
-	hash_init(&aspace_borders, 256, free_borderinfo);
-	
+{	
+	border_map = NULL;
+	border_map = im_new();
+
 	(void) setupAspaceFunctions();
 	(void) setupAspaceFlags();
 	(void) dump_space(GOD);

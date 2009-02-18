@@ -112,52 +112,6 @@ void damage_structure (int x, double damage)
 }
 
 /* ------------------------------------------------------------------------ */
-void do_selfdestruct(int x, int silent, int destruction) {
-
-
-	//we only self destruct if the ship is !destroyed
-	if (sdb[x].status.crippled !=1 && sdb[x].status.crippled !=2) {
-		//Only Zemit if silent eq 0 else its audible
-		if (silent == 1) {
-		do_ship_notify(x, tprintf("%s%sWoman voice says \"Self Destruct Sequence Started, Detonation in %i Seconds. Audible Alerts\"%s%s",
-		  ANSI_HILITE, ANSI_RED, destruction, ANSI_WHITE, ANSI_NORMAL));
-		}
-		else if (silent == 0) {
-		do_ship_notify(x, tprintf("%s%sWoman voice says \"Self Destruct Sequence Started, Detonation in %i Seconds. No Audible Alerts will be given.\"%s%s",
-		  ANSI_HILITE, ANSI_RED, destruction, ANSI_WHITE, ANSI_NORMAL));
-		}
-		//Lets let all the other ships in the area know
-		do_space_notify_one(x, console_helm, console_tactical, console_science,
-			"has started a self destruct sequence");
-		//Lets set the timer of death!
-		atr_add(sdb[x].object, "SELFDESTRUCTTIMER", tprintf("%i",destruction), GOD,(AF_MDARK + AF_WIZARD + AF_NOPROG));
-		atr_add(sdb[x].object, "SELFDESTRUCTSILENT", tprintf("%i",silent), GOD,(AF_MDARK + AF_WIZARD + AF_NOPROG));
-	}
-
-return;
-
-}	
-/* ------------------------------------------------------------------------ */
-void do_abortselfdestruct(int x) {
-
-
-	//we only self destruct if the ship is !destroyed
-	if (sdb[x].status.active==1) {
-		//Only Zemit if silent eq 0 else its audible
-		do_ship_notify(x, tprintf("%s%sWoman voice says \"Self Destruct Sequence Aborted. Have a Nice Day\"%s%s",
-		  ANSI_HILITE, ANSI_RED, ANSI_WHITE, ANSI_NORMAL));
-		//Lets let all the other ships in the area know
-		do_space_notify_one(x, console_helm, console_tactical, console_science,
-			"has aborted a self destruct sequence");
-		//Lets set the timer of death!
-		atr_add(sdb[x].object, "SELFDESTRUCTTIMER", tprintf("0"), GOD,(AF_MDARK + AF_WIZARD + AF_NOPROG));
-	}
-
-return;
-
-}
-
-/* ------------------------------------------------------------------------ */
 
 void damage_aux (int x, double damage)
 {
@@ -1001,28 +955,3 @@ int debug_space (int x)
 
 	return bug;
 }
-
-/* ------------------------------------------------------------------------ */
-
-/*int get_selfdestruct_timer(int x) 
-{
-	int px;
-	ATTR *a;
-	char *q;
-
-
-	
-				a = atr_get(sdb[n].object, "SELFDESTRUCTTIMER");
-				if (a != NULL) {
-					//selfdestructsilent
-					q = safe_uncompress(a->value);
-					px=atoi(q);
-
-		//Lets free up some ram
-		free((Malloc_t) q);
-
-				}
-					//tprintf("%i X%f Y %f Z%f",i,sdb[i].coords.x,sdb[i].coords.y,sdb[i].coords.z));
-					
-	return px;
-}*/

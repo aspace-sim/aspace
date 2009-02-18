@@ -45,6 +45,7 @@
 #include "function.h"
 #include "mushdb.h"
 #include "command.h"
+#include "intmap.h"
 
 /* ------------------------------------------------------------------------ */
 
@@ -293,23 +294,21 @@ struct aspace_empire_info {
 	double z;
 };
 
-HASHTAB aspace_borders;
-
-int border_id;
+intmap *border_map;
 
 typedef struct _space_border_info_ {
 	char* border_id;
 	struct aspace_border_info* data;
 } spaceborder_info;
 
-struct aspace_border_info {
+typedef struct _aspace_border_info {
 	const char *name;
 	int empire_id;
 	double radius;
 	double x;
 	double y;
 	double z;
-};
+} aspace_borders;
 
 struct allocate_t {
 	 int    version;
@@ -618,9 +617,10 @@ struct comms_database_t {
 /* from space_border.c - not everything yet */
 extern void free_borderinfo(void *ptr);
 extern char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z);
-extern char *deleteBorder(const char* border);
+extern char *deleteBorder(int border);
 extern char *list_borders();
-extern char *edit_border(const char* border_id, const char* setting, const char* new_value);
+extern char *edit_border(int border_id, const char* setting, const char* new_value);
+extern int get_empire_id (int ship);
 
 /* from space_convert.c */
 extern int convert_weapons(dbref ship, dbref executor, char *weaponType, char *weaponCountAttr, char *newAttr, char *oldAttr);
