@@ -1088,14 +1088,14 @@ FUNCTION(local_fun_border)
 					safe_str(tprintf("#-1 INVALID NUMBER OF ARGUMENTS %d REQUIRES 1", nargs), buff, bp);
 					return;
 				}
-				safe_str(deleteBorder(args[1]), buff, bp); 
+				safe_str(deleteBorder(parse_integer(args[1])), buff, bp); 
 			break;
 		case 'e': 
 				if (nargs != 3) {
 					safe_str(tprintf("#-1 INVALID NUMBER OF ARGUMENTS %d REQUIRES 3", nargs), buff, bp);
 					return;
 				}
-				safe_str(edit_border(args[1], args[2], args[3]), buff, bp); 
+				safe_str(edit_border(parse_integer(args[1]), args[2], args[3]), buff, bp); 
 			break;
 		case 'l': safe_str(list_borders(), buff, bp); break;
 	}
