@@ -46,6 +46,7 @@
 #include "mushdb.h"
 #include "command.h"
 #include "intmap.h"
+#include "version.h"
 
 /* ------------------------------------------------------------------------ */
 
@@ -62,9 +63,18 @@
 		* writing to a channel (falling back on the logfile if the channel doesn't exist)
 		* write to both the channel and the logfile
 **/
-#define LOG_TYPE 2 // 1 = write to log file, 2 = send to log channel, 3 = do both 1 and 2
+#define LOG_TYPE 3 // 1 = write to log file, 2 = send to log channel, 3 = do both 1 and 2
 #define LOG_FILE "log/space.log"
 #define LOG_CHANNEL "space-log"
+
+/** 
+ This is a patch to fix the issue presented in 1.8.3p9 where get_random_long() was replaced with get_random32().
+**/
+
+#if (NUMVERSION > 1008003007)
+#define get_random_long(x, y) get_random32(x, y)
+/* #define get_random32(x, y) get_random_long(x, y) */ 
+#endif
 
 #define MIN_OBJNUM			0
 #define MAX_OBJNUM			(db_top)
