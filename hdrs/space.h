@@ -67,15 +67,6 @@
 #define LOG_FILE "log/space.log"
 #define LOG_CHANNEL "space-log"
 
-/** 
- This is a patch to fix the issue presented in 1.8.3p9 where get_random_long() was replaced with get_random32().
-**/
-
-#if (NUMVERSION > 1008003007)
-#define get_random_long(x, y) get_random32(x, y)
-/* #define get_random32(x, y) get_random_long(x, y) */ 
-#endif
-
 #define MIN_OBJNUM			0
 #define MAX_OBJNUM			(db_top)
 #define MAX_LONG			((long) 0x7ffffffe)
@@ -106,6 +97,19 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 
 #define CONVERSION_ERROR	501
 #define CANT_UPDATE			502
+
+/**
+ * PennMUSH 1.8.3p8 changed get_random_long() to get_random32
+ *
+ * So now we must make sure aspace works in previous versions
+ * of penn as well as newer versions.
+ */
+
+#if ( NUMVERSION > 1008003007 )
+
+  #define get_random_long(x,y) get_random32(x,y)
+
+#endif
 
 /* ------------------------------------------------------------------------ */
 
