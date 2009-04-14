@@ -1144,14 +1144,17 @@ FUNCTION(local_fun_consolemsg)
 {
 	ATTR *a, *b;
 	dbref console, user, parent;
-	char *q, *pq, *consoles, *msg, *the_console, *c_pq;
-	char console_name[BUFFER_LEN];
-	int x;
+	char *q, *pq, *msg, *the_console, *c_pq, *console_list;
+	int x, index, result;
+	char *consoles[BUFFER_LEN / 2];
 	space_consoles *sc;
 	
 	char *buffer;
 	
 	x = parse_integer(args[0]);
+	
+	result = list2arr(consoles, BUFFER_LEN / 2, args[1], ' ');
+	
 	msg = (char *) mush_strdup(args[2], "console_message");
 	
 	if (!GoodObject(sdb[x].object) || !SpaceObj(sdb[x].object)) {
@@ -1167,12 +1170,9 @@ FUNCTION(local_fun_consolemsg)
 			console = parse_dbref(split_token(&pq, ' '));
 					
 			if ( console != NULL )
-			{
-				consoles = trim_space_sep(args[1], ' ');
-				
-				while (consoles) {
-					the_console = split_token(&consoles, ' ');
-					c_pq = tprintf("console_%s", the_console);
+			{			
+				for ( index = 0; index <= result; index++) {
+					c_pq = tprintf("console_%s", consoles[index]);
 				
 					if ( c_pq != NULL )
 					{
@@ -1180,9 +1180,7 @@ FUNCTION(local_fun_consolemsg)
 				
 						if (GoodObject(console) && sc != NULL) {
 							parent = Parent(console);
-							if ((parent == sc->console_dbref) || 
-							(parent == console_monitor) ||
-							(parent == console_fighter)) {
+							if ( parent == sc->console_dbref ) {
 								b = atr_get(console, CONSOLE_USER_ATTR_NAME);
 								if (b != NULL) {
 									user = parse_dbref(atr_value(b));
