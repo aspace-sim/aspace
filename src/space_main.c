@@ -109,7 +109,7 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 		return;
 	}
 
-	for (x = 0; x < 7; ++x)
+	for (x = 0; x < 9; ++x)
 		if (args[x] == NULL)
 			args[x] = blank;
 	switch (args[0][0]) {
@@ -126,7 +126,7 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				case  5: safe_str(unparse_integer(do_set_speed(parse_number(args[3]), enactor)), buff, bp); break;
 				case  6: safe_str(unparse_integer(do_set_eng_alloc(parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), enactor)), buff, bp); break;
 				case  7: safe_str(unparse_integer(do_set_helm_alloc(parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), enactor)), buff, bp); break;
-				case  8: safe_str(unparse_integer(do_set_shield_alloc(parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6]), enactor)), buff, bp); break;
+				case  8: safe_str(unparse_integer(do_set_shield_alloc(parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6]), parse_number(args[7]), parse_number(args[8]), enactor)), buff, bp); break;
 				case  9: safe_str(unparse_integer(do_set_tactical_alloc(parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), enactor)), buff, bp); break;
 				case 10: safe_str(unparse_integer(do_set_sensor_alloc(parse_number(args[3]), parse_number(args[4]), enactor)), buff, bp); break;
 				case 11: safe_str(unparse_integer(do_set_operations_alloc(parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), enactor)), buff, bp); break;

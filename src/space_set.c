@@ -2235,7 +2235,7 @@ int do_set_helm_alloc (double movement, double shields, double cloak, dbref enac
 
 /* ------------------------------------------------------------------------ */
 
-int do_set_shield_alloc (double forward, double starboard, double aft, double port, dbref enactor)
+int do_set_shield_alloc (double forward, double starboard, double aft, double port, double dorsal, double ventral, dbref enactor)
 {
 	if (error_on_console(enactor)) {
 		return 0;
@@ -2244,6 +2244,8 @@ int do_set_shield_alloc (double forward, double starboard, double aft, double po
 		sdb[n].alloc.shield[1] = fabs(starboard);
 		sdb[n].alloc.shield[2] = fabs(aft);
 		sdb[n].alloc.shield[3] = fabs(port);
+		sdb[n].alloc.shield[4] = fabs(dorsal);
+		sdb[n].alloc.shield[5] = fabs(ventral);
 		balance_shield_power();
 		report_shield_power();
 		sdb[n].engine.version = 1;
@@ -2506,7 +2508,7 @@ int do_set_dock (int contact, dbref enactor)
 /* check size on dock. include the tractoree! */
 		} else if ((tsize + sdb[n].structure.displacement + sdb[x].structure.cargo_mass) > sdb[x].structure.cargo_hold) {
 				notify(enactor, ansi_red(tprintf("%s does not have enough room.", Name(sdb[x].object))));
-		} else if (sdb[n].shield.active[0] || sdb[n].shield.active[1] || sdb[n].shield.active[2] || sdb[n].shield.active[3]) {
+		} else if (sdb[n].shield.active[0] || sdb[n].shield.active[1] || sdb[n].shield.active[2] || sdb[n].shield.active[3] || sdb[n].shield.active[4] || sdb[n].shield.active[5]) {
 		    	notify(enactor, ansi_red(tprintf("%s must lower all shields to dock.", Name(sdb[n].object))));
 		} else if (sdb2dissipation(x, sdb2shield(x, n)) != 0.0) {
 			notify(enactor, ansi_red(tprintf("%s's facing shield must be lowered.", Name(sdb[x].object))));
@@ -2787,7 +2789,7 @@ int do_set_land (int contact, dbref enactor)
 			notify(enactor, ansi_red(tprintf("%s does not have a landing pad.", Name(sdb[x].object))));
 		} else if ((sdb[n].structure.displacement + sdb[x].structure.cargo_mass) > sdb[x].structure.cargo_hold) {
 			notify(enactor, ansi_red(tprintf("%s does not have enough room.", Name(sdb[x].object))));
-		} else if (sdb[n].shield.active[0] || sdb[n].shield.active[1] || sdb[n].shield.active[2] || sdb[n].shield.active[3]) {
+		} else if (sdb[n].shield.active[0] || sdb[n].shield.active[1] || sdb[n].shield.active[2] || sdb[n].shield.active[3] || sdb[n].shield.active[4] || sdb[n].shield.active[5]) {
 			notify(enactor, ansi_red(tprintf("%s must lower all shields to land.", Name(sdb[n].object))));
 		} else if (sdb2dissipation(x, sdb2shield(x, n)) != 0.0) {
 			notify(enactor, ansi_red(tprintf("%s's facing shield must be lowered.", Name(sdb[x].object))));
@@ -3157,6 +3159,12 @@ int do_set_fix_damage (char *sys1, char *sys2, int type, char *name, dbref enact
 				dmg = &sdb[x].cloak.damage;
 				break;
 			}
+		case 'd': case 'D':
+			if (sdb[x].shield.exist) {
+				num = 10;
+				dmg = &sdb[x].shield.damage[4];
+				break;
+			}
 		case 'e': case 'E':
 			if (sdb[x].sensor.ew_exist) {
 				num = 5;
@@ -3253,6 +3261,12 @@ int do_set_fix_damage (char *sys1, char *sys2, int type, char *name, dbref enact
 					}
 				default: notify(enactor, ansi_red("Invalid system specification.")); return 0; break;
 			} break;
+		case 'v': case 'V':
+			if (sdb[x].shield.exist) {
+				num = 10;
+				dmg = &sdb[x].shield.damage[5];
+				break;
+			}
 		case 'w': case 'W':
 			if (sdb[x].engine.warp_exist) {
 				num = 14;

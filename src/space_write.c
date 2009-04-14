@@ -82,7 +82,7 @@ int do_space_db_write (dbref ship, dbref executor)
 
 /* ALLOCATE */
 
-	snprintf(buffer, sizeof(buffer), "%d %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
+	snprintf(buffer, sizeof(buffer), "%d %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
 		sdb[x].alloc.version,
 		sdb[x].alloc.helm,
 		sdb[x].alloc.tactical,
@@ -93,6 +93,8 @@ int do_space_db_write (dbref ship, dbref executor)
 		sdb[x].alloc.shield[1],
 		sdb[x].alloc.shield[2],
 		sdb[x].alloc.shield[3],
+		sdb[x].alloc.shield[4],
+		sdb[x].alloc.shield[5],
 		sdb[x].alloc.cloak,
 		sdb[x].alloc.beams,
 		sdb[x].alloc.missiles,
@@ -537,7 +539,7 @@ int do_space_db_write (dbref ship, dbref executor)
 
 /* SHIELD */
 
-	snprintf(buffer, sizeof(buffer), "%f %d %f %d %d %d %d %d %f %f %f %f",
+	snprintf(buffer, sizeof(buffer), "%f %d %f %d %d %d %d %d %d %d %f %f %f %f %f %f",
 		sdb[x].shield.ratio,
 		sdb[x].shield.maximum,
 		sdb[x].shield.freq,
@@ -546,10 +548,14 @@ int do_space_db_write (dbref ship, dbref executor)
 		sdb[x].shield.active[1],
 		sdb[x].shield.active[2],
 		sdb[x].shield.active[3],
+		sdb[x].shield.active[4],
+		sdb[x].shield.active[5],
 		sdb[x].shield.damage[0],
 		sdb[x].shield.damage[1],
 		sdb[x].shield.damage[2],
-		sdb[x].shield.damage[3]);
+		sdb[x].shield.damage[3],
+		sdb[x].shield.damage[4],
+		sdb[x].shield.damage[5]);
 	result = atr_add(ship, SHIELD_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
 	if (result != 0) {
 		write_spacelog(executor, ship, "WRITE: unable to write SHIELD attribute.");

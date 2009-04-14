@@ -33,6 +33,8 @@ void do_space_db_get (int x, char *f1, char *f2, char *f3, char *f4, char *buff,
 						case 's': safe_str(unparse_number(sdb[x].alloc.shield[1]), buff, bp); break;
 						case 'a': safe_str(unparse_number(sdb[x].alloc.shield[2]), buff, bp); break;
 						case 'p': safe_str(unparse_number(sdb[x].alloc.shield[3]), buff, bp); break;
+						case 'd': safe_str(unparse_number(sdb[x].alloc.shield[4]), buff, bp); break;
+						case 'v': safe_str(unparse_number(sdb[x].alloc.shield[5]), buff, bp); break;
 						default: safe_str(unparse_number(sdb[x].alloc.shields), buff, bp); break;
 						} break;
 					default: safe_str("#-1 NO SUCH FIELD", buff, bp); break;
@@ -274,6 +276,8 @@ void do_space_db_get (int x, char *f1, char *f2, char *f3, char *f4, char *buff,
 					case 's': safe_str(unparse_integer(sdb[x].shield.active[1]), buff, bp); break;
 					case 'a': safe_str(unparse_integer(sdb[x].shield.active[2]), buff, bp); break;
 					case 'p': safe_str(unparse_integer(sdb[x].shield.active[3]), buff, bp); break;
+					case 'd': safe_str(unparse_integer(sdb[x].shield.active[4]), buff, bp); break;
+					case 'v': safe_str(unparse_integer(sdb[x].shield.active[5]), buff, bp); break;
 					default: safe_str("#-1 NO SUCH FIELD", buff, bp); break;
 					} break;
 				case 'd': switch (f3[0]) {
@@ -281,6 +285,8 @@ void do_space_db_get (int x, char *f1, char *f2, char *f3, char *f4, char *buff,
 					case 's': safe_str(unparse_number(sdb[x].shield.damage[1]), buff, bp); break;
 					case 'a': safe_str(unparse_number(sdb[x].shield.damage[2]), buff, bp); break;
 					case 'p': safe_str(unparse_number(sdb[x].shield.damage[3]), buff, bp); break;
+					case 'd': safe_str(unparse_number(sdb[x].shield.damage[4]), buff, bp); break;
+					case 'v': safe_str(unparse_number(sdb[x].shield.damage[5]), buff, bp); break;
 					default: safe_str("#-1 NO SUCH FIELD", buff, bp); break;
 					} break;
 				case 'e': safe_str(unparse_integer(sdb[x].shield.exist), buff, bp); break;

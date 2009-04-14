@@ -81,15 +81,17 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[7], 0.0, &sdb[x].alloc.shield[1]);
 	result += convert_double(array[8], 0.0, &sdb[x].alloc.shield[2]);
 	result += convert_double(array[9], 0.0, &sdb[x].alloc.shield[3]);
-	result += convert_double(array[10], 0.0, &sdb[x].alloc.cloak);
-	result += convert_double(array[11], 0.0, &sdb[x].alloc.beams);
-	result += convert_double(array[12], 0.0, &sdb[x].alloc.missiles);
-	result += convert_double(array[13], 0.0, &sdb[x].alloc.sensors);
-	result += convert_double(array[14], 0.0, &sdb[x].alloc.ecm);
-	result += convert_double(array[15], 0.0, &sdb[x].alloc.eccm);
-	result += convert_double(array[16], 0.0, &sdb[x].alloc.transporters);
-	result += convert_double(array[17], 0.0, &sdb[x].alloc.tractors);
-	result += convert_double(array[18], 0.0, &sdb[x].alloc.miscellaneous);
+	result += convert_double(array[10], 0.0, &sdb[x].alloc.shield[4]);
+	result += convert_double(array[11], 0.0, &sdb[x].alloc.shield[5]);
+	result += convert_double(array[12], 0.0, &sdb[x].alloc.cloak);
+	result += convert_double(array[13], 0.0, &sdb[x].alloc.beams);
+	result += convert_double(array[14], 0.0, &sdb[x].alloc.missiles);
+	result += convert_double(array[15], 0.0, &sdb[x].alloc.sensors);
+	result += convert_double(array[16], 0.0, &sdb[x].alloc.ecm);
+	result += convert_double(array[17], 0.0, &sdb[x].alloc.eccm);
+	result += convert_double(array[18], 0.0, &sdb[x].alloc.transporters);
+	result += convert_double(array[19], 0.0, &sdb[x].alloc.tractors);
+	result += convert_double(array[20], 0.0, &sdb[x].alloc.miscellaneous);
 	
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: unable to convert ALLOCATE attribute.");
@@ -811,10 +813,14 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_long(array[5], 0, &sdb[x].shield.active[1]);
 	result += convert_long(array[6], 0, &sdb[x].shield.active[2]);
 	result += convert_long(array[7], 0, &sdb[x].shield.active[3]);
-	result += convert_double(array[8], 0.0, &sdb[x].shield.damage[0]);
-	result += convert_double(array[9], 0.0, &sdb[x].shield.damage[1]);
-	result += convert_double(array[10], 0.0, &sdb[x].shield.damage[2]);
-	result += convert_double(array[11], 0.0, &sdb[x].shield.damage[3]);
+	result += convert_long(array[8], 0, &sdb[x].shield.active[4]);
+	result += convert_long(array[9], 0, &sdb[x].shield.active[5]);
+	result += convert_double(array[10], 0.0, &sdb[x].shield.damage[0]);
+	result += convert_double(array[11], 0.0, &sdb[x].shield.damage[1]);
+	result += convert_double(array[12], 0.0, &sdb[x].shield.damage[2]);
+	result += convert_double(array[13], 0.0, &sdb[x].shield.damage[3]);
+	result += convert_double(array[14], 0.0, &sdb[x].shield.damage[4]);
+	result += convert_double(array[15], 0.0, &sdb[x].shield.damage[5]);
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: unable to convert SHIELD attribute.");
 		return 0;

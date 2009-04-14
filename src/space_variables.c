@@ -30,7 +30,9 @@ const char *shield_name[] = {
     "Forward shield",
     "Starboard shield",
     "Aft shield",
-    "Port shield"
+    "Port shield",
+    "Dorsal shield",
+    "Ventral shield"
 };
 
 const char *cloak_name[] = {

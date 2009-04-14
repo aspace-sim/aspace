@@ -118,7 +118,7 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 #define BAD_SDB_FAIL              -102
 #define ARC_FAIL                  -103
 
-#define MAX_SHIELD_NAME           4
+#define MAX_SHIELD_NAME           6
 #define MAX_EMPIRE_NAME           12
 #define MAX_SYSTEM_NAME           19
 #define MAX_QUADRANT_NAME         4
@@ -213,7 +213,7 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 #define CONSOLE_USER_ATTR_NAME    "USER"
 
 #define ALLOCATE_ATTR_NAME        "ALLOCATE"
-#define ALLOCATE_DATA_NUMBER      19
+#define ALLOCATE_DATA_NUMBER      21
 
 #define BEAM_ATTR_NAME            "BEAM"
 #define BEAM_DATA_NUMBER          5
@@ -260,7 +260,7 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 #define MAX_SENSOR_CONTACTS       30
 
 #define SHIELD_ATTR_NAME          "SHIELD"
-#define SHIELD_DATA_NUMBER        12
+#define SHIELD_DATA_NUMBER        16
 
 #define TECHNOLOGY_ATTR_NAME      "TECHNOLOGY"
 #define TECHNOLOGY_DATA_NUMBER    9
@@ -929,7 +929,7 @@ extern int do_set_tract_unlocked (dbref enactor);
 extern int do_set_ftr_alloc (double helm, double tactical, double operations, dbref enactor);
 extern int do_set_eng_alloc (double helm, double tactical, double operations, dbref enactor);
 extern int do_set_helm_alloc (double movement, double shields, double cloak, dbref enactor);
-extern int do_set_shield_alloc (double forward, double starboard, double aft, double port, dbref enactor);
+extern int do_set_shield_alloc (double forward, double starboard, double aft, double port, double dorsal, double ventral, dbref enactor);
 extern int do_set_tactical_alloc (double beams, double missiles, double sensors, dbref enactor);
 extern int do_set_sensor_alloc (double ecm, double eccm, dbref enactor);
 extern int do_set_operations_alloc (double transporters, double tractors, double miscellaneous, dbref enactor);

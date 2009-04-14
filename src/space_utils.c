@@ -253,9 +253,10 @@ int sdb2shield (int n1, int n2)
 	double y = sdb[n2].coords.y - sdb[n1].coords.y;
 	double z = sdb[n2].coords.z - sdb[n1].coords.z;
 	double r = sqrt(x * x + y * y + z * z);
-	double v1, v2;
+	double v1, v2, v3;
 	double forward_arc;
 	double starboard_arc;
+	double up_arc;
 
 	if (r == 0.0) {
 		return 0;
@@ -270,11 +271,23 @@ int sdb2shield (int n1, int n2)
 		  sdb[n1].course.d[1][0] +	sdb[n1].course.d[1][1] *
 		  sdb[n1].course.d[1][1] + sdb[n1].course.d[1][2] *
 		  sdb[n1].course.d[1][2]);
+		v3 = (x * sdb[n1].course.d[2][0] + y * sdb[n1].course.d[2][1] +
+		  z * sdb[n1].course.d[2][2]) / r / sqrt(sdb[n1].course.d[2][0] *
+		  sdb[n1].course.d[2][0] + sdb[n1].course.d[2][1] *
+		  sdb[n1].course.d[2][1] + sdb[n1].course.d[2][2] *
+		  sdb[n1].course.d[2][2]);
 		v1 = (v1 > 1.0) ? 1.0 : (v1 < -1.0) ? -1.0 : v1;
 		v2 = (v2 > 1.0) ? 1.0 : (v2 < -1.0) ? -1.0 : v2;
+		v3 = (v3 > 1.0) ? 1.0 : (v3 < -1.0) ? -1.0 : v3;
 		forward_arc = acos(v1) * 180 / PI;
 		starboard_arc = acos(v2) * 180 / PI;
-		if (starboard_arc < 60.0) {
+		up_arc = acos(v3) * 180 / PI;
+
+		if (up_arc < 45.0) {
+			return 4;
+		} else if (up_arc > 135.0) {
+			return 5;
+		} else if (starboard_arc < 60.0) {
 			return 1;
 		} else if (starboard_arc > 120.0) {
 			return 3;
