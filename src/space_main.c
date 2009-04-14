@@ -1152,7 +1152,6 @@ FUNCTION(local_fun_consolemsg)
 	char *buffer;
 	
 	x = parse_integer(args[0]);
-	consoles = args[1];
 	object = args[2];
 	attrib = args[3];
 	
@@ -1170,25 +1169,30 @@ FUNCTION(local_fun_consolemsg)
 		pq = trim_space_sep(q, ' ');
 		while (pq) {
 			console = parse_dbref(split_token(&pq, ' '));
-			
-			while (consoles) {
-				the_console = split_token(&consoles, ' ');
-				c_pq = tprintf("console_%s", the_console);
-			
-				if ( c_pq != NULL )
-				{
-					sc = hashfind(c_pq, &aspace_consoles);
-			
-					if (GoodObject(console) && sc != NULL) {
-						parent = Parent(console);
-						if ((parent == sc->console_dbref) || 
-						(parent == console_monitor) ||
-						(parent == console_fighter)) {
-							b = atr_get(console, CONSOLE_USER_ATTR_NAME);
-							if (b != NULL) {
-								user = parse_dbref(atr_value(b));
-								if (GoodObject(user)) {
-									notify(user, msg);
+					
+			if ( console != NULL )
+			{
+				consoles = trim_space_sep(args[1], ' ');
+				
+				while (consoles) {
+					the_console = split_token(&consoles, ' ');
+					c_pq = tprintf("console_%s", the_console);
+				
+					if ( c_pq != NULL )
+					{
+						sc = hashfind(c_pq, &aspace_consoles);
+				
+						if (GoodObject(console) && sc != NULL) {
+							parent = Parent(console);
+							if ((parent == sc->console_dbref) || 
+							(parent == console_monitor) ||
+							(parent == console_fighter)) {
+								b = atr_get(console, CONSOLE_USER_ATTR_NAME);
+								if (b != NULL) {
+									user = parse_dbref(atr_value(b));
+									if (GoodObject(user)) {
+										notify(user, msg);
+									}
 								}
 							}
 						}
