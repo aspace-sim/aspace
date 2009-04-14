@@ -350,54 +350,82 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 					switch (args[2][0]) {
 						case 'c': /* communication */
 							notify(executor, "Communications console parent dbref set.");
-							console_communication = console; break;
+							console_communication = console; 
+							addConsole("console_communication",console);
+							break;
 						case 'd': /* damage */
 							notify(executor, "Damage Control console parent dbref set.");
-							console_damage = console; break;
+							console_damage = console; 
+							addConsole("console_damage",console);
+							break;
 						case 'e': /* engineering */
 							notify(executor, "Engineering console parent dbref set.");
-							console_engineering = console; break;
+							console_engineering = console; 
+							addConsole("console_engineering",console);
+							break;
 						case 'f': /* fighter */
 							notify(executor, "Fighter/Shuttle console parent dbref set.");
-							console_fighter = console; break;
+							console_fighter = console; 
+							addConsole("console_fighter",console);
+							break;
 						case 'h': /* helm */
 							notify(executor, "Helm/Navigation console parent dbref set.");
-							console_helm = console; break;
+							console_helm = console; 
+							addConsole("console_helm",console);
+							break;
 						case 'm': /* monitor */
 							notify(executor, "Monitor console parent dbref set.");
-							console_monitor = console; break;
+							console_monitor = console; 
+							addConsole("console_monitor",console);
+							break;
 						case 'n': /* helm */
 							notify(executor, "Helm/Navigation console parent dbref set.");
-							console_helm = console; break;
+							console_helm = console; 
+							addConsole("console_navigation",console);
+							break;
 						case 'o': /* operations */
 							notify(executor, "Operations console parent dbref set.");
-							console_operation = console; break;
+							console_operation = console; 
+							addConsole("console_operation",console);
+							break;
 						case 's':
 							switch (args[2][1]) {
 								case 'c': /* science */
 									notify(executor, "Science console parent dbref set.");
-									console_science = console; break;
+									console_science = console; 
+									addConsole("console_science",console);
+									break;
 								case 'e': /* security */
 									notify(executor, "Security console parent dbref set.");
-									console_security = console; break;
+									console_security = console; 
+									addConsole("console_security",console);
+									break;
 								case 'h': /* fighter */
 									notify(executor, "Fighter/Shuttle console parent dbref set.");
-									console_fighter = console; break;
+									console_fighter = console; 
+									addConsole("console_shuttle",console);
+									break;
 								default: safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 							} break;
 						case 't':
 							switch (args[2][1]) {
 								case 'a': /* tactical */
 									notify(executor, "Tactical/Weapons console parent dbref set.");
-									console_tactical = console; break;
+									console_tactical = console; 
+									addConsole("console_tactical",console);
+									break;
 								case 'r': /* transporter */
 									notify(executor, "Transporter console parent dbref set.");
-									console_transporter = console; break;
+									console_transporter = console;
+									addConsole("console_transporter",console);									
+									break;
 								default : safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 							} break;
 						case 'w': /* tactical */
 							notify(executor, "Tactical/Weapons console parent dbref set.");
-							console_tactical = console; break;
+							console_tactical = console; 
+							addConsole("console_weapons",console);
+							break;
 						default: safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 					}
 					safe_str(unparse_dbref(console), buff, bp); break;
@@ -1105,10 +1133,92 @@ FUNCTION(local_fun_border)
 
 /* ------------------------------------------------------------------------ */
 
+void free_spaceconsole(void *ptr) {
+	space_consoles *sc = (space_consoles *) ptr;
+	mush_free(sc->console_dbref, "console_dbref");
+	mush_free(sc->console_name, "console_name");
+	mush_free(sc, "space_consoles");
+}
 
+FUNCTION(local_fun_consolemsg)
+{
+	ATTR *a, *b;
+	dbref console, user, parent, object;
+	char *q, *pq, *consoles, *attrib, *msg, *the_console, *c_pq;
+	char console_name[BUFFER_LEN];
+	int x;
+	space_consoles *sc;
+	
+	char *buffer;
+	
+	x = parse_integer(args[0]);
+	consoles = args[1];
+	object = args[2];
+	attrib = args[3];
+	
+	if (nargs == 5)
+		msg = (char *) mush_strdup(args[4], "console_message");
+
+	if (!GoodObject(sdb[x].object) || !SpaceObj(sdb[x].object)) {
+		write_spacelog(sdb[x].object, sdb[x].object, "BUG: invalid zone to zemit to.");
+		return;
+	}
+
+	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
+	if (a != NULL) {
+		q = safe_atr_value(a);
+		pq = trim_space_sep(q, ' ');
+		while (pq) {
+			console = parse_dbref(split_token(&pq, ' '));
+			
+			while (consoles) {
+				the_console = split_token(&consoles, ' ');
+				c_pq = tprintf("console_%s", the_console);
+			
+				if ( c_pq != NULL )
+				{
+					sc = hashfind(c_pq, &aspace_consoles);
+			
+					if (GoodObject(console) && sc != NULL) {
+						parent = Parent(console);
+						if ((parent == sc->console_dbref) || 
+						(parent == console_monitor) ||
+						(parent == console_fighter)) {
+							b = atr_get(console, CONSOLE_USER_ATTR_NAME);
+							if (b != NULL) {
+								user = parse_dbref(atr_value(b));
+								if (GoodObject(user)) {
+									notify(user, msg);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		free((Malloc_t) q);
+		mush_free(msg, "console_message");
+	}
+	
+	return;
+}
+
+/* ------------------------------------------------------------------------ */
+
+void addConsole(char *console_name, dbref console_dbref)
+{
+	space_consoles *sc = NULL;
+	
+	sc = mush_malloc(sizeof(space_consoles), "space_consoles");
+	sc->console_name = mush_strdup(console_name, "console_name");
+	sc->console_dbref = console_dbref;
+	
+	hash_add(&aspace_consoles, sc->console_name, sc);
+}
 
 void setupAspaceFunctions()
 {
+	function_add("CONSOLEMSG", local_fun_consolemsg, 4, 5, FN_ADMIN);
 	function_add("BORDER", local_fun_border, 1, 7, FN_REG);
 	function_add((char *) "CDB", local_fun_cdb, 1, 5, FN_REG);
 	function_add("INRANGE", local_fun_inrange, 2, 5, FN_REG);
@@ -1158,6 +1268,8 @@ void initSpace()
 	border_map = NULL;
 	border_map = im_new();
 
+	hash_init(&aspace_consoles, 256, free_borderinfo);
+	
 	(void) setupAspaceFunctions();
 	(void) setupAspaceFlags();
 	(void) dump_space(GOD);

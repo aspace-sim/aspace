@@ -310,6 +310,13 @@ struct aspace_empire_info {
 
 intmap *border_map;
 
+HASHTAB aspace_consoles;
+
+typedef struct _space_consoles {
+	char *console_name;
+	dbref console_dbref;
+} space_consoles;
+
 typedef struct _space_border_info_ {
 	char* border_id;
 	struct aspace_border_info* data;
