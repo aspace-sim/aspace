@@ -1143,8 +1143,8 @@ void free_spaceconsole(void *ptr) {
 FUNCTION(local_fun_consolemsg)
 {
 	ATTR *a, *b;
-	dbref console, user, parent, object;
-	char *q, *pq, *consoles, *attrib, *msg, *the_console, *c_pq;
+	dbref console, user, parent;
+	char *q, *pq, *consoles, *msg, *the_console, *c_pq;
 	char console_name[BUFFER_LEN];
 	int x;
 	space_consoles *sc;
@@ -1152,12 +1152,8 @@ FUNCTION(local_fun_consolemsg)
 	char *buffer;
 	
 	x = parse_integer(args[0]);
-	object = args[2];
-	attrib = args[3];
+	msg = (char *) mush_strdup(args[2], "console_message");
 	
-	if (nargs == 5)
-		msg = (char *) mush_strdup(args[4], "console_message");
-
 	if (!GoodObject(sdb[x].object) || !SpaceObj(sdb[x].object)) {
 		write_spacelog(sdb[x].object, sdb[x].object, "BUG: invalid zone to zemit to.");
 		return;
@@ -1222,7 +1218,7 @@ void addConsole(char *console_name, dbref console_dbref)
 
 void setupAspaceFunctions()
 {
-	function_add("CONSOLEMSG", local_fun_consolemsg, 4, 5, FN_ADMIN);
+	function_add("CONSOLEMSG", local_fun_consolemsg, 3, 3, FN_ADMIN);
 	function_add("BORDER", local_fun_border, 1, 7, FN_REG);
 	function_add((char *) "CDB", local_fun_cdb, 1, 5, FN_REG);
 	function_add("INRANGE", local_fun_inrange, 2, 5, FN_REG);
