@@ -1171,7 +1171,7 @@ FUNCTION(local_fun_consolemsg)
 					
 			if ( console != NULL )
 			{			
-				for ( index = 0; index <= result; index++) {
+				for ( index = 0; index < result; index++) {
 					c_pq = tprintf("console_%s", consoles[index]);
 				
 					if ( c_pq != NULL )
