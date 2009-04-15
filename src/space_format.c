@@ -247,6 +247,40 @@ char *format_Cargo_Cap (int x)
 	return (buffer);
 }
 
+/* ------------------------------------------------------------------------ */
+
+char *format_Docking_Doors (int x)
+{
+	static char buffer[50];
+
+	if (sdb[x].status.open_docking) {
+		snprintf(buffer, sizeof(buffer), "%s%16.16s:%s %-20.20s", 
+			ANSI_CYAN, "Docking Doors", ANSI_WHITE, "Open");
+	} else {
+		snprintf(buffer, sizeof(buffer), "%s%16.16s:%s %-20.20s",
+			ANSI_CYAN, "Docking Doors", ANSI_WHITE, "Closed");
+	}
+
+	return (buffer);
+}
+
+/* ------------------------------------------------------------------------ */
+
+char *format_Landing_Doors (int x)
+{
+	static char buffer[50];
+
+	if (sdb[x].status.open_landing) {
+		snprintf(buffer, sizeof(buffer), "%s%16.16s:%s %-20.20s", 
+			ANSI_CYAN, "Landing Doors", ANSI_WHITE, "Open");
+	} else {
+		snprintf(buffer, sizeof(buffer), "%s%16.16s:%s %-20.20s",
+			ANSI_CYAN, "Landing Doors", ANSI_WHITE, "Closed");
+	}
+
+	return (buffer);
+}
+
 /* -------------------------------------------------------------------- */
 
 char *format_Resolution (double a)

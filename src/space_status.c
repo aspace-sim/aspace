@@ -327,6 +327,13 @@ int do_sensor_report (int contact, dbref enactor)
 			strncat(buffer, format_Name(x), sizeof(buffer) - 1);
  			strncat(buffer, format_Cargo_Cap(x), sizeof(buffer) - 1);
 			strncat(buffer, "\n", sizeof(buffer) - 1);
+			if (sdb[x].structure.type < 3 && ( sdb[x].structure.has_docking_bay || sdb[x].structure.has_landing_pad )) {
+				if (sdb[x].structure.has_docking_bay)
+					strncat(buffer, format_Docking_Doors(x), sizeof(buffer) - 1);
+				if (sdb[x].structure.has_landing_pad)
+					strncat(buffer, format_Landing_Doors(x), sizeof(buffer) - 1);
+				strncat(buffer, "\n", sizeof(buffer) - 1);
+			}
 		}
 		if (sdb[n].slist.lev[i] > 0.25 && !sdb[x].cloak.active) {
 			strncat(buffer, format_Class(x), sizeof(buffer) - 1);
@@ -602,6 +609,13 @@ int do_operations_status (dbref enactor)
 				strncat(buffer, format_Trans_Freq(n), sizeof(buffer) - 1);
 			if (sdb[n].tract.exist)
 				strncat(buffer, format_Tract_Freq(n), sizeof(buffer) - 1);
+			strncat(buffer, "\n", sizeof(buffer) - 1);
+		}
+		if (sdb[n].structure.type < 3 && (sdb[n].structure.has_docking_bay || sdb[n].structure.has_landing_pad)) {
+			if (sdb[n].structure.has_docking_bay)
+				strncat(buffer, format_Docking_Doors(n), sizeof(buffer) - 1);
+			if (sdb[n].structure.has_landing_pad)
+				strncat(buffer, format_Landing_Doors(n), sizeof(buffer) - 1);
 			strncat(buffer, "\n", sizeof(buffer) - 1);
 		}
 		if (sdb[n].main.exist || sdb[n].aux.exist || sdb[n].batt.exist) {

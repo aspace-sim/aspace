@@ -2467,6 +2467,70 @@ int do_set_inactive (dbref enactor)
 
 /* ------------------------------------------------------------------------ */
 
+int do_set_docking_doors (int active, dbref enactor)
+{
+	if (error_on_console(enactor)) {
+		return 0;
+	} else if (!sdb[n].structure.has_docking_bay) {
+		notify(enactor, ansi_red(tprintf("%s has no docking bay.", Name(sdb[n].object))));
+	} else {
+		if (active) {
+			if (sdb[n].status.open_docking) {
+				notify(enactor, ansi_red("Docking bay doors are already open."));
+			} else {
+				sdb[n].status.open_docking = 1;
+				do_console_notify(n, console_helm, console_operation, console_engineering,
+					ansi_cmd(enactor, "Docking bay doors open"));
+				return 1;
+			}
+		} else {
+			if (!sdb[n].status.open_docking) {
+				notify(enactor, ansi_red("Docking bay doors are already closed."));
+			} else {
+				sdb[n].status.open_docking = 0;
+				do_console_notify(n, console_helm, console_operation, console_engineering,
+					ansi_cmd(enactor, "Docking bay doors closed"));
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+/* ------------------------------------------------------------------------ */
+
+int do_set_landing_doors (int active, dbref enactor)
+{
+	if (error_on_console(enactor)) {
+		return 0;
+	} else if (!sdb[n].structure.has_landing_pad) {
+		notify(enactor, ansi_red(tprintf("%s has no landing bay.", Name(sdb[n].object))));
+	} else {
+		if (active) {
+			if (sdb[n].status.open_landing) {
+				notify(enactor, ansi_red("Landing bay doors are already open."));
+			} else {
+				sdb[n].status.open_landing = 1;
+				do_console_notify(n, console_helm, console_operation, console_engineering,
+					ansi_cmd(enactor, "Landing bay doors open"));
+				return 1;
+			}
+		} else {
+			if (!sdb[n].status.open_landing) {
+				notify(enactor, ansi_red("Landing bay doors are already closed."));
+			} else {
+				sdb[n].status.open_landing = 0;
+				do_console_notify(n, console_helm, console_operation, console_engineering,
+					ansi_cmd(enactor, "Landing bay doors closed"));
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+/* ------------------------------------------------------------------------ */
+
 int do_set_dock (int contact, dbref enactor)
 {
 	register int i;
@@ -2505,6 +2569,8 @@ int do_set_dock (int contact, dbref enactor)
 			notify(enactor, ansi_red("That is too far away to dock with."));
 		} else if (!sdb[x].structure.has_docking_bay) {
 			notify(enactor, ansi_red(tprintf("%s does not have a dock.", Name(sdb[x].object))));
+		} else if (!sdb[x].status.open_docking) {
+			notify(enactor, ansi_red(tprintf("%s's docking bay doors are closed.", Name(sdb[x].object))));
 /* check size on dock. include the tractoree! */
 		} else if ((tsize + sdb[n].structure.displacement + sdb[x].structure.cargo_mass) > sdb[x].structure.cargo_hold) {
 				notify(enactor, ansi_red(tprintf("%s does not have enough room.", Name(sdb[x].object))));
@@ -2690,6 +2756,8 @@ int do_set_undock (dbref enactor)
 		if (!x) {
 			notify(enactor, ansi_red("Undocking error."));
 			write_spacelog(enactor, n, "BUG: Bad undocking location SDB");
+		} else if (!sdb[x].status.open_docking) {
+			notify(enactor, ansi_red(tprintf("%s's docking bay doors are closed.", Name(sdb[x].object))));
 		} else {
 			moveit(sdb[n].object, Location(sdb[x].object), 1);
 			do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[x].object))));
@@ -2787,6 +2855,8 @@ int do_set_land (int contact, dbref enactor)
 			notify(enactor, ansi_red("That is too far away to land on."));
 		} else if (!sdb[x].structure.has_landing_pad) {
 			notify(enactor, ansi_red(tprintf("%s does not have a landing pad.", Name(sdb[x].object))));
+		} else if (!sdb[x].status.open_landing) {
+			notify(enactor, ansi_red(tprintf("%s's landing bay doors are closed.", Name(sdb[x].object))));
 		} else if ((sdb[n].structure.displacement + sdb[x].structure.cargo_mass) > sdb[x].structure.cargo_hold) {
 			notify(enactor, ansi_red(tprintf("%s does not have enough room.", Name(sdb[x].object))));
 		} else if (sdb[n].shield.active[0] || sdb[n].shield.active[1] || sdb[n].shield.active[2] || sdb[n].shield.active[3] || sdb[n].shield.active[4] || sdb[n].shield.active[5]) {
@@ -2895,6 +2965,8 @@ int do_set_launch (dbref enactor)
 		if (!x) {
 			notify(enactor, ansi_red("Launching error."));
 			write_spacelog(enactor, n, "BUG: Bad launching location SDB");
+		} else if (!sdb[x].status.open_landing) {
+			notify(enactor, ansi_red(tprintf("%s's landing bay doors are closed.", Name(sdb[x].object))));
 		} else {
 			moveit(sdb[n].object, Location(sdb[x].object), 1);
 			do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[x].object))));

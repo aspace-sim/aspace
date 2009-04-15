@@ -142,8 +142,8 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				case 21: safe_str(unparse_integer(do_set_trans_unlocked(enactor)), buff, bp); break;
 				case 22: safe_str(unparse_integer(do_lock_weapon(parse_integer(args[3]), parse_integer(args[4]), parse_integer(args[5]), parse_integer(args[6]), enactor)), buff, bp); break;
 				case 23: safe_str(unparse_integer(do_unlock_weapon(parse_integer(args[3]), parse_integer(args[4]), parse_integer(args[5]), enactor)), buff, bp); break;
-
-
+				case 24: safe_str(unparse_integer(do_set_docking_doors(parse_integer(args[3]), enactor)), buff, bp); break;
+				case 25: safe_str(unparse_integer(do_set_landing_doors(parse_integer(args[3]), enactor)), buff, bp); break;
 				case 26: safe_str(unparse_integer(do_set_lrs(parse_integer(args[3]), enactor)), buff, bp); break;
 				case 27: safe_str(unparse_integer(do_set_ftr_alloc(parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), enactor)), buff, bp); break;
 				case 28: safe_str(unparse_integer(do_set_evade(parse_integer(args[3]), enactor)), buff, bp); break;
