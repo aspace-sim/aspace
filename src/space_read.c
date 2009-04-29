@@ -50,7 +50,7 @@ int do_space_db_read (dbref ship, dbref executor)
 
 	a = atr_get(ship, SPACE_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read SPACE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read SPACE Attribute.");
 		return 0;
 	} else {
 		sdb[x].space = parse_integer(atr_value(a));
@@ -60,13 +60,13 @@ int do_space_db_read (dbref ship, dbref executor)
 
 	a = atr_get(ship, ALLOCATE_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read ALLOCATE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read ALLOCATE Attribute.");
 		return 0;
 	}
-	
+
 	array = mush_calloc(ALLOCATE_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
 	result = list2arr(array, ALLOCATE_DATA_NUMBER + 1, atr_value(a), ' ');
-	
+
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack ALLOCATE Attribute.");
 		return 0;
@@ -98,7 +98,7 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[18], 0.0, &sdb[x].alloc.transporters);
 	result += convert_double(array[19], 0.0, &sdb[x].alloc.tractors);
 	result += convert_double(array[20], 0.0, &sdb[x].alloc.miscellaneous);
-	
+
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Convert ALLOCATE Attribute.");
 		return 0;
@@ -109,11 +109,11 @@ int do_space_db_read (dbref ship, dbref executor)
                 return 0;
         }
 
-	/* BEAM */
+/* BEAM */
 
 	a = atr_get(ship, BEAM_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read BEAM attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read BEAM Attribute.");
 		return 0;
 	}
 
@@ -138,7 +138,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		result += convert_long(array[4], 0, &sdb[x].beam.banks);
 	} else {
 		sdb[x].beam.banks = 0;
-                write_spacelog(executor, ship, "READ: BEAMS Do Not Exist, Beam Banks Value Defaulting to 0.");  
+                write_spacelog(executor, ship, "READ: BEAMS Do Not Exist, Beam Banks Value Defaulting to 0.");
 	}
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Convert BEAM Attribute.");
@@ -155,7 +155,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 	}
 
-	/* BEAM_ACTIVE */
+/* BEAM_ACTIVE */
 
 	if (sdb[x].beam.exist) {
 		a = atr_get(ship, BEAM_ACTIVE_ATTR_NAME);
@@ -163,7 +163,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Read BEAM_ACTIVE Attribute.");
 			return 0;
 		}
-		
+
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
 
@@ -175,7 +175,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_ACTIVE Attribute Format.");
 			return 0;
 		}
-		
+
 		for (i = 0 ; i < sdb[x].beam.banks ; ++i) {
 			result += convert_long(array[i], 0, &sdb[x].blist.active[i]);
 		}
@@ -188,8 +188,8 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 	}
-	
-	/* BEAM_NAME */
+
+/* BEAM_NAME */
 
 	if (sdb[x].beam.exist) {
 		a = atr_get(ship, BEAM_NAME_ATTR_NAME);
@@ -197,7 +197,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Read BEAM_NAME Attribute.");
 			return 0;
 		}
-		
+
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
 
@@ -224,8 +224,8 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 	}
-	
-	/* BEAM_DAMAGE */
+
+/* BEAM_DAMAGE */
 
 	if (sdb[x].beam.exist) {
 		a = atr_get(ship, BEAM_DAMAGE_ATTR_NAME);
@@ -233,7 +233,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Read BEAM_DAMAGE Attribute.");
 			return 0;
 		}
-		
+
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
 
@@ -266,7 +266,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Read BEAM_BONUS Attribute.");
 			return 0;
 		}
-		
+
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
 
@@ -300,7 +300,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Read BEAM_COST Attribute.");
 			return 0;
 		}
-		
+
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
 
@@ -334,7 +334,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Read BEAM_RANGE Attribute.");
 			return 0;
 		}
-		
+
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
 
@@ -367,7 +367,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Read BEAM_ARCS Attribute.");
 			return 0;
 		}
-		
+
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
 
@@ -400,7 +400,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Read BEAM_LOCK Attribute.");
 			return 0;
 		}
-		
+
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
 
@@ -433,7 +433,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Read BEAM_LOAD Attribute.");
 			return 0;
 		}
-		
+
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
 
@@ -466,7 +466,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			write_spacelog(executor, ship, "READ: Unable to Read BEAM_RECYCLE Attribute.");
 			return 0;
 		}
-		
+
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
 
@@ -491,14 +491,14 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 	}
 
-/* ISSILE */
+/* MISSILE */
 
 	a = atr_get(ship, MISSILE_ATTR_NAME);
 	if (a == NULL) {
 		write_spacelog(executor, ship, "READ: Unable to Read MISSILE Attribute.");
 		return 0;
-	}	
-	
+	}
+
 	array = mush_calloc(MISSILE_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
 	result = list2arr(array, MISSILE_DATA_NUMBER + 1, atr_value(a), ' ');
 
@@ -534,53 +534,69 @@ int do_space_db_read (dbref ship, dbref executor)
 			sdb[x].missile.exist = 0;
 		}
 	}
-	
-	/* MISSILE_ACTIVE */
+
+/* MISSILE_ACTIVE */
 
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_ACTIVE_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: unable to read MISSILE_ACTIVE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_ACTIVE Attribute.");
 			return 0;
-		}	
-		
-		array = mush_calloc(sdb[x].missile.tubes, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes, atr_value(a), ' ');
+		}
+
+		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
 
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to crack MISSILE_ACTIVE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
 			result += convert_long(array[i], 0, &sdb[x].mlist.active[i]);
 		}
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to convert MISSILE_ACTIVE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_ACTIVE Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_ACTIVE Attribute Format.");
 			return 0;
 		}
 	}
-	
-	/* MISSILE_NAME */
+
+/* MISSILE_NAME */
 
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_NAME_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: unable to read MISSILE_NAME attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_NAME Attribute.");
 			return 0;
 		}
-		
-		array = mush_calloc(sdb[x].missile.tubes, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes, atr_value(a), ' ');
+
+		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
 
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to crack MISSILE_NAME attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_NAME Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_NAME Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
 			result += convert_long(array[i], 0, &sdb[x].mlist.name[i]);
 		}
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to convert MISSILE_NAME attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_NAME Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_NAME Attribute Format.");
 			return 0;
 		}
 	}
@@ -590,22 +606,30 @@ int do_space_db_read (dbref ship, dbref executor)
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_DAMAGE_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: unable to read MISSILE_DAMAGE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_DAMAGE Attribute.");
 			return 0;
 		}
-		
-		array = mush_calloc(sdb[x].missile.tubes, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes, atr_value(a), ' ');
+
+		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
 
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to crack MISSILE_DAMAGE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_DAMAGE Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_DAMAGE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
 			result += convert_double(array[i], 0.0, &sdb[x].mlist.damage[i]);
 		}
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to convert MISSILE_DAMAGE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_DAMAGE Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_DAMAGE Attribute Format.");
 			return 0;
 		}
 	}
@@ -615,22 +639,30 @@ int do_space_db_read (dbref ship, dbref executor)
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_WARHEAD_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: unable to read MISSILE_WARHEAD attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_WARHEAD Attribute.");
 			return 0;
 		}
-		
-		array = mush_calloc(sdb[x].missile.tubes, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes, atr_value(a), ' ');
+
+		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
 
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to crack MISSILE_WARHEAD attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_WARHEAD Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
 			result += convert_long(array[i], 0, &sdb[x].mlist.warhead[i]);
 		}
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to convert MISSILE_WARHEAD attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_WARHEAD Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_WAREHEAD Attribute Format.");
 			return 0;
 		}
 	}
@@ -640,22 +672,30 @@ int do_space_db_read (dbref ship, dbref executor)
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_COST_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: unable to read MISSILE_COST attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_COST Attribute.");
 			return 0;
 		}
-		
-		array = mush_calloc(sdb[x].missile.tubes, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes, atr_value(a), ' ');
+
+		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
 
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to crack MISSILE_COST attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_COST Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
 			result += convert_long(array[i], 0, &sdb[x].mlist.cost[i]);
 		}
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to convert MISSILE_COST attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_COST Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_COST Attribute Format.");
 			return 0;
 		}
 	}
@@ -665,22 +705,30 @@ int do_space_db_read (dbref ship, dbref executor)
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_RANGE_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: unable to read MISSILE_RANGE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_RANGE Attribute.");
 			return 0;
 		}
-		
-		array = mush_calloc(sdb[x].missile.tubes, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes, atr_value(a), ' ');
+
+		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
 
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to crack MISSILE_RANGE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_RANGE Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_RANGE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
 			result += convert_long(array[i], 0, &sdb[x].mlist.range[i]);
 		}
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to convert MISSILE_RANGE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_RANGE Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_RANGE Attribute Format.");
 			return 0;
 		}
 	}
@@ -690,22 +738,30 @@ int do_space_db_read (dbref ship, dbref executor)
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_ARCS_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: unable to read MISSILE_ARCS attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_ARCS Attribute.");
 			return 0;
 		}
-		
-		array = mush_calloc(sdb[x].missile.tubes, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes, atr_value(a), ' ');
+
+		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
 
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to crack MISSILE_ARCS attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_ARCS Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_ARCS Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
 			result += convert_long(array[i], 0, &sdb[x].mlist.arcs[i]);
 		}
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to convert MISSILE_ARCS attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_ARCS Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_ARCS Attribute Format.");
 			return 0;
 		}
 	}
@@ -715,22 +771,30 @@ int do_space_db_read (dbref ship, dbref executor)
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_LOCK_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: unable to read MISSILE_LOCK attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_LOCK Attribute.");
 			return 0;
 		}
-		
-		array = mush_calloc(sdb[x].missile.tubes, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes, atr_value(a), ' ');
+
+		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
 
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to crack MISSILE_LOCK attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_LOCK Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_LOCK Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
 			result += convert_long(array[i], 0, &sdb[x].mlist.lock[i]);
 		}
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to convert MISSILE_LOCK attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_LOCK Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_LOCK Attribute Format.");
 			return 0;
 		}
 	}
@@ -740,22 +804,30 @@ int do_space_db_read (dbref ship, dbref executor)
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_LOAD_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: unable to read MISSILE_LOAD attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_LOAD Attribute.");
 			return 0;
 		}
-		
-		array = mush_calloc(sdb[x].missile.tubes, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes, atr_value(a), ' ');
+
+		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
 
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to crack MISSILE_LOAD attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_LOAD Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_LOAD Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
 			result += convert_long(array[i], 0, &sdb[x].mlist.load[i]);
 		}
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to convert MISSILE_LOAD attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_LOAD Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_LOAD Attribute Format.");
 			return 0;
 		}
 	}
@@ -765,39 +837,51 @@ int do_space_db_read (dbref ship, dbref executor)
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_RECYCLE_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: unable to read MISSILE_RECYCLE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_RECYCLE Attribute.");
 			return 0;
 		}
-		
-		array = mush_calloc(sdb[x].missile.tubes, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes, atr_value(a), ' ');
+
+		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
 
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to crack MISSILE_RECYCLE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_RECYCLE Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_RECYCLE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
 			result += convert_long(array[i], 0, &sdb[x].mlist.recycle[i]);
 		}
 		if (result == 0) {
-			write_spacelog(executor, ship, "READ: unable to convert MISSILE_RECYCLE attribute.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_RECYCLE Attribute.");
+			return 0;
+		}
+		if (result != sdb[x].missile.tubes) {
+			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_RECYCLE Attribute Format.");
 			return 0;
 		}
 	}
-	
-	/* ENGINE */
+
+/* ENGINE */
 
  	a = atr_get(ship, ENGINE_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read ENGINE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read ENGINE Attribute.");
 		return 0;
 	}
-	
-	array = mush_calloc(ENGINE_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, ENGINE_DATA_NUMBER, atr_value(a), ' ');
-	
+
+	array = mush_calloc(ENGINE_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, ENGINE_DATA_NUMBER + 1, atr_value(a), ' ');
+
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack ENGINE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack ENGINE Attribute.");
+		return 0;
+	}
+	if (result != ENGINE_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack ENGINE Attribute Format.");
 		return 0;
 	}
 	result += convert_long(array[0], 0, &sdb[x].engine.version);
@@ -810,23 +894,31 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[7], 0.0, &sdb[x].engine.warp_cruise);
 	result += convert_double(array[8], 0.0, &sdb[x].engine.impulse_cruise);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert ENGINE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert ENGINE Attribute.");
+		return 0;
+	}
+	if (result != ENGINE_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert ENGINE Attribute Format.");
 		return 0;
 	}
 	sdb[x].engine.version = 1;
-	
-	/* STRUCTURE */
+
+/* STRUCTURE */
 
  	a = atr_get(ship, STRUCTURE_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read STRUCTURE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read STRUCTURE Attribute.");
 		return 0;
 	}
-	array = mush_calloc(STRUCTURE_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, STRUCTURE_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(STRUCTURE_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, STRUCTURE_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack STRUCTURE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack STRUCTURE Attribute.");
+		return 0;
+	}
+	if (result != STRUCTURE_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack STRUCTURE Attribute Format.");
 		return 0;
 	}
 	result += convert_long(array[0], 0, &sdb[x].structure.type);
@@ -842,22 +934,30 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[10], 0.0, &sdb[x].structure.repair);
 	result += convert_long(array[11], 0, &sdb[x].structure.max_repair);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert STRUCTURE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert STRUCTURE Attribute.");
 		return 0;
 	}
-	
-	/* POWER */
+	if (result != STRUCTURE_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert STRUCTURE Attribute Format.");
+		return 0;
+	}
+
+/* POWER */
 
  	a = atr_get(ship, POWER_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read POWER attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read POWER Attribute.");
 		return 0;
 	}
-	array = mush_calloc(POWER_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, POWER_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(POWER_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, POWER_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack POWER attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack POWER Attribute.");
+		return 0;
+	}
+	if (result != POWER_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack POWER Attribute Format.");
 		return 0;
 	}
 	result += convert_long(array[0], 0, &sdb[x].power.version);
@@ -866,7 +966,11 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[3], 0.0, &sdb[x].power.batt);
 	result += convert_double(array[4], 0.0, &sdb[x].power.total);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert POWER attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert POWER Attribute.");
+		return 0;
+	}
+	if (result != POWER_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert POWER Attribute Format.");
 		return 0;
 	}
 
@@ -874,14 +978,18 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, SENSOR_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read SENSOR attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read SENSOR Attribute.");
 		return 0;
 	}
-	array = mush_calloc(SENSOR_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, SENSOR_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(SENSOR_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, SENSOR_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack SENSOR attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack SENSOR Attribute.");
+		return 0;
+	}
+	if (result != SENSOR_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack SENSOR Attribute Format.");
 		return 0;
 	}
 	result += convert_long(array[0], 0, &sdb[x].sensor.version);
@@ -902,7 +1010,11 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_long(array[15], 0, &sdb[x].sensor.contacts);
 	result += convert_long(array[16], 0, &sdb[x].sensor.counter);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert SENSOR attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert SENSOR Attribute.");
+		return 0;
+	}
+	if (result != SENSOR_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert SENSOR Attribute Format.");
 		return 0;
 	}
 	sdb[x].sensor.contacts = 0;
@@ -910,64 +1022,68 @@ int do_space_db_read (dbref ship, dbref executor)
 
 /* SHIELD */
 
-        a = atr_get(ship, SHIELD_ATTR_NAME);
-        if (a == NULL) {
-                write_spacelog(executor, ship, "READ: unable to read SHIELD attribute.");
-                return 0;
-        }
-        array = mush_calloc(SHIELD_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-        result = list2arr(array, SHIELD_DATA_NUMBER + 1, atr_value(a), ' ');
+    a = atr_get(ship, SHIELD_ATTR_NAME);
+    if (a == NULL) {
+		write_spacelog(executor, ship, "READ: Unable to Read SHIELD Attribute.");
+        return 0;
+    }
+    array = mush_calloc(SHIELD_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+    result = list2arr(array, SHIELD_DATA_NUMBER + 1, atr_value(a), ' ');
 
-        if (result == 0) {
-                write_spacelog(executor, ship, "READ: Unable to Crack SHIELD Attribute.");
-                return 0;
-        }
-
-        if (result != SHIELD_DATA_NUMBER) {
-	        write_spacelog(executor, ship, "READ: Unable to Crack SHIELD Attribute Format.");
+    if (result == 0) {
+		write_spacelog(executor, ship, "READ: Unable to Crack SHIELD Attribute.");
+		return 0;
+	}
+	if (result != SHIELD_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack SHIELD Attribute Format.");
 		return 0;
 	}
 
-        result += convert_double(array[0], 0.0, &sdb[x].shield.ratio);
-        result += convert_long(array[1], 0, &sdb[x].shield.maximum);
-        result += convert_double(array[2], 0.0, &sdb[x].shield.freq);
-        result += convert_long(array[3], 0, &sdb[x].shield.exist);
-        result += convert_long(array[4], 0, &sdb[x].shield.active[0]);
-        result += convert_long(array[5], 0, &sdb[x].shield.active[1]);
-        result += convert_long(array[6], 0, &sdb[x].shield.active[2]);
-        result += convert_long(array[7], 0, &sdb[x].shield.active[3]);
-        result += convert_long(array[8], 0, &sdb[x].shield.active[4]);
-        result += convert_long(array[9], 0, &sdb[x].shield.active[5]);
-        result += convert_double(array[10], 0.0, &sdb[x].shield.damage[0]);
-        result += convert_double(array[11], 0.0, &sdb[x].shield.damage[1]);
-        result += convert_double(array[12], 0.0, &sdb[x].shield.damage[2]);
-        result += convert_double(array[13], 0.0, &sdb[x].shield.damage[3]);
-        result += convert_double(array[14], 0.0, &sdb[x].shield.damage[4]);
-        result += convert_double(array[15], 0.0, &sdb[x].shield.damage[5]);
-        if (result == 0) {
-                write_spacelog(executor, ship, "READ: Unable to Convert SHIELD Attribute.");
-                return 0;
-        }
-        
-	if (result != SHIELD_DATA_NUMBER) {
+    result += convert_double(array[0], 0.0, &sdb[x].shield.ratio);
+    result += convert_long(array[1], 0, &sdb[x].shield.maximum);
+    result += convert_double(array[2], 0.0, &sdb[x].shield.freq);
+    result += convert_long(array[3], 0, &sdb[x].shield.exist);
+    result += convert_long(array[4], 0, &sdb[x].shield.active[0]);
+    result += convert_long(array[5], 0, &sdb[x].shield.active[1]);
+    result += convert_long(array[6], 0, &sdb[x].shield.active[2]);
+    result += convert_long(array[7], 0, &sdb[x].shield.active[3]);
+    result += convert_long(array[8], 0, &sdb[x].shield.active[4]);
+    result += convert_long(array[9], 0, &sdb[x].shield.active[5]);
+    result += convert_double(array[10], 0.0, &sdb[x].shield.damage[0]);
+    result += convert_double(array[11], 0.0, &sdb[x].shield.damage[1]);
+    result += convert_double(array[12], 0.0, &sdb[x].shield.damage[2]);
+    result += convert_double(array[13], 0.0, &sdb[x].shield.damage[3]);
+    result += convert_double(array[14], 0.0, &sdb[x].shield.damage[4]);
+    result += convert_double(array[15], 0.0, &sdb[x].shield.damage[5]);
+    if (result == 0) {
+		write_spacelog(executor, ship, "READ: Unable to Convert SHIELD Attribute.");
+		return 0;
+    }
+
+    if (result != SHIELD_DATA_NUMBER) {
 		write_spacelog(executor, ship, "READ: Unable to Convert SHIELD Attribute Format.");
 		return 0;
 	}
-	
+
 /* TECHNOLOGY */
 
  	a = atr_get(ship, TECHNOLOGY_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read TECHNOLOGY attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read TECHNOLOGY Attribute.");
 		return 0;
 	}
-	array = mush_calloc(TECHNOLOGY_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, TECHNOLOGY_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(TECHNOLOGY_DATA_NUMBER +1, sizeof(char *), "arrayarray");
+	result = list2arr(array, TECHNOLOGY_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack TECHNOLOGY attribute.");
+		write_spacelog(executor, ship, "READ: Unable to crack TECHNOLOGY Attribute.");
 		return 0;
 	}
+	if (result != TECHNOLOGY_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack TECHNOLOGY Attribute Format.");
+		return 0;
+	}
+
 	result += convert_double(array[0], 0.0, &sdb[x].tech.firing);
 	result += convert_double(array[1], 0.0, &sdb[x].tech.fuel);
 	result += convert_double(array[2], 0.0, &sdb[x].tech.stealth);
@@ -978,7 +1094,11 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[7], 0.0, &sdb[x].tech.armor);
 	result += convert_double(array[8], 0.0, &sdb[x].tech.ly_range);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert TECHNOLOGY attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert TECHNOLOGY Attribute.");
+		return 0;
+	}
+	if (result != TECHNOLOGY_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert TECHNOLOGY Attribute Format.");
 		return 0;
 	}
 
@@ -986,16 +1106,21 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, MOVEMENT_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read MOVEMENT attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read MOVEMENT Attribute.");
 		return 0;
 	}
-	array = mush_calloc(MOVEMENT_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, MOVEMENT_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(MOVEMENT_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, MOVEMENT_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack MOVEMENT attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack MOVEMENT Attribute.");
 		return 0;
 	}
+	if (result != MOVEMENT_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack MOVEMENT Attribute Format.");
+		return 0;
+	}
+
 	result += convert_long(array[0], 0, &sdb[x].move.time);
 	result += convert_long(array[1], 0, &sdb[x].move.dt);
 	result += convert_double(array[2], 0.0, &sdb[x].move.in);
@@ -1006,7 +1131,11 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_long(array[7], 0, &sdb[x].move.empire);
 	result += convert_long(array[8], 0, &sdb[x].move.quadrant);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert MOVEMENT attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert MOVEMENT Attribute.");
+		return 0;
+	}
+	if (result != MOVEMENT_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert MOVEMENT Attribute Format.");
 		return 0;
 	}
 
@@ -1014,16 +1143,21 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, CLOAK_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read CLOAK attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read CLOAK Attribute.");
 		return 0;
 	}
-	array = mush_calloc(CLOAK_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, CLOAK_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(CLOAK_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, CLOAK_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack CLOAK attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack CLOAK Attribute.");
 		return 0;
 	}
+	if (result != CLOAK_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack CLOAK Attribute Format.");
+		return 0;
+	}
+
 	result += convert_long(array[0], 0, &sdb[x].cloak.version);
 	result += convert_long(array[1], 0, &sdb[x].cloak.cost);
 	result += convert_double(array[2], 0.0, &sdb[x].cloak.freq);
@@ -1031,7 +1165,11 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_long(array[4], 0, &sdb[x].cloak.active);
 	result += convert_double(array[5], 0.0, &sdb[x].cloak.damage);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert CLOAK attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert CLOAK Attribute.");
+		return 0;
+	}
+	if (result != CLOAK_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack CLOAK Attribute Format.");
 		return 0;
 	}
 
@@ -1039,16 +1177,21 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, TRANS_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read TRANS attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read TRANS Attribute.");
 		return 0;
 	}
-	array = mush_calloc(TRANS_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, TRANS_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(TRANS_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, TRANS_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack TRANS attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack TRANS Attribute.");
 		return 0;
 	}
+	if (result != TRANS_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack TRANS Attribute Format.");
+		return 0;
+	}
+
 	result += convert_long(array[0], 0, &sdb[x].trans.cost);
 	result += convert_double(array[1], 0.0, &sdb[x].trans.freq);
 	result += convert_long(array[2], 0, &sdb[x].trans.exist);
@@ -1057,7 +1200,11 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_long(array[5], 0, &sdb[x].trans.d_lock);
 	result += convert_long(array[5], 0, &sdb[x].trans.s_lock);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert TRANS attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert TRANS Attribute.");
+		return 0;
+	}
+	if (result != TRANS_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert TRANS Attribute Format.");
 		return 0;
 	}
 
@@ -1065,16 +1212,21 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, TRACT_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read TRACT attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read TRACT Attribute.");
 		return 0;
 	}
-	array = mush_calloc(TRACT_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, TRACT_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(TRACT_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, TRACT_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack TRACT attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack TRACT Attribute.");
 		return 0;
 	}
+	if (result != TRACT_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack TRACT Attribute Format.");
+		return 0;
+	}
+
 	result += convert_long(array[0], 0, &sdb[x].tract.cost);
 	result += convert_double(array[1], 0.0, &sdb[x].tract.freq);
 	result += convert_long(array[2], 0, &sdb[x].tract.exist);
@@ -1082,7 +1234,11 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[4], 0.0, &sdb[x].tract.damage);
 	result += convert_long(array[5], 0, &sdb[x].tract.lock);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert TRACT attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert TRACT Attribute.");
+		return 0;
+	}
+	if (result != TRACT_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert TRACT Attribute Format.");
 		return 0;
 	}
 
@@ -1090,16 +1246,21 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, COORDS_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read COORDS attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read COORDS Attribute.");
 		return 0;
 	}
-	array = mush_calloc(COORDS_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, COORDS_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(COORDS_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, COORDS_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack COORDS attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack COORDS Attribute.");
 		return 0;
 	}
+	if (result != COORDS_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack COORDS Attribute Format.");
+		return 0;
+	}
+
 	result += convert_double(array[0], 0.0, &sdb[x].coords.x);
 	result += convert_double(array[1], 0.0, &sdb[x].coords.y);
 	result += convert_double(array[2], 0.0, &sdb[x].coords.z);
@@ -1110,7 +1271,11 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[7], 0.0, &sdb[x].coords.yd);
 	result += convert_double(array[8], 0.0, &sdb[x].coords.zd);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert COORDS attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert COORDS Attribute.");
+		return 0;
+	}
+	if (result != COORDS_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert COORDS Attribute Format.");
 		return 0;
 	}
 
@@ -1118,16 +1283,21 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, COURSE_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read COURSE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read COURSE Attribute.");
 		return 0;
 	}
-	array = mush_calloc(COURSE_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, COURSE_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(COURSE_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, COURSE_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack COURSE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack COURSE Attribute.");
 		return 0;
 	}
+	if (result != COURSE_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack COURSE Attribute Format.");
+		return 0;
+	}
+
 	result += convert_long(array[0], 0, &sdb[x].course.version);
 	result += convert_double(array[1], 0.0, &sdb[x].course.yaw_in);
 	result += convert_double(array[2], 0.0, &sdb[x].course.yaw_out);
@@ -1146,7 +1316,11 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[15], 0.0, &sdb[x].course.d[2][2]);
 	result += convert_double(array[16], 0.0, &sdb[x].course.rate);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert COURSE attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert COURSE Attribute.");
+		return 0;
+	}
+	if (result != COURSE_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert COURSE Attribute Format.");
 		return 0;
 	}
 
@@ -1154,23 +1328,32 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, MAIN_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read MAIN attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read MAIN Attribute.");
 		return 0;
 	}
-	array = mush_calloc(MAIN_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, MAIN_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(MAIN_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, MAIN_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack MAIN attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack MAIN Attribute.");
 		return 0;
 	}
+	if (result != MAIN_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack MAIN Attribute Format.");
+		return 0;
+	}
+
 	result += convert_double(array[0], 0.0, &sdb[x].main.in);
 	result += convert_double(array[1], 0.0, &sdb[x].main.out);
 	result += convert_double(array[2], 0.0, &sdb[x].main.damage);
 	result += convert_double(array[3], 0.0, &sdb[x].main.gw);
 	result += convert_long(array[4], 0, &sdb[x].main.exist);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert MAIN attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert MAIN Attribute.");
+		return 0;
+	}
+	if (result != MAIN_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert MAIN Attribute Format.");
 		return 0;
 	}
 
@@ -1178,23 +1361,32 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, AUX_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read AUX attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read AUX Attribute.");
 		return 0;
 	}
-	array = mush_calloc(AUX_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, AUX_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(AUX_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, AUX_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack AUX attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack AUX Attribute.");
 		return 0;
 	}
+	if (result != AUX_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack AUX Attribute Format.");
+		return 0;
+	}
+
 	result += convert_double(array[0], 0.0, &sdb[x].aux.in);
 	result += convert_double(array[1], 0.0, &sdb[x].aux.out);
 	result += convert_double(array[2], 0.0, &sdb[x].aux.damage);
 	result += convert_double(array[3], 0.0, &sdb[x].aux.gw);
 	result += convert_long(array[4], 0, &sdb[x].aux.exist);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert AUX attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert AUX Attribute.");
+		return 0;
+	}
+	if (result != AUX_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert AUX Attribute Format.");
 		return 0;
 	}
 
@@ -1202,23 +1394,32 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, BATT_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read BATT attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read BATT Attribute.");
 		return 0;
 	}
-	array = mush_calloc(BATT_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, BATT_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(BATT_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, BATT_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack BATT attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack BATT Attribute.");
 		return 0;
 	}
+	if (result != BATT_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack BATT Attribute Format.");
+		return 0;
+	}
+
 	result += convert_double(array[0], 0.0, &sdb[x].batt.in);
 	result += convert_double(array[1], 0.0, &sdb[x].batt.out);
 	result += convert_double(array[2], 0.0, &sdb[x].batt.damage);
 	result += convert_double(array[3], 0.0, &sdb[x].batt.gw);
 	result += convert_long(array[4], 0, &sdb[x].batt.exist);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert BATT attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert BATT Attribute.");
+		return 0;
+	}
+	if (result != BATT_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert BATT Attribute Format.");
 		return 0;
 	}
 
@@ -1226,21 +1427,30 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, FUEL_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read FUEL attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read FUEL Attribute.");
 		return 0;
 	}
-	array = mush_calloc(FUEL_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, FUEL_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(FUEL_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, FUEL_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack FUEL attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack FUEL Attribute.");
 		return 0;
 	}
+	if (result != FUEL_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack FUEL Attribute Format.");
+		return 0;
+	}
+
 	result += convert_double(array[0], 0.0, &sdb[x].fuel.antimatter);
 	result += convert_double(array[1], 0.0, &sdb[x].fuel.deuterium);
 	result += convert_double(array[2], 0.0, &sdb[x].fuel.reserves);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert FUEL attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert FUEL Attribute.");
+		return 0;
+	}
+	if (result != FUEL_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert FUEL Attribute Format.");
 		return 0;
 	}
 
@@ -1248,16 +1458,21 @@ int do_space_db_read (dbref ship, dbref executor)
 
  	a = atr_get(ship, STATUS_ATTR_NAME);
 	if (a == NULL) {
-		write_spacelog(executor, ship, "READ: unable to read STATUS attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Read STATUS Attribute.");
 		return 0;
 	}
-	array = mush_calloc(STATUS_DATA_NUMBER, sizeof(char *), "arrayarray");
-	result = list2arr(array, STATUS_DATA_NUMBER, atr_value(a), ' ');
+	array = mush_calloc(STATUS_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, STATUS_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to crack STATUS attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Crack STATUS Attribute.");
 		return 0;
 	}
+	if (result != STATUS_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack STATUS Attribute Format.");
+		return 0;
+	}
+
 	result += convert_long(array[0], 0, &sdb[x].status.active);
 	result += convert_long(array[1], 0, &sdb[x].status.docked);
 	result += convert_long(array[2], 0, &sdb[x].status.landed);
@@ -1269,16 +1484,20 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_long(array[8], 0, &sdb[x].status.open_docking);
 	result += convert_long(array[9], 0, &sdb[x].status.link);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: unable to convert STATUS attribute.");
+		write_spacelog(executor, ship, "READ: Unable to Convert STATUS Attribute.");
+		return 0;
+	}
+	if (result != STATUS_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert STATUS Attribute Format.");
 		return 0;
 	}
 	sdb[x].status.time = sdb[x].move.time;
-	
+
 /* DEBUGGING */
 
 	result = debug_space(x);
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: Bugs found and corrected.");
+		write_spacelog(executor, ship, "READ: Bugs Found and Corrected.");
 	}
 
 	return 1;
