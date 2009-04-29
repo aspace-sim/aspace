@@ -72,10 +72,10 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 
-        if (result != ALLOCATE_DATA_NUMBER) {
-                write_spacelog(executor, ship, "READ: Unable to Crack ALLOCATE Attribute Format.");
-                return 0;
-        }
+	if (result != ALLOCATE_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack ALLOCATE Attribute Format.");
+		return 0;
+    }
 
 	result += convert_long(array[0], 0, &sdb[x].alloc.version);
 	result += convert_double(array[1], 0.0, &sdb[x].alloc.helm);
@@ -104,10 +104,10 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 
-        if (result != ALLOCATE_DATA_NUMBER) {
-                write_spacelog(executor, ship, "READ: Unable to Convert ALLOCATE Attribute Format.");
-                return 0;
-        }
+	if (result != ALLOCATE_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Convert ALLOCATE Attribute Format.");
+		return 0;
+    }
 
 /* BEAM */
 
@@ -125,10 +125,10 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 
-        if (result != BEAM_DATA_NUMBER) {
-                write_spacelog(executor, ship, "READ: Unable to Crack BEAM Attribute Format.");
-                return 0;
-        }
+    if (result != BEAM_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack BEAM Attribute Format.");
+		return 0;
+    }
 
 	result += convert_double(array[0], 0.0, &sdb[x].beam.in);
 	result += convert_double(array[1], 0.0, &sdb[x].beam.out);
@@ -276,7 +276,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		if (result != sdb[x].beam.banks) {
-			write_spacelog(executor, ship, "READ:  Unable to Crack BEAM_BONUS Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_BONUS Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].beam.banks ; ++i) {
