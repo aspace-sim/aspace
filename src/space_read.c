@@ -552,7 +552,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
@@ -563,7 +563,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_ACTIVE Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_ACTIVE Attribute Format.");
 			return 0;
 		}
 	}
@@ -585,7 +585,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_NAME Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_NAME Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
@@ -596,7 +596,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_NAME Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_NAME Attribute Format.");
 			return 0;
 		}
 	}
@@ -618,7 +618,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_DAMAGE Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_DAMAGE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
@@ -629,7 +629,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_DAMAGE Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_DAMAGE Attribute Format.");
 			return 0;
 		}
 	}
@@ -651,7 +651,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
@@ -662,7 +662,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_WAREHEAD Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_WAREHEAD Attribute Format.");
 			return 0;
 		}
 	}
@@ -684,7 +684,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
@@ -695,7 +695,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_COST Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_COST Attribute Format.");
 			return 0;
 		}
 	}
@@ -717,7 +717,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_RANGE Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_RANGE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
@@ -728,7 +728,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_RANGE Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_RANGE Attribute Format.");
 			return 0;
 		}
 	}
@@ -750,7 +750,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_ARCS Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_ARCS Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
@@ -761,7 +761,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_ARCS Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_ARCS Attribute Format.");
 			return 0;
 		}
 	}
@@ -783,7 +783,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_LOCK Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_LOCK Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
@@ -794,7 +794,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_LOCK Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_LOCK Attribute Format.");
 			return 0;
 		}
 	}
@@ -816,7 +816,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_LOAD Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_LOAD Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
@@ -827,7 +827,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_LOAD Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_LOAD Attribute Format.");
 			return 0;
 		}
 	}
@@ -849,7 +849,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Crack MISSILE_RECYCLE Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_RECYCLE Attribute Format.");
 			return 0;
 		}
 		for (i = 0 ; i < sdb[x].missile.tubes ; ++i) {
@@ -860,7 +860,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 		if (result != sdb[x].missile.tubes) {
-			write_spacelog(executive, ship, "READ: Unable to Convert MISSILE_RECYCLE Attribute Format.");
+			write_spacelog(executor, ship, "READ: Unable to Convert MISSILE_RECYCLE Attribute Format.");
 			return 0;
 		}
 	}
