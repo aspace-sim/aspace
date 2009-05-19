@@ -110,7 +110,6 @@ int do_space_db_read (dbref ship, dbref executor)
     }
 
 /* BEAM */
-
 	a = atr_get(ship, BEAM_ATTR_NAME);
 	if (a == NULL) {
 		write_spacelog(executor, ship, "READ: Unable to Read BEAM Attribute.");
@@ -134,11 +133,12 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_double(array[1], 0.0, &sdb[x].beam.out);
 	result += convert_double(array[2], 0.0, &sdb[x].beam.freq);
 	result += convert_long(array[3], 0, &sdb[x].beam.exist);
-	if (sdb[x].beam.exist) {
-		result += convert_long(array[4], 0, &sdb[x].beam.banks);
-	} else {
+	result += convert_long(array[4], 0, &sdb[x].beam.banks);
+	if (!sdb[x].beam.exist) {
+	   if (sdb[x].beam.banks > 0) {
 		sdb[x].beam.banks = 0;
                 write_spacelog(executor, ship, "READ: BEAMS Do Not Exist, Beam Banks Value Defaulting to 0.");
+	   }
 	}
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Convert BEAM Attribute.");
