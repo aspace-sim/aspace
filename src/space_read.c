@@ -120,25 +120,24 @@ int do_space_db_read (dbref ship, dbref executor)
 	result = list2arr(array, BEAM_DATA_NUMBER + 1, atr_value(a), ' ');
 
 	if (result == 0) {
-		write_spacelog(executor, ship, "READ: Unable to Crack BEAM Attribute.");
-		return 0;
+	   write_spacelog(executor, ship, "READ: Unable to Crack BEAM Attribute.");
+           return 0;
 	}
 
-    if (result != BEAM_DATA_NUMBER) {
-		write_spacelog(executor, ship, "READ: Unable to Crack BEAM Attribute Format.");
-		return 0;
-    }
+        if (result != BEAM_DATA_NUMBER) {
+	   write_spacelog(executor, ship, "READ: Unable to Crack BEAM Attribute Format.");
+           return 0;
+        }
 
 	result += convert_double(array[0], 0.0, &sdb[x].beam.in);
 	result += convert_double(array[1], 0.0, &sdb[x].beam.out);
 	result += convert_double(array[2], 0.0, &sdb[x].beam.freq);
 	result += convert_long(array[3], 0, &sdb[x].beam.exist);
-	result += convert_long(array[4], 0, &sdb[x].beam.banks);
-	if (!sdb[x].beam.exist) {
-	   if (sdb[x].beam.banks > 0) {
+	if (sdb[x].beam.exist) {
+	   result += convert_long(array[4], 0, &sdb[x].beam.banks);
+	} else if (atof(array[4]) > 0) {
 		sdb[x].beam.banks = 0;
                 write_spacelog(executor, ship, "READ: BEAMS Do Not Exist, Beam Banks Value Defaulting to 0.");
-	   }
 	}
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Convert BEAM Attribute.");
@@ -516,7 +515,7 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_long(array[3], 0, &sdb[x].missile.exist);
 	if (sdb[x].missile.exist) {
 		result += convert_long(array[4], 0, &sdb[x].missile.tubes);
-	} else {
+	} else if (atof(array[4]) > 0) {
 		sdb[x].missile.tubes = 0;
 		write_spacelog(executor, ship, "READ: MISSILES Do Not Exist, Missile Tubes Value Defaulting to 0.");
 	}
