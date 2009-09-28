@@ -1228,7 +1228,7 @@ void setupAspaceFunctions()
 	function_add("PC2SU", local_fun_pc2su, 1, 1, FN_REG);
 	function_add("RAD2DEG", local_fun_rad2deg, 1, 1, FN_REG);
 	function_add("SD2SECS", local_fun_sd2secs, 1, 1, FN_REG);
-	function_add("SDB", local_fun_sdb, 1, 7, FN_REG);
+	function_add("SDB", local_fun_sdb, 1, 9, FN_REG);
 	function_add("SECS2SD", local_fun_secs2sd, 1, 1, FN_REG);
 	function_add("SPACENUM", local_fun_spacenum, 1, 1, FN_REG);
 	function_add("SPACENUMLIST", local_fun_spacenumlist, 1, 1, FN_REG);
