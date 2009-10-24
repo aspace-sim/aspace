@@ -835,9 +835,10 @@ FUNCTION(local_fun_spacenumlist)
 		{
 			for (i = 0; space[i] != NOTHING; i++)
 			{
-				if (first)
+				if (first) {
+					safe_dbref(space[i], buff, bp);
 					first = 0;
-				else {
+				} else {
 					safe_chr(' ', buff, bp);
 					safe_dbref(space[i], buff, bp);
 				}
