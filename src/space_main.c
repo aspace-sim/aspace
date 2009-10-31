@@ -1218,7 +1218,7 @@ void addConsole(char *console_name, dbref console_dbref)
 void setupAspaceFunctions()
 {
 	function_add("CONSOLEMSG", local_fun_consolemsg, 3, 3, FN_ADMIN);
-	function_add("BORDER", local_fun_border, 1, 7, FN_REG);
+	function_add("BORDER", local_fun_border, 1, 7, FN_ADMIN);
 	function_add((char *) "CDB", local_fun_cdb, 1, 5, FN_REG);
 	function_add("INRANGE", local_fun_inrange, 2, 5, FN_REG);
 	function_add("COORDS", local_fun_coords, 2, 2, FN_REG);
