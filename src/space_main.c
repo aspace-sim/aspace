@@ -672,7 +672,7 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 							global_eval_context.wenv[9] = msg;
 						process_expression(buff, bp, &tp, cdb[i].object, executor, enactor,
 						  PE_DEFAULT, PT_DEFAULT, pe_info);
-						free(void* tbuf);
+						free(tbuf);
 					}
 				/* restore the stack */
 				for (i = 0; i < 10; i++)
@@ -1195,7 +1195,7 @@ FUNCTION(local_fun_consolemsg)
 				}
 			}
 		}
-		free(void* q);
+		free(q);
 		mush_free(msg, "console_message");
 	}
 	
