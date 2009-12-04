@@ -1177,7 +1177,7 @@ int do_scanner_report (int a, char *s, dbref enactor)
 					sp = sbuf = safe_atr_value(d);
 					process_expression(desc, &dp, &sp, sdb[x].object, enactor, enactor,
 		    			 PE_DEFAULT, PT_DEFAULT, NULL);
-		    		free((Malloc_t) sbuf);
+		    		free(void* sbuf);
 		    		*dp = '\0';
 					strncat(buffer, desc, sizeof(buffer) - 1);
 					strncat(buffer, "\n", sizeof(buffer) - 1);

@@ -39,7 +39,7 @@ void do_console_notify (int x, dbref parent1, dbref parent2, dbref parent3, cons
 				}
 			}
 		}
-		free((Malloc_t) q);
+		free(void* q);
 	}
 	return;
 }
@@ -75,7 +75,7 @@ void do_all_console_notify (int x, const char *msg)
 				}
 			}
 		}
-		free((Malloc_t) q);
+		free(void* q);
 	}
 	return;
 }
@@ -107,7 +107,7 @@ void do_ship_notify(int x, const char *msg)
 				}
 			}
 		}
-		free((Malloc_t) q);
+		free(void* q);
 	}
 	return;
 }
@@ -160,7 +160,7 @@ void do_space_notify_one (int x, dbref parent1, dbref parent2, dbref parent3, co
 											}
 										}
 									}
-									free((Malloc_t) q);
+									free(void* q);
 								}
 							}
 						}
@@ -221,7 +221,7 @@ void do_space_notify_two (int n1, int n2, dbref parent1, dbref parent2, dbref pa
 											}
 										}
 									}
-									free((Malloc_t) q);
+									free(void* q);
 								}
 							}
 						}
