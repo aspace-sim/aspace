@@ -8,11 +8,9 @@
 /* New functions for dealing with the new border system */
 
 void
-free_borderinfo(void *ptr) {
-  spaceborder_info *si = (spaceborder_info *) ptr;
-  mush_free(si->data, "border_info");
-  mush_free(si->border_id, "spaceborder_id");
-  mush_free(si, "spaceborder_info");
+free_borderinfo(aspace_borders *ptr) {
+  mush_free(si->name, "spaceborder_name");
+  mush_free(si, "border_info");
 }
 
 char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z)

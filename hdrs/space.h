@@ -636,7 +636,7 @@ struct comms_database_t {
 /* ------------------------------------------------------------------------ */
 
 /* from space_border.c - not everything yet */
-extern void free_borderinfo(void *ptr);
+extern void free_borderinfo(aspace_borders *ptr);
 extern char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z);
 extern char *deleteBorder(int border);
 extern char *list_borders();
