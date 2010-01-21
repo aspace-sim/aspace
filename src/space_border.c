@@ -9,8 +9,8 @@
 
 void
 free_borderinfo(aspace_borders *ptr) {
-  mush_free(si->name, "spaceborder_name");
-  mush_free(si, "border_info");
+  mush_free(ptr->name, "spaceborder_name");
+  mush_free(ptr, "border_info");
 }
 
 char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z)
