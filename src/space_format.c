@@ -95,6 +95,18 @@ char *format_Class (int x)
 
 /* -------------------------------------------------------------------- */
 
+char *format_Iff_Freq (int x)
+{
+	static char buffer[50];
+	
+	snprintf(buffer, sizeof(buffer), "%s%16.16s:%s %-20.20s",
+	  ANSI_CYAN, "IFF Frequency", ANSI_WHITE, unparse_freq(sdb[x].iff.frequency));
+	  
+	return (buffer);
+}
+
+/* -------------------------------------------------------------------- */
+
 char *format_Range (int n1, int n2)
 {
 	static char buffer[50];

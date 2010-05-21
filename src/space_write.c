@@ -80,6 +80,17 @@ int do_space_db_write (dbref ship, dbref executor)
 		return 0;
 	}
 
+/* IFF */
+
+	strncpy(buffer, unparse_number(sdb[x].iff.frequency), sizeof(buffer) - 1);
+	result = atr_add(ship, IFF_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+	
+	if ( result != 0 ) {
+		write_spacelog(executor, ship, "WRITE: unable to write IFF attribute.");
+		return 0;
+	}
+	
+	
 /* ALLOCATE */
 
 	snprintf(buffer, sizeof(buffer), "%d %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",

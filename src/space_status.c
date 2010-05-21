@@ -75,30 +75,33 @@ char *contact_line (int contact)
 	strncpy(arc2, unparse_arc(sdb2arc(x, n)), sizeof(arc1) - 1);
 
 	if (level < 25) {
-		snprintf(buffer, sizeof(buffer), "%s%3d%s %-4.4s %3.0f %3.0f %-3.0f %7.7s %-5.5s %3.0f %-3.0f %6.6s %-5.5s\n",
-			ANSI_CYAN, sdb[n].slist.num[contact], ANSI_WHITE,
-			unparse_type(x), level,
-			sdb2bearing(n, x), sdb2elevation(n, x),
-			unparse_range(sdb2range(n, x)), arc1,
-			sdb[x].course.yaw_out, sdb[x].course.pitch_out,
-			unparse_speed(sdb[x].move.out), arc2);
-	} else if (level < 50.0) {
-		snprintf(buffer, sizeof(buffer), "%s%3d%s %-4.4s %3.0f %3.0f %-3.0f %7.7s %-5.5s %3.0f %-3.0f %6.6s %-5.5s %16.16s %-6.6s\n",
+		snprintf(buffer, sizeof(buffer), "%s%3d%s %-4.4s %3.0f %3.0f %-3.0f %7.7s %-5.5s %3.0f %-3.0f %6.6s %-5.5s %s%s%s%s\n",
 			ANSI_CYAN, sdb[n].slist.num[contact], ANSI_WHITE,
 			unparse_type(x), level,
 			sdb2bearing(n, x), sdb2elevation(n, x),
 			unparse_range(sdb2range(n, x)), arc1,
 			sdb[x].course.yaw_out, sdb[x].course.pitch_out,
 			unparse_speed(sdb[x].move.out), arc2,
+			ANSI_HILITE,(sdb[n].iff.frequency == sdb[x].iff.frequency ?  ANSI_GREEN : ANSI_RED),"*",ANSI_NORMAL);
+	} else if (level < 50.0) {
+		snprintf(buffer, sizeof(buffer), "%s%3d%s %-4.4s %3.0f %3.0f %-3.0f %7.7s %-5.5s %3.0f %-3.0f %6.6s %-5.5s %s%s%s%s%16.16s %-6.6s\n",
+			ANSI_CYAN, sdb[n].slist.num[contact], ANSI_WHITE,
+			unparse_type(x), level,
+			sdb2bearing(n, x), sdb2elevation(n, x),
+			unparse_range(sdb2range(n, x)), arc1,
+			sdb[x].course.yaw_out, sdb[x].course.pitch_out,
+			unparse_speed(sdb[x].move.out), arc2,
+			ANSI_HILITE,(sdb[n].iff.frequency == sdb[x].iff.frequency ?  ANSI_GREEN : ANSI_RED),"*",ANSI_NORMAL,
 			(sdb[x].cloak.active ? "(cloaked)" : unparse_class(x)), contact_flags(x));
 	} else {
-		snprintf(buffer, sizeof(buffer), "%s%3d%s %-4.4s %3.0f %3.0f %-3.0f %7.7s %-5.5s %3.0f %-3.0f %6.6s %-5.5s %s%-16.16s%s %-6.6s\n",
+		snprintf(buffer, sizeof(buffer), "%s%3d%s %-4.4s %3.0f %3.0f %-3.0f %7.7s %-5.5s %3.0f %-3.0f %6.6s %-5.5s %s%s%s%s%s%-16.16s%s %-6.6s\n",
 			ANSI_CYAN, sdb[n].slist.num[contact], ANSI_WHITE,
 			unparse_type(x), level,
 			sdb2bearing(n, x), sdb2elevation(n, x),
 			unparse_range(sdb2range(n, x)), arc1,
 			sdb[x].course.yaw_out, sdb[x].course.pitch_out,
 			unparse_speed(sdb[x].move.out), arc2,
+			ANSI_HILITE,(sdb[n].iff.frequency == sdb[x].iff.frequency ?  ANSI_GREEN : ANSI_RED),"*",ANSI_NORMAL,
 			ANSI_HILITE, (sdb[x].cloak.active ? "(cloaked)" : Name(sdb[x].object)), ANSI_NORMAL,
 			contact_flags(x));
 	}
@@ -297,6 +300,19 @@ char *do_sensor_contacts_bot (char *a, dbref enactor)
 			return (buffer);
 		} else
 			return (char *) "#-1 NO CONTACTS";
+	}
+}
+
+/* ------------------------------------------------------------------------ */
+
+int do_iff_check (int contact, dbref enactor)
+{
+	int x = contact2sdb(n, contact);
+	
+	if ( sdb[x].iff.frequency == sdb[n].iff.frequency ) {
+		return 1;
+	} else {
+		return 0;
 	}
 }
 
@@ -611,6 +627,8 @@ int do_operations_status (dbref enactor)
 				strncat(buffer, format_Tract_Freq(n), sizeof(buffer) - 1);
 			strncat(buffer, "\n", sizeof(buffer) - 1);
 		}
+		strncat(buffer, format_Iff_Freq(n), sizeof(buffer) - 1);
+		strncat(buffer, "\n", sizeof(buffer) - 1);
 		if (sdb[n].structure.type < 3 && (sdb[n].structure.has_docking_bay || sdb[n].structure.has_landing_pad)) {
 			if (sdb[n].structure.has_docking_bay)
 				strncat(buffer, format_Docking_Doors(n), sizeof(buffer) - 1);

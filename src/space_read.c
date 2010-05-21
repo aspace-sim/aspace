@@ -56,6 +56,46 @@ int do_space_db_read (dbref ship, dbref executor)
 		sdb[x].space = parse_integer(atr_value(a));
 	}
 
+/* IFF */
+
+	a = atr_get(ship, IFF_ATTR_NAME);
+	
+	if (a == NULL ) {
+		write_spacelog(executor, ship, "READ: Unable to Read IFF Attribute. Setting up default value of 100.000.");
+		atr_add(ship, IFF_ATTR_NAME, "100.00", GOD, 0);
+		a = atr_get(ship, IFF_ATTR_NAME);
+		
+		if ( a == NULL ) {
+			write_spacelog(executor, ship, "READ: Unable to Read IFF Attribute. Could not set default value.");
+			return 0;
+		}
+	}
+	
+	array = mush_calloc(IFF_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
+	result = list2arr(array, IFF_DATA_NUMBER + 1, atr_value(a), ' ');
+	
+	if ( result == 0 ) {
+		write_spacelog(executor, ship, "READ: Unable to Crack IFF Attribute.");
+		return 0;
+	}
+	
+	if ( result != IFF_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to Crack IFF Attribute Format.");
+	}
+	
+	result += convert_double(array[0], 0.0, &sdb[x].iff.frequency);
+	
+	if ( result == 0) {
+		write_spacelog(executor, ship, "READ: Unable to convert IFF Attribute.");
+		return 0;
+	}
+	
+	if ( result != IFF_DATA_NUMBER) {
+		write_spacelog(executor, ship, "READ: Unable to convert IFF Attribute format.");
+		return 0;
+	}
+		
+	
 /* ALLOCATE */
 
 	a = atr_get(ship, ALLOCATE_ATTR_NAME);

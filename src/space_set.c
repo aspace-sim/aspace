@@ -3868,3 +3868,20 @@ int do_set_autopilot (int flag, dbref enactor)
 }
 
 /* ------------------------------------------------------------------------ */
+
+int do_set_iff_frequency (double frequency, dbref enactor)
+{
+	if (error_on_console(enactor)) {
+		return 0;
+	} else if ( frequency < 1.0 || frequency >= 1000.0 ) {
+		notify(enactor, ansi_red("Valid IFF frequency is from 1.0 to 999.999 GHz."));
+	} else {
+		sdb[n].iff.frequency = frequency;
+		do_console_notify(n, console_tactical, console_operation, 0,
+			ansi_cmd(enactor, tprintf("IFF Frequency set to %.3f GHz", sdb[n].iff.frequency)));
+		write_spacelog(enactor, sdb[n].object, tprintf("LOG: IFF Frequency set to %.6f GHz", sdb[n].iff.frequency));
+		return 1;
+	}
+	return 0;
+}
+

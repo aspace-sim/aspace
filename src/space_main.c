@@ -177,6 +177,7 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				case 56: safe_str(unparse_integer(do_set_coords_engage(enactor)), buff, bp); break;
 	
 				case 58: safe_str(unparse_integer(do_set_parallel(parse_integer(args[3]), enactor)), buff, bp); break;
+				case 59: safe_str(unparse_integer(do_set_iff_frequency(parse_number(args[3]), enactor)), buff, bp); break;				
 				default: safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 			} break;
 		case 'e': /* empty */
@@ -329,6 +330,7 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				case 16: safe_str(unparse_integer(do_planet_report(args[3], 1, enactor)), buff, bp); break;
 				case 17: safe_str(unparse_integer(do_planet_report(args[3], 0, enactor)), buff, bp); break;
 				case 18: safe_str(do_sensor_contacts_bot(args[3], enactor), buff, bp); break;
+				case 19: safe_str(unparse_integer(do_iff_check (parse_integer(args[3]), enactor)), buff, bp); break;				
 				default: safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 			} break;
 		case 'v': /* variable */
