@@ -298,6 +298,9 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 #define STATUS_ATTR_NAME          "STATUS"
 #define STATUS_DATA_NUMBER        10
 
+#define IFF_ATTR_NAME			  "IFF"
+#define IFF_DATA_NUMBER           1
+
 /* ------------------------------------------------------------------------ */
 
 struct aspace_empire_info {
@@ -585,6 +588,10 @@ struct status_t {
      int    link;
 };
 
+struct iff_t {
+	double frequency;
+};
+
 struct tmp_t {
      int    i0;
      int    i1;
@@ -624,6 +631,7 @@ struct space_database_t {
      struct batt_t         batt;
      struct fuel_t         fuel;
      struct status_t       status;
+	 struct iff_t          iff;
      struct tmp_t          tmp;
 };
 
@@ -898,6 +906,7 @@ extern void up_repair (void);
 extern int do_space_db_iterate (void);
 
 /* from space_set.c */
+extern int do_set_iff_frequency (double frequency, dbref enactor);
 extern void do_fed_shield_bug_check(int x);
 extern int do_lock_weapon(int first, int last, int contact, int weapon, dbref enactor);
 extern int do_unlock_weapon(int first, int last, int weapon, dbref enactor);
@@ -964,6 +973,7 @@ extern int do_set_intercept (int contact, dbref enactor);
 
 
 /* from space_status.c */
+extern int do_iff_check (int contact, dbref enactor);
 extern int do_sensor_contacts (char *a, dbref enactor);
 extern int do_sensor_report (int contact, dbref enactor);
 extern int do_eng_status (dbref enactor);
@@ -987,6 +997,7 @@ extern char *contact_line_bot (int contact);
 extern char *planet_eta (int x, double r);
 
 /* from space_format.c */
+extern char *format_Iff_Freq (int x);
 extern char *format_Location (int x);
 extern char *format_Name (int x);
 extern char *format_Type (int x);
