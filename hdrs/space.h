@@ -643,6 +643,9 @@ struct comms_database_t {
 
 /* ------------------------------------------------------------------------ */
 
+/* from space_output.c - Raw outputs */
+extern char* output_shields_raw();
+
 /* from space_border.c - not everything yet */
 extern void free_borderinfo(aspace_borders *ptr);
 extern char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z);
