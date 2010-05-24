@@ -160,6 +160,42 @@ void report_ops_power (void)
 
 /* ------------------------------------------------------------------------ */
 
+char *output_shields_raw (int x)
+{
+	static char buffer[BUFFER_LEN];
+	
+	/* Allocate 6, 7, 8, 9 and 10 */
+	/* Shield 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 and 12 */
+	
+	/* Master Shield Information */
+	snprintf(buffer, sizeof(buffer), "%f|%f|%d|%3.3f|%d", sdb[x].alloc.shields, sdb[x].shield.ratio, sdb[x].shield.maximum, sdb[x].shield.freq, sdb[x].shield.exist);
+	strncat(buffer, "~", sizeof(buffer) - 1);
+	
+	/* Fore Shield */
+	
+	snprintf(buffer, sizeof(buffer), "%s|%f|%d|%f", "Fore Shield", sdb[x].alloc.shield[0], sdb[x].shield.active[0], sdb[x].shield.damage[0]);
+	strncat(buffer, "~", sizeof(buffer) - 1);
+
+	/* Starboard Shield */
+	
+	snprintf(buffer, sizeof(buffer), "%s|%f|%d|%f", "Starboard Shield", sdb[x].alloc.shield[1], sdb[x].shield.active[1], sdb[x].shield.damage[1]);
+	strncat(buffer, "~", sizeof(buffer) - 1);
+	
+	/* Aft Shield */
+	
+	snprintf(buffer, sizeof(buffer), "%s|%f|%d|%f", "Aft Shield", sdb[x].alloc.shield[2], sdb[x].shield.active[2], sdb[x].shield.damage[2]);
+	strncat(buffer, "~", sizeof(buffer) - 1);
+	
+	/* Port Shield */
+	
+	snprintf(buffer, sizeof(buffer), "%s|%f|%d|%f", "Port Shield", sdb[x].alloc.shield[3], sdb[x].shield.active[3], sdb[x].shield.damage[3]);
+	strncat(buffer, "~", sizeof(buffer) - 1);
+	
+	return buffer;
+}
+
+/* ------------------------------------------------------------------------ */
+
 void report_shield_power (void)
 {
 	static char buffer[BUFFER_LEN];
