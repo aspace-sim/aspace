@@ -65,7 +65,7 @@
 **/
 #define LOG_TYPE 3 // 1 = write to log file, 2 = send to log channel, 3 = do both 1 and 2
 #define LOG_FILE "log/space.log"
-#define LOG_CHANNEL "space-log"
+#define LOG_CHANNEL "SpaceLog"
 
 #define MIN_OBJNUM			0
 #define MAX_OBJNUM			(db_top)

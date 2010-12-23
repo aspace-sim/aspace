@@ -1157,7 +1157,7 @@ FUNCTION(local_fun_consolemsg)
 	
 	x = parse_integer(args[0]);
 	
-	result = list2arr(consoles, BUFFER_LEN / 2, args[1], ' ');
+	result = list2arr(consoles, BUFFER_LEN / 2, args[1], ' ', 1);
 	
 	msg = (char *) mush_strdup(args[2], "console_message");
 	

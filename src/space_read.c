@@ -72,7 +72,7 @@ int do_space_db_read (dbref ship, dbref executor)
 	}
 	
 	array = mush_calloc(IFF_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, IFF_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, IFF_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 	
 	if ( result == 0 ) {
 		write_spacelog(executor, ship, "READ: Unable to Crack IFF Attribute.");
@@ -105,7 +105,7 @@ int do_space_db_read (dbref ship, dbref executor)
 	}
 
 	array = mush_calloc(ALLOCATE_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, ALLOCATE_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, ALLOCATE_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack ALLOCATE Attribute.");
@@ -157,7 +157,7 @@ int do_space_db_read (dbref ship, dbref executor)
 	}
 
 	array = mush_calloc(BEAM_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, BEAM_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, BEAM_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 	   write_spacelog(executor, ship, "READ: Unable to Crack BEAM Attribute.");
@@ -204,7 +204,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_ACTIVE Attribute.");
@@ -238,7 +238,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_NAME Attribute.");
@@ -274,7 +274,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_DAMAGE Attribute.");
@@ -307,7 +307,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_BONUS Attribute.");
@@ -341,7 +341,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_COST Attribute.");
@@ -375,7 +375,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_RANGE Attribute.");
@@ -408,7 +408,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_ARCS Attribute.");
@@ -441,7 +441,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_LOCK Attribute.");
@@ -474,7 +474,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_LOAD Attribute.");
@@ -507,7 +507,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack BEAM_RECYCLE Attribute.");
@@ -539,7 +539,7 @@ int do_space_db_read (dbref ship, dbref executor)
 	}
 
 	array = mush_calloc(MISSILE_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, MISSILE_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, MISSILE_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack MISSILE Attribute.");
@@ -584,7 +584,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_ACTIVE Attribute.");
@@ -617,7 +617,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_NAME Attribute.");
@@ -650,7 +650,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_DAMAGE Attribute.");
@@ -683,7 +683,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_WARHEAD Attribute.");
@@ -716,7 +716,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_COST Attribute.");
@@ -749,7 +749,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_RANGE Attribute.");
@@ -782,7 +782,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_ARCS Attribute.");
@@ -815,7 +815,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_LOCK Attribute.");
@@ -848,7 +848,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_LOAD Attribute.");
@@ -881,7 +881,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		}
 
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
-		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ');
+		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
 		if (result == 0) {
 			write_spacelog(executor, ship, "READ: Unable to Crack MISSILE_RECYCLE Attribute.");
@@ -913,7 +913,7 @@ int do_space_db_read (dbref ship, dbref executor)
 	}
 
 	array = mush_calloc(ENGINE_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, ENGINE_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, ENGINE_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack ENGINE Attribute.");
@@ -950,7 +950,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(STRUCTURE_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, STRUCTURE_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, STRUCTURE_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack STRUCTURE Attribute.");
@@ -989,7 +989,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(POWER_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, POWER_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, POWER_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack POWER Attribute.");
@@ -1021,7 +1021,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(SENSOR_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, SENSOR_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, SENSOR_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack SENSOR Attribute.");
@@ -1067,7 +1067,7 @@ int do_space_db_read (dbref ship, dbref executor)
         return 0;
     }
     array = mush_calloc(SHIELD_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-    result = list2arr(array, SHIELD_DATA_NUMBER + 1, atr_value(a), ' ');
+    result = list2arr(array, SHIELD_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
     if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack SHIELD Attribute.");
@@ -1112,7 +1112,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(TECHNOLOGY_DATA_NUMBER +1, sizeof(char *), "arrayarray");
-	result = list2arr(array, TECHNOLOGY_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, TECHNOLOGY_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to crack TECHNOLOGY Attribute.");
@@ -1149,7 +1149,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(MOVEMENT_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, MOVEMENT_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, MOVEMENT_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack MOVEMENT Attribute.");
@@ -1186,7 +1186,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(CLOAK_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, CLOAK_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, CLOAK_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack CLOAK Attribute.");
@@ -1220,7 +1220,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(TRANS_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, TRANS_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, TRANS_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack TRANS Attribute.");
@@ -1255,7 +1255,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(TRACT_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, TRACT_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, TRACT_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack TRACT Attribute.");
@@ -1289,7 +1289,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(COORDS_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, COORDS_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, COORDS_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack COORDS Attribute.");
@@ -1326,7 +1326,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(COURSE_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, COURSE_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, COURSE_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack COURSE Attribute.");
@@ -1371,7 +1371,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(MAIN_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, MAIN_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, MAIN_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack MAIN Attribute.");
@@ -1404,7 +1404,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(AUX_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, AUX_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, AUX_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack AUX Attribute.");
@@ -1437,7 +1437,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(BATT_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, BATT_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, BATT_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack BATT Attribute.");
@@ -1470,7 +1470,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(FUEL_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, FUEL_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, FUEL_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack FUEL Attribute.");
@@ -1501,7 +1501,7 @@ int do_space_db_read (dbref ship, dbref executor)
 		return 0;
 	}
 	array = mush_calloc(STATUS_DATA_NUMBER + 1, sizeof(char *), "arrayarray");
-	result = list2arr(array, STATUS_DATA_NUMBER + 1, atr_value(a), ' ');
+	result = list2arr(array, STATUS_DATA_NUMBER + 1, atr_value(a), ' ', 1);
 
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Crack STATUS Attribute.");
