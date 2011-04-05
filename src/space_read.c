@@ -1237,7 +1237,7 @@ int do_space_db_read (dbref ship, dbref executor)
 	result += convert_long(array[3], 0, &sdb[x].trans.active);
 	result += convert_double(array[4], 0.0, &sdb[x].trans.damage);
 	result += convert_long(array[5], 0, &sdb[x].trans.d_lock);
-	result += convert_long(array[5], 0, &sdb[x].trans.s_lock);
+	result += convert_long(array[6], 0, &sdb[x].trans.s_lock);
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Convert TRANS Attribute.");
 		return 0;
