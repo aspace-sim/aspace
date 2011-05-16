@@ -52,7 +52,7 @@ void lookup_space (const char *name, dbref *space)
 	} else
 		for (thing = 0; thing < db_top; thing++)
 			if (SpaceObj(thing) && GoodObject(thing))
-				if (local_wild_match(name, Name(thing)))
+				if (local_wild_match(name, Name(thing), NULL))
 				{
 					space[i] = thing;
       					i++;

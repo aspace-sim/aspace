@@ -390,7 +390,7 @@ int name2sdb (char *name) /* Returns the sdb# of a named space object */
 	for (i = MIN_SPACE_OBJECTS ; i <= max_space_objects ; ++i)
 		if (sdb[i].structure.type)
 			if (SpaceObj(sdb[i].object) && GoodObject(sdb[i].object))
-				if (local_wild_match(name, Name(sdb[i].object)))
+				if (local_wild_match(name, Name(sdb[i].object), NULL))
 					return i;
 	return SENSOR_FAIL;
 }

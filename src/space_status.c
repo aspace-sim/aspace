@@ -1287,7 +1287,7 @@ int do_planet_report (const char *s, int t, dbref enactor)
 					  n != x &&
 					  SpaceObj(sdb[x].object) &&
 					  GoodObject(sdb[x].object)) {
-						if (local_wild_match(s, Name(sdb[x].object))) {
+						if (local_wild_match(s, Name(sdb[x].object), NULL)) {
 							r = sdb2range(n, x);
 							pln[c] = x;
 							rng[c] = r;
