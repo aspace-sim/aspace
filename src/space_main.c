@@ -672,13 +672,14 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 							pe_regs_setenv(pe_regs, 9, msg);
 						} else {
 							pe_regs_setenv(pe_regs, 9, space_crypt_code(atr_value(a), msg, 0));
-						} else {
-							pe_regs_setenv(pe_regs, 9, msg);
-						}
-						call_ufun(&ufun, tptr, 10, tbuf, executor, enactor, pe_info);
-						safe_str(tbuf, buff, bp);
-						pe_regs_free(pe_regs);
+						} 
+					} else {
+						pe_regs_setenv(pe_regs, 9, msg);
 					}
+					call_ufun(&ufun, tptr, 10, tbuf, executor, enactor, pe_info);
+					safe_str(tbuf, buff, bp);
+					pe_regs_free(pe_regs);
+					
 					safe_chr('1', buff, bp);
 					notify(executor, "transmission sent.");
 				}
