@@ -609,7 +609,7 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 					pe_regs_setenv(pe_regs, 1, dbuf1);
 					pe_regs_setenv(pe_regs, 2, dbuf2);
 					pe_regs_setenv(pe_regs, 4, ibuf1);
-					pe_regs_setenv(pe_regs, 6, nfbu2);
+					pe_regs_setenv(pe_regs, 6, nbuf2);
 					pe_regs_setenv(pe_regs, 8, args[3]);
 				}
 				a = atr_get(executor, ENCRYPTION_ATTR_NAME);
