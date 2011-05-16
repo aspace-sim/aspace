@@ -676,7 +676,7 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 					} else {
 						pe_regs_setenv(pe_regs, 9, msg);
 					}
-					call_ufun(&ufun, tptr, 10, tbuf, executor, enactor, pe_info);
+					call_ufun(&ufun, tbuf, executor, enactor, pe_info, pe_regs);
 					safe_str(tbuf, buff, bp);
 					pe_regs_free(pe_regs);
 					
