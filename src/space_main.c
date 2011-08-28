@@ -689,6 +689,7 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 			break;
 		}
 	}
+	}
 
 	return;
 }
