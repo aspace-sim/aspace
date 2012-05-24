@@ -9,10 +9,6 @@
  * normally include them
  */
 
-#ifdef HAVE_PCRE
-  #undef HAVE_PCRE
-#endif
-
 #include <ctype.h>
 #include <string.h>
 #include <math.h>
@@ -43,6 +39,7 @@
 #include "lock.h"
 #include "game.h"
 #include "function.h"
+#include "funs.h"
 #include "mushdb.h"
 #include "command.h"
 #include "intmap.h"

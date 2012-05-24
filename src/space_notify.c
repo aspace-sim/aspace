@@ -102,7 +102,7 @@ void do_ship_notify(int x, const char *msg)
 				room = parse_dbref(split_token(&pq, ' '));
 				if (Zone(room) == sdb[x].object) {
 					if (Typeof(room) == TYPE_ROOM) {
-						notify_except(db[room].contents, sdb[x].object, msg, 0);
+						notify_except(db[room].contents, sdb[x].object,NOTHING, msg, 0);
 					}
 				}
 			}
