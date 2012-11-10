@@ -32,7 +32,7 @@ struct pennmush_flag_info aspace_flag_table[] =
 	{NULL,'0',0,0,0}
 };
 
-/* border stuff */
+/* border stuff - no longer stored here. */
 
 
 /* ------------------------------------------------------------------------ */
