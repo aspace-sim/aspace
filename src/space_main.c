@@ -24,11 +24,6 @@ struct pennmush_flag_info aspace_power_table[] =
 struct pennmush_flag_info aspace_flag_table[] = 
 {
 	{"SPACE-OBJECT", '+', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD},
-	{"PLANET", 'P', TYPE_THING, F_WIZARD, F_WIZARD},
-	{"NEBULA", 'N', TYPE_THING, F_WIZARD, F_WIZARD},
-	{"ANOMALY", 'Y', TYPE_THING | TYPE_PLAYER, F_WIZARD, F_WIZARD},
-	{"BASE", 'B', TYPE_THING, F_WIZARD, F_WIZARD},
-	{"SHIP", 'p', TYPE_THING, F_WIZARD, F_WIZARD},
 	{NULL,'0',0,0,0}
 };
 
