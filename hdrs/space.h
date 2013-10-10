@@ -44,6 +44,7 @@
 #include "command.h"
 #include "intmap.h"
 #include "version.h"
+#include "mymalloc.h"
 
 /* ------------------------------------------------------------------------ */
 
