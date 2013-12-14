@@ -1150,14 +1150,17 @@ void free_spaceconsole(void *ptr) {
 
 void console_message(int x, char *consoles, char *msg) {
 	ATTR *a, *b;
-	char *q, *pq, *the_console, *c_pq, *console_list, *consoles_list[BUFFER_LEN / 2];
+	char *q, *pq, *the_console, *c_pq, *console_list, *show_message, *consoles2, *consoles_list[BUFFER_LEN / 2];
 	space_consoles *sc;
 	int index, result;
 	dbref console, user, parent;
 
 	char *buffer;
 
-	result = list2arr(consoles_list, BUFFER_LEN / 2, consoles, ' ', 1);
+	show_message = (char *) mush_strdup(msg, "console_message");
+	consoles2 = (char *) mush_strdup(consoles, "console_message_consoles");
+
+	result = list2arr(consoles_list, BUFFER_LEN / 2, consoles2, ' ', 1);
 
 	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
 	if (a != NULL) {
@@ -1182,7 +1185,7 @@ void console_message(int x, char *consoles, char *msg) {
 								if (b != NULL) {
 									user = parse_dbref(atr_value(b));
 									if (GoodObject(user)) {
-										notify(user, msg);
+										notify(user, show_message);
 									}
 								}
 							}
@@ -1192,6 +1195,8 @@ void console_message(int x, char *consoles, char *msg) {
 			}
 		}
 		free(q);
+		mush_free(show_message, "console_message");
+		mush_free(consoles2, "console_message_consoles");
 	}
 }
 
@@ -1201,17 +1206,13 @@ FUNCTION(local_fun_consolemsg)
 	int x;
 	
 	x = parse_integer(args[0]);
-	
-	msg = (char *) mush_strdup(args[2], "console_message");
-	
+		
 	if (!GoodObject(sdb[x].object) || !SpaceObj(sdb[x].object)) {
 		write_spacelog(sdb[x].object, sdb[x].object, "BUG: invalid zone to zemit to.");
 		return;
 	}
 
-	console_message(x, args[1], msg);
-
-	mush_free(msg, "console_message");
+	console_message(x, args[1], args[2]);
 	
 	return;
 }

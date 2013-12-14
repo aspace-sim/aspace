@@ -693,6 +693,7 @@ extern double repair_mult[];
 /* from space_main.c */
 extern void initSpace();
 extern void dump_space(dbref);
+extern void console_message(int x, char *consoles, char *msg);
 extern return_t convert_double (char *input, double deflt, double *output);
 extern return_t convert_long (char *input, long deflt, int *output);
 
