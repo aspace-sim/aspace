@@ -32,16 +32,13 @@ void addNewBorder(int border_number, const char* name, double radius, double x, 
 		safe_str("#-1 BORDER NOT CREATED.", buff, bp);
 }
 
-char *deleteBorder(int border)
+void deleteBorder(int border, char *buff, char **bp)
 {
-	static char deleteBuffer[1000];
 	aspace_borders *theBorder;
-	
-	deleteBuffer[0] = '\0';
 
 	if (!border) {
-		strncat(deleteBuffer, "#-1 BORDER NOT SUPPLIED", sizeof(deleteBuffer) - 1);
-		return deleteBuffer;
+		safe_str("#-1 BORDER NOT SUPPLIED", buff, bp);
+		return;
 	}
 	
 	theBorder = im_find(border_map, border);
@@ -50,8 +47,6 @@ char *deleteBorder(int border)
 		free_borderinfo(theBorder);
 		
 	im_delete(border_map, border);
-	
-	return "";
 }
 
 char *border_line_bot (int border_id, aspace_borders *sbi)
@@ -71,60 +66,56 @@ char *border_line_bot (int border_id, aspace_borders *sbi)
 	return (buffer);
 }
 
-char *list_borders()
+void list_borders(char *buff, char **bp)
 {
-		static char listBuffer[BUFFER_LEN];
-		int first = 0;
-		int index = 0;
-        
-		listBuffer[0] = '\0';
+	int first = 0;
+	int index = 0;
+        	
+       for (index = 1; index <= im_count(border_map); index++) {
+		if (first) {
+			safe_str("~", buff, bp);
+		}
 		
-        for (index = 1; index <= im_count(border_map); index++) {
-			if (first)
-				strncat(listBuffer, "~", sizeof(listBuffer) - 1);
-			
-			strncat(listBuffer, border_line_bot(index, im_find(border_map, index)), sizeof(listBuffer) - 1);
-			++first;
+		safe_str(border_line_bot(index, im_find(border_map, index)), buff, bp);
+		++first;
         }
-		
-		return listBuffer;
 }
 
-char *edit_border(int border_id, const char* setting, const char* new_value)
+void edit_border(int border_id, const char* setting, const char* new_value, char *buff, char **bp)
 {
 	aspace_borders *si = NULL;
-	static char editBuffer[1000];
 
 	si = im_find(border_map, border_id);
-	
-	editBuffer[0] = '\0';
 	
 	if (si != NULL)
 	{
 		switch (setting[0]) {
 			case 'n': /* Name */
-					si->name = mush_strdup(new_value, "spaceborder_name");
+				si->name = mush_strdup(new_value, "spaceborder_name");
+				safe_format(buff, bp, "Border Name changed for border %u to %s", border_id, si->name);
 				break;
 			case 'r': /* Radius */
-					si->radius = parse_number(new_value);
+				si->radius = parse_number(new_value);
+				safe_format(buff, bp, "Border Radius changed for border %u to %f", border_id, si->radius);
 				break;
 			case 'x': /* X Coordinate of Centre */
-					si->x = parse_number(new_value);
+				si->x = parse_number(new_value);
+				safe_format(buff, bp, "Border CoordX changed for border %u to %f", border_id, si->x);
 				break;
 			case 'y': /* Y Coordinate of Centre */
-					si->y = parse_number(new_value);
+				si->y = parse_number(new_value);
+				safe_format(buff, bp, "Border CoordY changed for border %u to %f", border_id, si->y);
 				break;
 			case 'z': /* Z Coordinate of Centre */
-					si->z = parse_number(new_value);
+				si->z = parse_number(new_value);
+				safe_format(buff, bp, "Border CoordZ changed for border %u to %f", border_id, si->z);
 				break;
-			default: strncat(editBuffer, "#-1 BORDER SETTING NOT FOUND.", sizeof(editBuffer) - 1);
+			default: safe_str("#-1 BORDER SETTING NOT FOUND.", buff, bp);
 				break;
 		}
 	} else {
-		strncat(editBuffer, "#-1 BORDER NOT FOUND.", sizeof(editBuffer) - 1);
+		safe_str("#-1 BORDER NOT FOUND.", buff, bp);
 	}
-	
-	return editBuffer;
 }
 
 /* Used for returning the empire name that the space-object is in */

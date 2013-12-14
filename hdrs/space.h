@@ -648,9 +648,9 @@ extern char* output_shields_raw();
 /* from space_border.c - not everything yet */
 extern void free_borderinfo(void *ptr);
 extern void addNewBorder(int border_number, const char* name, double radius, double x, double y, double z, char *buff, char **bp);
-extern char *deleteBorder(int border);
-extern char *list_borders();
-extern char *edit_border(int border_id, const char* setting, const char* new_value);
+extern void deleteBorder(int border, char *buff, char **bp);
+extern void list_borders(char *buff, char **bp);
+extern void edit_border(int border_id, const char* setting, const char* new_value, char *buff, char **bp);
 extern int get_empire_id (int ship);
 
 /* from space_crypt.c */

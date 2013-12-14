@@ -1125,16 +1125,16 @@ FUNCTION(local_fun_border)
 					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 1", nargs);
 					return;
 				}
-				safe_str(deleteBorder(parse_integer(args[1])), buff, bp); 
+				deleteBorder(parse_integer(args[1]), buff, bp);
 			break;
 		case 'e': 
 				if (nargs != 3) {
 					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 3", nargs);
 					return;
 				}
-				safe_str(edit_border(parse_integer(args[1]), args[2], args[3]), buff, bp); 
+				edit_border(parse_integer(args[1]), args[2], args[3], buff, bp); 
 			break;
-		case 'l': safe_str(list_borders(), buff, bp); break;
+		case 'l': list_borders(buff, bp); break;
 	}
 	
 	return;
