@@ -5,9 +5,6 @@
 
 /* ------------------------------------------------------------------------ */
 
-char *space_crunch_code(char *code);
-char *space_crypt_code(char *code, char *text, int type);
-
 char *space_crunch_code(char *code)
 {
   char *in;

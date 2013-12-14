@@ -28,7 +28,16 @@ struct pennmush_flag_info aspace_flag_table[] =
 };
 
 /* border stuff - no longer stored here. */
-
+void addConsole(char *console_name, dbref console_dbref)
+{
+	space_consoles *sc = NULL;
+	
+	sc = mush_malloc(sizeof(space_consoles), "space_consoles");
+	sc->console_name = mush_strdup(console_name, "console_name");
+	sc->console_dbref = console_dbref;
+	
+	hash_add(&aspace_consoles, sc->console_name, sc);
+}
 
 /* ------------------------------------------------------------------------ */
 
@@ -1136,7 +1145,6 @@ FUNCTION(local_fun_border)
 
 void free_spaceconsole(void *ptr) {
 	space_consoles *sc = (space_consoles *) ptr;
-	mush_free(sc->console_dbref, "console_dbref");
 	mush_free(sc->console_name, "console_name");
 	mush_free(sc, "space_consoles");
 }
@@ -1170,7 +1178,7 @@ FUNCTION(local_fun_consolemsg)
 		while (pq) {
 			console = parse_dbref(split_token(&pq, ' '));
 					
-			if ( console != NULL )
+			if ( console != NOTHING )
 			{			
 				for ( index = 0; index < result; index++) {
 					c_pq = tprintf("console_%s", consoles[index]);
@@ -1203,17 +1211,6 @@ FUNCTION(local_fun_consolemsg)
 }
 
 /* ------------------------------------------------------------------------ */
-
-void addConsole(char *console_name, dbref console_dbref)
-{
-	space_consoles *sc = NULL;
-	
-	sc = mush_malloc(sizeof(space_consoles), "space_consoles");
-	sc->console_name = mush_strdup(console_name, "console_name");
-	sc->console_dbref = console_dbref;
-	
-	hash_add(&aspace_consoles, sc->console_name, sc);
-}
 
 void setupAspaceFunctions()
 {

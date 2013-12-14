@@ -1045,7 +1045,8 @@ int do_scanner_report (int a, char *s, dbref enactor)
 {
 	static char buffer[BUFFER_LEN], desc[BUFFER_LEN];
 	char *dp = desc;
-	char const *sp, *sbuf;
+	const char *sp;
+        char *sbuf;
 	int x, f, y;
 	ATTR *d;
 

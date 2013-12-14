@@ -28,6 +28,7 @@
 #include "externs.h"
 #include "ansi.h"
 #include "intrface.h"
+#include "strutil.h"
 #include "parse.h"
 #include "confmagic.h"
 #include "dbdefs.h"
@@ -645,12 +646,16 @@ struct comms_database_t {
 extern char* output_shields_raw();
 
 /* from space_border.c - not everything yet */
-extern void free_borderinfo(aspace_borders *ptr);
+extern void free_borderinfo(void *ptr);
 extern char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z);
 extern char *deleteBorder(int border);
 extern char *list_borders();
 extern char *edit_border(int border_id, const char* setting, const char* new_value);
 extern int get_empire_id (int ship);
+
+/* from space_crypt.c */
+extern char *space_crunch_code(char *code);
+extern char *space_crypt_code(char *code, char *text, int type);
 
 /* from space_convert.c */
 extern int convert_weapons(dbref ship, dbref executor, char *weaponType, char *weaponCountAttr, char *newAttr, char *oldAttr);

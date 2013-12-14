@@ -7,10 +7,10 @@
 
 /* New functions for dealing with the new border system */
 
-void
-free_borderinfo(aspace_borders *ptr) {
-  mush_free(ptr->name, "spaceborder_name");
-  mush_free(ptr, "border_info");
+void free_borderinfo(void *ptr) {
+  aspace_borders *border = (aspace_borders *) ptr;
+  mush_free(border->name, "spaceborder_name");
+  mush_free(border, "border_info");
 }
 
 char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z)
@@ -215,12 +215,12 @@ void up_empire (void)
 			if ((dx * dx + dy * dy + dz * dz) < (si->radius * si->radius)) {
 	
 				if (sdb[n].move.empire != index) {
-					if (get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
+					if ((int)get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
 						alert_exit_empire(n);
 						alert_border_cross (n, sdb[n].move.empire, 0);
 					}
 					sdb[n].move.empire = index;
-					if (get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
+					if ((int)get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
 						alert_enter_empire(n);
 						alert_border_cross (n, sdb[n].move.empire, 1);
 					}
