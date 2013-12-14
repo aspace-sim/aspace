@@ -1069,13 +1069,13 @@ FUNCTION(local_fun_inrange)
 									if (parse_number(relay) == parse_number(args[4]))
 									{
 										strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer) - 1);
-										strncat(buffer, " ", sizeof(buffer));
+										strncat(buffer, " ", sizeof(buffer) - strlen(buffer) - 1);
 									}
 								}
 								else
 								{
 									strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer) - 1);
-									strncat(buffer, " ", sizeof(buffer));
+									strncat(buffer, " ", sizeof(buffer) - strlen(buffer) - 1);
 								}
 							}
 						}
@@ -1086,7 +1086,7 @@ FUNCTION(local_fun_inrange)
 						if(the_range <= q)
 						{
 							strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer) - 1);
-							strncat(buffer, " ", sizeof(buffer));
+							strncat(buffer, " ", sizeof(buffer) - strlen(buffer) - 1);
 						}
 					}
 				}
