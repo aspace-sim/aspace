@@ -34,7 +34,6 @@ void do_console_notify (int x, dbref parent1, dbref parent2, dbref parent3, cons
 						user = parse_dbref(atr_value(b));
 						if (GoodObject(user)) {
 							notify(user, msg);
-                                                        write_spacelog(sdb[x].object, sdb[x].object, tprintf("Message: %s for %u", msg, user));
 						}
 					}
 				}

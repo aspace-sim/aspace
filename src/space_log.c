@@ -6,31 +6,16 @@
 /* ------------------------------------------------------------------------ */
 
 const char *aspace_log = "log/space.log";
-static char *quick_space_unparse(dbref object);
+char *quick_space_unparse(dbref object);
 
-static char *
-quick_space_unparse(dbref object)
+char *quick_space_unparse(dbref object)
 {
-  static char buff[BUFFER_LEN], *bp;
-
   switch (object) {
-  case NOTHING:
-    strcpy(buff, T("*NOTHING*"));
-    break;
-  case AMBIGUOUS:
-    strcpy(buff, T("*VARIABLE*"));
-    break;
-  case HOME:
-    strcpy(buff, T("*HOME*"));
-    break;
-  default:
-    bp = buff;
-    safe_format(buff, &bp, "%s(#%d%s)",
-		Name(object), object, unparse_flags(object, GOD));
-    *bp = '\0';
+	case NOTHING: return "*NOTHING*";
+	case AMBIGUOUS: return "*VARIABLE*";
+	case HOME: return "*HOME*";
+	default: return tprintf("%s(#%d%s)", Name(object), object, unparse_flags(object, GOD));
   }
-
-  return buff;
 }
 
 void open_spacelog()
@@ -50,17 +35,9 @@ void open_spacelog()
 	fclose(fp);
 }
 
-void write_logfile(dbref executor, dbref object, const char *fmt) 
+void write_logfile(char *timestring, char *unp1, char *unp2, const char *message) 
 {
 	FILE *fp;
-	struct tm *ttm;
-	char timebuf[18];
-	char unp1[BUFFER_LEN], unp2[BUFFER_LEN];
-
-	ttm = localtime(&mudtime);
-	strftime(timebuf, sizeof timebuf, "[%m/%d %H:%M:%S]", ttm);
-	strcpy(unp1, quick_space_unparse(executor));
-	strcpy(unp2, quick_space_unparse(object));
 
 	fp = fopen(aspace_log, "a");
 
@@ -70,39 +47,46 @@ void write_logfile(dbref executor, dbref object, const char *fmt)
 		return;
 	}
 
-	fprintf(fp, T("%s SPACE: %s %s %s\n"), timebuf, unp1, unp2, fmt);
+	fprintf(fp, "%s SPACE: %s %s %s\n", timestring, unp1, unp2, message); 
 	fclose(fp);
 }
 
-void write_logchannel(dbref executor, dbref object, const char *fmt)
+void write_logchannel(char *timestring, char *unp1, char *unp2, const char *message)
 {
 	CHAN *c;
-	struct tm *ttm;
-	char timebuf[18];
-	char unp1[BUFFER_LEN], unp2[BUFFER_LEN];
 
 	c = NULL;
-	ttm = localtime(&mudtime);
-	strftime(timebuf, sizeof timebuf, "[%m/%d %H:%M:%S]", ttm);
-	strcpy(unp1, quick_space_unparse(executor));
-	strcpy(unp2, quick_space_unparse(object));
 	
 	if (find_channel(LOG_CHANNEL, &c, GOD) == CMATCH_NONE) {
-		write_logfile(executor, object, fmt);
+		write_logfile(timestring, unp1, unp2, message);
 	} else {
-		do_cemit(GOD, LOG_CHANNEL, tprintf("%s SPACE: %s %s %s", timebuf, unp1, unp2, fmt), 0);
+		do_cemit(GOD, LOG_CHANNEL, tprintf("%s SPACE: %s %s %s", timestring, unp1, unp2, message), 0);
 	}
 }
 
 void write_spacelog(dbref executor, dbref object, const char *fmt)
 {
+	struct tm *ttm;
+	char timebuf[18];
+
+	ttm = localtime(&mudtime);
+	strftime(timebuf, sizeof timebuf, "[%m/%d %H:%M:%S]", ttm);
+
+	char *unp1 = mush_strdup(quick_space_unparse(executor), "slm_executor");
+	char *unp2 = mush_strdup(quick_space_unparse(object), "slm_object");
+	char *message = mush_strdup(fmt, "space_log_message");
+
 	switch (LOG_TYPE) {
-		case 1: write_logfile(executor, object, fmt); break;
-		case 2: write_logchannel(executor, object, fmt); break;
-		case 3: write_logfile(executor, object, fmt);
-				write_logchannel(executor, object, fmt);
-				break;
-		default: write_logfile(executor, object, fmt); break;
+		case 1: write_logfile(timebuf, unp1, unp2, message); break;
+		case 2: write_logchannel(timebuf, unp1, unp2, message); break;
+		case 3: write_logfile(timebuf, unp1, unp2, message);
+			 write_logchannel(timebuf, unp1, unp2, message);
+			 break;
+		default: write_logfile(timebuf, unp1, unp2, message); break;
 	}
+
+	mush_free(message, "space_log_message");
+	mush_free(unp1, "slm_executor");
+	mush_free(unp2, "slm_executor");
 }
 /* ------------------------------------------------------------------------ */

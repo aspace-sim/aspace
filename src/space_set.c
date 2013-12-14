@@ -628,6 +628,7 @@ int do_set_main_reactor (double level, dbref enactor)
 		} else {
 			do_console_notify(n, console_engineering, 0, 0,
 				ansi_cmd(enactor, tprintf("M/A reactor set at %.3f%%", sdb[n].main.in * 100.0)));
+			write_spacelog(sdb[n].object, sdb[n].object, tprintf("M/A reactor set at %.3f%%", sdb[n].main.in * 100.0));
 		}
 		return 1;
 	}

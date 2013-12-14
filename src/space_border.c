@@ -136,7 +136,7 @@ char *unparse_empire (int x)
 /* Alerts the ship when it has entered an empires space */
 void alert_enter_empire (int x)
 {
-	console_message(x, "helm", 	ansi_warn(tprintf("Entering %s space", unparse_empire(x))))
+	console_message(x, "helm", 	ansi_warn(tprintf("Entering %s space", unparse_empire(x))));
 	return;
 }
 
