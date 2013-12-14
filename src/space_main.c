@@ -1068,14 +1068,14 @@ FUNCTION(local_fun_inrange)
 								{
 									if (parse_number(relay) == parse_number(args[4]))
 									{
-										strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer) - 1);
-										strncat(buffer, " ", sizeof(buffer) - strlen(buffer) - 1);
+										safe_format(buff, bp, "#%d|%d|%f", sdb[i].object, i, sdb2range(n, i));
+										safe_str(" ", buff, bp);
 									}
 								}
 								else
 								{
-									strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer) - 1);
-									strncat(buffer, " ", sizeof(buffer) - strlen(buffer) - 1);
+									safe_format(buff, bp, "#%d|%d|%f", sdb[i].object, i, sdb2range(n, i));
+                                                               safe_str(" ", buff, bp);
 								}
 							}
 						}
@@ -1085,13 +1085,12 @@ FUNCTION(local_fun_inrange)
 					{
 						if(the_range <= q)
 						{
-							strncat(buffer, tprintf("#%d|%d|%f", sdb[i].object, i, sdb2range(n, i)), sizeof(buffer) - 1);
-							strncat(buffer, " ", sizeof(buffer) - strlen(buffer) - 1);
+							safe_format(buff, bp, "#%d|%d|%f", sdb[i].object, i, sdb2range(n, i));
+                                                 safe_str(" ", buff, bp);
 						}
 					}
 				}
 			}
-			safe_str(buffer, buff, bp);
 		}
 		else
 		{
@@ -1116,21 +1115,21 @@ FUNCTION(local_fun_border)
 	switch (args[0][0]) {
 		case 'a': 
 				if (nargs != 6) {
-					safe_str(tprintf("#-1 INVALID NUMBER OF ARGUMENTS %d REQUIRES 5", nargs), buff, bp);
+					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 5", nargs);
 					return;
 				}
 				addNewBorder(parse_integer(args[1]), args[2], parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6])); 
 			break;
 		case 'd': 
 				if (nargs != 1) {
-					safe_str(tprintf("#-1 INVALID NUMBER OF ARGUMENTS %d REQUIRES 1", nargs), buff, bp);
+					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 1", nargs);
 					return;
 				}
 				safe_str(deleteBorder(parse_integer(args[1])), buff, bp); 
 			break;
 		case 'e': 
 				if (nargs != 3) {
-					safe_str(tprintf("#-1 INVALID NUMBER OF ARGUMENTS %d REQUIRES 3", nargs), buff, bp);
+					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 3", nargs);
 					return;
 				}
 				safe_str(edit_border(parse_integer(args[1]), args[2], args[3]), buff, bp); 
