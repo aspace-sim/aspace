@@ -13,11 +13,9 @@ void free_borderinfo(void *ptr) {
   mush_free(border, "border_info");
 }
 
-char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z)
+void addNewBorder(int border_number, const char* name, double radius, double x, double y, double z, char *buff, char **bp)
 {
 	aspace_borders* newBorder;
-	
-	static char addBuffer[1000];
 	
 	newBorder = mush_malloc(sizeof(aspace_borders), "border_info");
 	
@@ -28,14 +26,10 @@ char* addNewBorder(int border_number, const char* name, double radius, double x,
 	newBorder->y = y;
 	newBorder->z = z;
 	
-	addBuffer[0] = '\0';
-	
 	if( im_insert(border_map, border_number, newBorder ))
-		strncat(addBuffer, "New Border Created.", sizeof(addBuffer) - 1);
+		safe_str("New Border Created.", buff, bp);
 	else
-		strncat(addBuffer, "#-1 BORDER NOT CREATED.", sizeof(addBuffer) - 1);
-		
-	return addBuffer;
+		safe_str("#-1 BORDER NOT CREATED.", buff, bp);
 }
 
 char *deleteBorder(int border)

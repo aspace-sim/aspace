@@ -1118,7 +1118,7 @@ FUNCTION(local_fun_border)
 					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 5", nargs);
 					return;
 				}
-				addNewBorder(parse_integer(args[1]), args[2], parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6])); 
+				addNewBorder(parse_integer(args[1]), args[2], parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6]), buff, bp); 
 			break;
 		case 'd': 
 				if (nargs != 1) {

@@ -647,7 +647,7 @@ extern char* output_shields_raw();
 
 /* from space_border.c - not everything yet */
 extern void free_borderinfo(void *ptr);
-extern char* addNewBorder(int border_number, const char* name, double radius, double x, double y, double z);
+extern void addNewBorder(int border_number, const char* name, double radius, double x, double y, double z, char *buff, char **bp);
 extern char *deleteBorder(int border);
 extern char *list_borders();
 extern char *edit_border(int border_id, const char* setting, const char* new_value);
