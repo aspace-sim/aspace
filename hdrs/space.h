@@ -709,6 +709,8 @@ extern double repair_mult[];
 extern void initSpace();
 extern void dump_space(dbref);
 extern void console_message(int x, char *consoles, char *msg);
+extern void console_notify(int x, char *msg, int numargs, char **args);
+extern void console_notify_all(int x, char *msg);
 extern return_t convert_double (char *input, double deflt, double *output);
 extern return_t convert_long (char *input, long deflt, int *output);
 
