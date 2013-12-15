@@ -1032,13 +1032,8 @@ FUNCTION(local_fun_inrange)
 	{
 		if (GoodSDB(n))
 		{
-			switch (r)
-			{
-				case 0: q = pc2su(q); break;
-				case 1: q = q; break;
-				default: q = pc2su(q); break;
-			}
-
+			if ( r == 0 ) { q = pc2su(q); }
+			
 			for	(i = MIN_SPACE_OBJECTS; i <= MAX_SPACE_OBJECTS; ++i)
 			{
 				if (n == i)
