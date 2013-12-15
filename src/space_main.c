@@ -1216,69 +1216,14 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 }
 
 void console_message(int x, char *consoles, char *msg) {
-	ATTR *a, *b;
-	char *q, *pq, *c_pq, *show_message, *consoles2, *consoles_list[BUFFER_LEN / 2];
-	space_consoles *sc;
-	int index, result;
-	dbref console, user, parent;
-
-	show_message = (char *) mush_strdup(msg, "console_message");
+	char *args[BUFFER_LEN], *consoles2;
+	int argc;
+	
 	consoles2 = (char *) mush_strdup(consoles, "console_message_consoles");
-
-	result = list2arr(consoles_list, BUFFER_LEN / 2, consoles2, ' ', 1);
-
-	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
-	if (a != NULL) {
-		q = safe_atr_value(a);
-		pq = trim_space_sep(q, ' ');
-		while (pq) {
-			console = parse_dbref(split_token(&pq, ' '));
-					
-			if ( console != NOTHING )
-			{			
-				for ( index = 0; index < result; index++) {
-					c_pq = tprintf("console_%s", consoles_list[index]);
-				
-					if ( c_pq != NULL )
-					{
-						sc = hashfind(c_pq, &aspace_consoles);
-				
-						if (GoodObject(console) && sc != NULL) {
-							parent = Parent(console);
-							if ( parent == sc->console_dbref ) {
-								b = atr_get(console, CONSOLE_USER_ATTR_NAME);
-								if (b != NULL) {
-									user = parse_dbref(atr_value(b));
-									if (GoodObject(user)) {
-										notify(user, show_message);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		free(q);
-		mush_free(show_message, "console_message");
-		mush_free(consoles2, "console_message_consoles");
-	}
-}
-
-FUNCTION(local_fun_consolemsg)
-{
-	int x;
 	
-	x = parse_integer(args[0]);
-		
-	if (!GoodObject(sdb[x].object) || !SpaceObj(sdb[x].object)) {
-		write_spacelog(sdb[x].object, sdb[x].object, "BUG: invalid zone to zemit to.");
-		return;
-	}
-
-	console_message(x, args[1], args[2]);
+	argc = list2arr(args, BUFFER_LEN, consoles2, ' ', 1);
 	
-	return;
+	console_notify(x, msg, argc, args);
 }
 
 FUNCTION(local_fun_consolenotify)
@@ -1325,7 +1270,6 @@ void setupAspaceFunctions()
 {
 	function_add("CONSOLENOTIFYALL", local_fun_consolenotifyall, 2, 2, FN_ADMIN);
 	function_add("CONSOLENOTIFY", local_fun_consolenotify, 3, INT_MAX, FN_ADMIN);
-	function_add("CONSOLEMSG", local_fun_consolemsg, 3, 3, FN_ADMIN);
 	function_add("BORDER", local_fun_border, 1, 7, FN_ADMIN);
 	function_add((char *) "CDB", local_fun_cdb, 1, 5, FN_REG);
 	function_add("INRANGE", local_fun_inrange, 2, 5, FN_REG);
