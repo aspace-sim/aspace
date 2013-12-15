@@ -603,6 +603,9 @@ int do_set_fire (int first, int last, int weapon, int mode, dbref enactor)
 
 int do_set_main_reactor (double level, dbref enactor)
 {
+	char buff[BUFFER_LEN];
+	char *bp = buff;
+
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].main.exist) {
@@ -622,13 +625,13 @@ int do_set_main_reactor (double level, dbref enactor)
 			sdb[n].main.in = level;
 		}
 		if (sdb[n].main.in > sdb[n].main.damage) {
-			do_console_notify(n, console_engineering, 0, 0,
-				ansi_cmd(enactor, tprintf("M/A reactor set at %.3f%% %s%sOVERLOAD%s",
-				sdb[n].main.in * 100.0, ANSI_BLINK, ANSI_RED, ANSI_NORMAL)));
+			safe_format(buff, &bp, "M/A reactor set at %.3f%% %s%sOVERLOAD%s", sdb[n].main.in * 100.0, ANSI_BLINK, ANSI_RED, ANSI_NORMAL);
+			console_message(n, "engineering", ansi_cmd(enactor, buff));
 		} else {
-			do_console_notify(n, console_engineering, 0, 0,
-				ansi_cmd(enactor, tprintf("M/A reactor set at %.3f%%", sdb[n].main.in * 100.0)));
-			write_spacelog(sdb[n].object, sdb[n].object, tprintf("M/A reactor set at %.3f%%", sdb[n].main.in * 100.0));
+			safe_format(buff, &bp, "M/A reactor set at %.3f%%", sdb[n].main.in * 100.0);
+			*bp = '\0';
+
+			console_message(n, "engineering", ansi_cmd(enactor, buff));
 		}
 		return 1;
 	}

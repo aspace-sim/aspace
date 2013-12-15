@@ -11,18 +11,16 @@ char *quick_space_unparse(dbref object);
 char *quick_space_unparse(dbref object)
 {
   switch (object) {
-	case NOTHING: return "*NOTHING*";
-	case AMBIGUOUS: return "*VARIABLE*";
-	case HOME: return "*HOME*";
+	case NOTHING: return "*NOTHING*\0";
+	case AMBIGUOUS: return "*VARIABLE*\0";
+	case HOME: return "*HOME*\0";
 	default: return tprintf("%s(#%d%s)", Name(object), object, unparse_flags(object, GOD));
   }
 }
 
 void open_spacelog()
 {
-	FILE *fp;
-	
-	fp = fopen(aspace_log, "a");
+	FILE *fp = fopen(aspace_log, "a");
 
 	if (fp == 0)
 	{
@@ -35,11 +33,9 @@ void open_spacelog()
 	fclose(fp);
 }
 
-void write_logfile(char *timestring, char *unp1, char *unp2, const char *message) 
+void write_logfile(char *timestring, char *unp1, char *unp2, char *message) 
 {
-	FILE *fp;
-
-	fp = fopen(aspace_log, "a");
+	FILE *fp = fopen(aspace_log, "a");
 
 	if (fp == 0)
 	{
@@ -51,11 +47,9 @@ void write_logfile(char *timestring, char *unp1, char *unp2, const char *message
 	fclose(fp);
 }
 
-void write_logchannel(char *timestring, char *unp1, char *unp2, const char *message)
+void write_logchannel(char *timestring, char *unp1, char *unp2, char *message)
 {
-	CHAN *c;
-
-	c = NULL;
+	CHAN *c = NULL;
 	
 	if (find_channel(LOG_CHANNEL, &c, GOD) == CMATCH_NONE) {
 		write_logfile(timestring, unp1, unp2, message);
@@ -64,7 +58,7 @@ void write_logchannel(char *timestring, char *unp1, char *unp2, const char *mess
 	}
 }
 
-void write_spacelog(dbref executor, dbref object, const char *fmt)
+void write_spacelog(dbref executor, dbref object, char *fmt)
 {
 	struct tm *ttm;
 	char timebuf[18];
@@ -72,9 +66,9 @@ void write_spacelog(dbref executor, dbref object, const char *fmt)
 	ttm = localtime(&mudtime);
 	strftime(timebuf, sizeof timebuf, "[%m/%d %H:%M:%S]", ttm);
 
-	char *unp1 = mush_strdup(quick_space_unparse(executor), "slm_executor");
-	char *unp2 = mush_strdup(quick_space_unparse(object), "slm_object");
 	char *message = mush_strdup(fmt, "space_log_message");
+	char *unp1 = mush_strdup(quick_space_unparse(executor), "space_log_executor");
+	char *unp2 = mush_strdup(quick_space_unparse(object), "space_log_executor");
 
 	switch (LOG_TYPE) {
 		case 1: write_logfile(timebuf, unp1, unp2, message); break;
@@ -85,8 +79,8 @@ void write_spacelog(dbref executor, dbref object, const char *fmt)
 		default: write_logfile(timebuf, unp1, unp2, message); break;
 	}
 
+	mush_free(unp1, "space_log_executor");
+	mush_free(unp2, "space_log_executor");
 	mush_free(message, "space_log_message");
-	mush_free(unp1, "slm_executor");
-	mush_free(unp2, "slm_executor");
 }
 /* ------------------------------------------------------------------------ */

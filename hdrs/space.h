@@ -698,7 +698,7 @@ extern return_t convert_double (char *input, double deflt, double *output);
 extern return_t convert_long (char *input, long deflt, int *output);
 
 /* from space_log.c */
-extern void write_spacelog(dbref executor, dbref object, const char *fmt);
+extern void write_spacelog(dbref executor, dbref object, char *fmt);
 extern void open_spacelog();
 
 /* from space_ansi.c */
