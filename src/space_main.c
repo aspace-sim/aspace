@@ -1272,7 +1272,7 @@ void initSpace()
 	border_map = im_new();
 
 	hash_init(&aspace_consoles, 256, free_borderinfo);
-	
+
 	loadSpaceConfig();
 
 	(void) setupAspaceFunctions();
@@ -1280,6 +1280,6 @@ void initSpace()
 	(void) dump_space(GOD);
 	(void) open_spacelog();
 
-	write_spacelog(1, 1, tprintf("%s", configstruct.mainReactor));
+	write_spacelog(1, 1, tprintf("%f", configstruct.cochrane_rate));
 }
 

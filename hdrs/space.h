@@ -307,10 +307,11 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 /* ------------------------------------------------------------------------ */
 
 struct spaceconfig {
-	char mainReactor[MAXBUF];
+	double cochrane_rate;
 };
 
-struct spaceconfig configstruct;
+typedef struct spaceconfig SPACETAB;
+extern SPACETAB configstruct;
 
 struct aspace_empire_info {
 	const char* name;

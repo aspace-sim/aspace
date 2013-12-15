@@ -5,6 +5,8 @@
 
 /* ------------------------------------------------------------------------ */
 
+SPACETAB configstruct;
+
 struct spaceconfig get_space_config(char *filename) {
 	struct spaceconfig configstruct;
 	FILE *file = fopen(filename, "r");
@@ -19,7 +21,7 @@ struct spaceconfig get_space_config(char *filename) {
 			cfline = cfline + strlen(DELIM);
 
 			if ( i == 0 ) {
-				memcpy(configstruct.mainReactor, cfline, strlen(cfline));
+				configstruct.cochrane_rate = parse_number(cfline);
 			}
 
 			i++;
@@ -31,7 +33,12 @@ struct spaceconfig get_space_config(char *filename) {
 	return configstruct;
 }
 
+void loadDefaultConfig() {
+	configstruct.cochrane_rate = 12927.238000;
+}
+
 void loadSpaceConfig() {
+	//loadDefaultConfig();
 	configstruct = get_space_config(FILENAME);
 }
 
