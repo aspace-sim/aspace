@@ -455,7 +455,6 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 	register int i, x, y, e;
 	double range, max_range, freq;
 	dbref zone;
-	char *tptr[10];
 	ufun_attrib ufun;
 	char tbuf[BUFFER_LEN];
     static char ibuf1[20], ibuf2[20];
@@ -1015,8 +1014,7 @@ FUNCTION(local_fun_inrange)
 	register int i;
 	int r;
 	double q, the_range;
-	static char buffer[1000];
-	char *relay, *s;
+	char *relay;
 	ATTR *a;
 
 	if (args[2] == NULL)
@@ -1029,14 +1027,11 @@ FUNCTION(local_fun_inrange)
 	n = parse_integer(args[0]);
 	q = parse_number(args[1]);
 	r = parse_integer(args[2]);
-	s = args[3];
 
 	if (Hasprivs(executor) || has_power_by_name(executor, "SDB-OK", NOTYPE) || has_power_by_name(executor, "SDB-READ", NOTYPE))
 	{
 		if (GoodSDB(n))
 		{
-			buffer[0] = '\0';
-
 			switch (r)
 			{
 				case 0: q = pc2su(q); break;
@@ -1075,7 +1070,7 @@ FUNCTION(local_fun_inrange)
 								else
 								{
 									safe_format(buff, bp, "#%d|%d|%f", sdb[i].object, i, sdb2range(n, i));
-                                                               safe_str(" ", buff, bp);
+                                    safe_str(" ", buff, bp);
 								}
 							}
 						}
@@ -1086,7 +1081,7 @@ FUNCTION(local_fun_inrange)
 						if(the_range <= q)
 						{
 							safe_format(buff, bp, "#%d|%d|%f", sdb[i].object, i, sdb2range(n, i));
-                                                 safe_str(" ", buff, bp);
+                            safe_str(" ", buff, bp);
 						}
 					}
 				}
@@ -1150,10 +1145,8 @@ void free_spaceconsole(void *ptr) {
 
 void console_notify_all(int x, char *msg) {
 	ATTR *a, *b;
-	char *q, *pq, *console_mode, *c_pq, *show_message;
-	space_consoles *sc;
-	int index, result;
-	dbref console, user, parent;
+	char *q, *pq, *show_message;
+	dbref console, user;
 
 	show_message = (char *) mush_strdup(msg, "console_message");
 	
@@ -1184,7 +1177,7 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 	ATTR *a, *b;
 	char *q, *pq, *console_mode, *c_pq, *show_message;
 	space_consoles *sc;
-	int index, result;
+	int index;
 	dbref console, user, parent;
 
 	show_message = (char *) mush_strdup(msg, "console_message");
@@ -1229,12 +1222,10 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 
 void console_message(int x, char *consoles, char *msg) {
 	ATTR *a, *b;
-	char *q, *pq, *the_console, *c_pq, *console_list, *show_message, *consoles2, *consoles_list[BUFFER_LEN / 2];
+	char *q, *pq, *c_pq, *show_message, *consoles2, *consoles_list[BUFFER_LEN / 2];
 	space_consoles *sc;
 	int index, result;
 	dbref console, user, parent;
-
-	char *buffer;
 
 	show_message = (char *) mush_strdup(msg, "console_message");
 	consoles2 = (char *) mush_strdup(consoles, "console_message_consoles");
@@ -1281,7 +1272,6 @@ void console_message(int x, char *consoles, char *msg) {
 
 FUNCTION(local_fun_consolemsg)
 {
-	char *msg;
 	int x;
 	
 	x = parse_integer(args[0]);
