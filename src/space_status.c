@@ -1211,7 +1211,7 @@ int do_scanner_report (int a, char *s, dbref enactor)
 		if (f != 5 && f != 9) {
 			y = sdb2contact(x, n);
 			if (y != SENSOR_FAIL)
-				do_console_notify(x, console_science, 0, 0,
+				console_message(x, "science",
 					ansi_warn(tprintf("Scan from %s detected", unparse_identity(x, n))));
 		}
 		return 1;

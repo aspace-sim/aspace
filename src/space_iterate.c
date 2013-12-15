@@ -360,8 +360,7 @@ void up_autopilot (void)
 	int a = sdb[n].status.autopilot;
 
 	if (r < 1.0) { s = 0; a = 0;
-		do_console_notify(n, console_helm, 0, 0,
-		  ansi_cmd(sdb[n].object, "Autopilot destination reached"));
+		console_message(n, "helm", ansi_cmd(sdb[n].object, "Autopilot destination reached"));
 	} else if (r < 2) { s = 0.01; a = 1;
 	} else if (r < 4) { s = 0.02; a = 2;
 	} else if (r < 8) { s = 0.04; a = 3;
@@ -929,9 +928,7 @@ void up_sensor_message (int contacts)
 				sdb[n].sensor.counter = 1;
 			}
 			temp_num[i] = sdb[n].sensor.counter;
-			do_console_notify(n, console_helm, console_science, console_tactical,
-			  ansi_warn(tprintf("New sensor contact (%d): %s",
-			  temp_num[i], unparse_type(temp_sdb[i]))));
+			console_message(n, "helm science tactical", ansi_warn(tprintf("New sensor contact (%d): %s", temp_num[i], unparse_type(temp_sdb[i]))));
 		}
 	}
 	for (i = 0 ; i < sdb[n].sensor.contacts ; ++i) {
@@ -943,26 +940,17 @@ void up_sensor_message (int contacts)
 			}
 		}
 		if (!lose) {
-			do_console_notify(n, console_helm, console_science, console_tactical,
-			  ansi_warn(tprintf("%s contact lost: %s",
-			  unparse_type(sdb[n].slist.sdb[i]),
-			  unparse_identity(n, sdb[n].slist.sdb[i]))));
+			console_message(n, "helm science tactical", ansi_warn(tprintf("%s contact lost: %s", unparse_type(sdb[n].slist.sdb[i]), unparse_identity(n, sdb[n].slist.sdb[i]))));
 			if (sdb[n].trans.s_lock == sdb[n].slist.sdb[i]) {
-				do_console_notify(n, console_operation, console_transporter, 0,
-				  ansi_warn(tprintf("%s source lock on %s lost",
-				  system_name[13], unparse_identity(n, sdb[n].slist.sdb[i]))));
+				console_message(n, "operation transporter", ansi_warn(tprintf("%s source lock on %s lost", system_name[13], unparse_identity(n, sdb[n].slist.sdb[i]))));
 				sdb[n].trans.s_lock = 0;
 			}
 			if (sdb[n].trans.d_lock == sdb[n].slist.sdb[i]) {
-				do_console_notify(n, console_operation, console_transporter, 0,
-				  ansi_warn(tprintf("%s lock on %s lost",
-				  system_name[13], unparse_identity(n, sdb[n].slist.sdb[i]))));
+				console_message(n, "operation transporter", ansi_warn(tprintf("%s lock on %s lost", system_name[13], unparse_identity(n, sdb[n].slist.sdb[i]))));
 				sdb[n].trans.d_lock = 0;
 			}
 			if (sdb[n].tract.lock == sdb[n].slist.sdb[i]) {
-				do_console_notify(n, console_operation, console_helm, 0,
-				  ansi_warn(tprintf("%s lock on %s lost",
-				  system_name[12], unparse_identity(n, sdb[n].slist.sdb[i]))));
+				console_message(n, "helm operation", ansi_warn(tprintf("%s lock on %s lost", system_name[12], unparse_identity(n, sdb[n].slist.sdb[i]))));
 				sdb[n].tract.lock = 0;
 				sdb[n].status.tractoring = 0;
 				sdb[sdb[n].slist.sdb[i]].status.tractored = 0;
@@ -976,9 +964,7 @@ void up_sensor_message (int contacts)
 					sdb[n].blist.lock[j] = 0;
 				}
 			if (flag)
-				do_console_notify(n, console_tactical, 0, 0,
-				  ansi_warn(tprintf("%s lock on %s lost",
-				  system_name[3], unparse_identity(n, sdb[n].slist.sdb[i]))));
+				console_message(n, "tactical", ansi_warn(tprintf("%s lock on %s lost", system_name[3], unparse_identity(n, sdb[n].slist.sdb[i]))));
 			flag = 0;
 			for ( j = 0 ; j < sdb[n].missile.tubes ; ++j )
 				if (sdb[n].mlist.lock[j] == sdb[n].slist.sdb[i]) {
@@ -986,9 +972,7 @@ void up_sensor_message (int contacts)
 					sdb[n].mlist.lock[j] = 0;
 				}
 			if (flag)
-				do_console_notify(n, console_tactical, 0, 0,
-				  ansi_warn(tprintf("%s lock on %s lost",
-				  system_name[9], unparse_identity(n, sdb[n].slist.sdb[i]))));
+				console_message(n, "tactical", ansi_warn(tprintf("%s lock on %s lost", system_name[9], unparse_identity(n, sdb[n].slist.sdb[i]))));
 		}
 	}
 	sdb[n].sensor.contacts = contacts;

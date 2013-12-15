@@ -162,13 +162,13 @@ void alert_border_cross (int x, int a, int way)
 						if (i != x)
 							if (sdb2range(x, i) < MAX_NOTIFICATION_DISTANCE) {
 								if (way) {
-									do_console_notify(i, console_helm, console_science, console_security,
+									console_message(i, "helm science security",
 									  ansi_warn(tprintf("Inbound border crossing reported at %.3f %.3f %.3f",
 									  su2pc(sdb[x].coords.x - sdb[i].coords.xo),
 									  su2pc(sdb[x].coords.y - sdb[i].coords.yo),
 									  su2pc(sdb[x].coords.z - sdb[i].coords.zo))));
 								} else
-									do_console_notify(i, console_helm, console_science, console_security,
+									console_message(i, "helm science security",
 									  ansi_warn(tprintf("Outbound border crossing reported at %.3f %.3f %.3f",
 									  su2pc(sdb[x].coords.x - sdb[i].coords.xo),
 									  su2pc(sdb[x].coords.y - sdb[i].coords.yo),

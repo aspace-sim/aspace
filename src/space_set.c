@@ -366,7 +366,7 @@ int do_set_fire (int first, int last, int weapon, int mode, dbref enactor)
 					  "fires and misses");
 				}
 				if (sdb[x].status.active && !sdb[x].status.crippled) {
-					do_console_notify(x, console_helm, console_science, console_tactical,
+					console_message(x, "helm science tactical",
 					  ansi_warn(tprintf("%s firing: %s", unparse_identity(x, n), buff_x[i])));
 					do_fed_shield_bug_check(x);
 					sdb[x].tmp.i3 = sdb2shield(x, n);
@@ -377,7 +377,7 @@ int do_set_fire (int first, int last, int weapon, int mode, dbref enactor)
 			sdb[x].tmp.d2 = 0.0; /* ship damage */
 		}
 	}
-	do_console_notify(n, console_helm, console_science, console_tactical, buff_n);
+	console_message(n, "helm science tactical", buff_n);
 
 	/* compute damage */
 
@@ -658,11 +658,11 @@ int do_set_aux_reactor (double level, dbref enactor)
 		} else
 			sdb[n].aux.in = level;
 		if (sdb[n].aux.in > sdb[n].aux.damage) {
-			do_console_notify(n, console_engineering, 0, 0,
+			console_message(n, "engineering",
 				ansi_cmd(enactor, tprintf("Fusion reactor set at %.3f%% %s%sOVERLOAD%s",
 				sdb[n].aux.in * 100.0, ANSI_BLINK, ANSI_RED, ANSI_NORMAL)));
 		} else {
-			do_console_notify(n, console_engineering, 0, 0,
+			console_message(n, "engineering",
 				ansi_cmd(enactor, tprintf("Fusion reactor set at %.3f%%", sdb[n].aux.in * 100.0)));
 		}
 		return 1;
@@ -689,7 +689,7 @@ int do_set_battery (double level, dbref enactor)
 			sdb[n].batt.in = 1.0;
 		} else
 			sdb[n].batt.in = level;
-		do_console_notify(n, console_engineering, 0, 0,
+		console_message(n, "engineering",
 			ansi_cmd(enactor, tprintf("Batteries set at %.3f%%", sdb[n].batt.in * 100)));
 		return 1;
 	}
@@ -713,7 +713,7 @@ int do_set_lrs (int active, dbref enactor)
 			} else {
 				sdb[n].sensor.lrs_active = 1;
 				sdb[n].sensor.version = 1;
-				do_console_notify(n, console_helm, console_science, console_tactical,
+				console_message(n, "helm science tactical",
 					ansi_cmd(enactor, "Long-range sensors online"));
 				return 1;
 			}
@@ -723,7 +723,7 @@ int do_set_lrs (int active, dbref enactor)
 			} else {
 				sdb[n].sensor.lrs_active = 0;
 				sdb[n].sensor.version = 1;
-				do_console_notify(n, console_helm, console_science, console_tactical,
+				console_message(n, "helm science tactical",
 					ansi_cmd(enactor, "Long-range sensors offline"));
 				return 1;
 			}
@@ -751,7 +751,7 @@ int do_set_srs (int active, dbref enactor)
 			} else {
 				sdb[n].sensor.srs_active = 1;
 				sdb[n].sensor.version = 1;
-				do_console_notify(n, console_helm, console_science, console_tactical,
+				console_message(n, "helm science tactical",
 					ansi_cmd(enactor, "Short-range sensors online"));
 				return 1;
 			}
@@ -761,7 +761,7 @@ int do_set_srs (int active, dbref enactor)
 			} else {
 				sdb[n].sensor.srs_active = 0;
 				sdb[n].sensor.version = 1;
-				do_console_notify(n, console_helm, console_science, console_tactical,
+				console_message(n, "helm science tactical",
 					ansi_cmd(enactor, "Short-range sensors offline"));
 				return 1;
 			}
@@ -789,7 +789,7 @@ int do_set_ew (int active, dbref enactor)
 			} else {
 				sdb[n].sensor.ew_active = 1;
 				sdb[n].sensor.version = 1;
-				do_console_notify(n, console_helm, console_science, console_tactical,
+				console_message(n, "helm science tactical",
 					ansi_cmd(enactor, "Electronic warfare systems online"));
 				return 1;
 			}
@@ -799,7 +799,7 @@ int do_set_ew (int active, dbref enactor)
 			} else {
 				sdb[n].sensor.ew_active = 0;
 				sdb[n].sensor.version = 1;
-				do_console_notify(n, console_helm, console_science, console_tactical,
+				console_message(n, "helm science tactical",
 					ansi_cmd(enactor, "Electronic warfare systems offline"));
 				return 1;
 			}
@@ -836,18 +836,18 @@ int do_set_cloak (int active, dbref enactor)
 		} else if (sdb[n].tech.cloak < 2.0) {
 			if (sdb[n].sensor.srs_active) {
 				sdb[n].sensor.srs_active = 0;
-				do_console_notify(n, console_helm, console_science, console_tactical,
+				console_message(n, "helm science tactical",
 					ansi_cmd(enactor, "Short-range sensors offline"));
 			}
 			if (sdb[n].sensor.ew_active) {
 				sdb[n].sensor.ew_active = 0;
-				do_console_notify(n, console_helm, console_science, console_tactical,
+				console_message(n, "helm science tactical",
 					ansi_cmd(enactor, "Electronic warfare systems offline"));
 			}
 			if (sdb[n].trans.active) {
 				sdb[n].trans.active = 0;
 				sdb[n].trans.d_lock = sdb[n].trans.s_lock = 0;
-				do_console_notify(n, console_transporter, console_operation, console_helm,
+				console_message(n, "helm operation transporter",
 					ansi_cmd(enactor, "Transporters offline"));
 			}
 			if (sdb[n].tract.active) {
@@ -861,7 +861,7 @@ int do_set_cloak (int active, dbref enactor)
 					sdb[n].power.version = 1;
 					sdb[x].power.version = 1;
 				}
-				do_console_notify(n, console_operation, console_helm, 0,
+				console_message(n, "helm operation",
 					ansi_cmd(enactor, "Tractor beams offline"));
 			}
 			if (sdb[n].beam.exist)
@@ -883,14 +883,14 @@ int do_set_cloak (int active, dbref enactor)
 					}
 				}
 				if (flag) {
-					do_console_notify(n, console_helm, 0, 0, buffer);
+					console_message(n, "helm", buffer);
 				}
 			}
 		}
 		sdb[n].cloak.active = 1;
 		sdb[n].sensor.version = 1;
 		sdb[n].engine.version = 1;
-		do_console_notify(n, console_helm, console_tactical, 0,
+		console_message(n, "helm tactical",
 		  ansi_cmd(enactor, "Cloaking device online"));
 		alert_ship_cloak_online(n);
 		return 1;
@@ -902,19 +902,19 @@ int do_set_cloak (int active, dbref enactor)
 			if (sdb[n].tech.cloak < 2.0) {
 				if ( ! sdb[n].sensor.srs_active) {
 					sdb[n].sensor.srs_active = 1;
-					do_console_notify(n, console_helm, console_science, console_tactical,
+					console_message(n, "helm science tactical",
 						ansi_cmd(enactor, "Short-range sensors online"));
 				}
 				if ( ! sdb[n].sensor.ew_active) {
 					sdb[n].sensor.ew_active = 1;
-					do_console_notify(n, console_helm, console_science, console_tactical,
+					console_message(n, "helm science tactical",
 						ansi_cmd(enactor, "Electronic warfare systems online"));
 				}
 			}
 			sdb[n].cloak.active = 0;
 			sdb[n].sensor.version = 1;
 			sdb[n].engine.version = 1;
-			do_console_notify(n, console_helm, console_tactical, 0,
+			console_message(n, "helm tactical",
 			  ansi_cmd(enactor, "Cloaking device offline"));
 			alert_ship_cloak_offline(n);
 			return 1;
@@ -941,7 +941,7 @@ int do_set_course (double yaw, double pitch, double roll, dbref enactor)
 	} else {
 		if (sdb[n].status.autopilot) {
 			sdb[n].status.autopilot = 0;
-			do_console_notify(n, console_helm, 0, 0,
+			console_message(n, "helm",
 			  ansi_cmd(enactor, "Autopilot disengaged"));
 		}
 		sdb[n].course.yaw_in = fmod(yaw,360);
@@ -954,11 +954,11 @@ int do_set_course (double yaw, double pitch, double roll, dbref enactor)
 		if (sdb[n].course.roll_in < 0.0)
 			sdb[n].course.roll_in += 360.0;
 		if (sdb[n].course.roll_in != 0.0) {
-			do_console_notify(n, console_helm, 0, 0,
+			console_message(n, "helm",
 				ansi_cmd(enactor, tprintf("Course set to %.3f %.3f %.3f",
 				sdb[n].course.yaw_in, sdb[n].course.pitch_in, sdb[n].course.roll_in)));
 		} else {
-			do_console_notify(n, console_helm, 0, 0,
+			console_message(n, "helm",
 				ansi_cmd(enactor, tprintf("Course set to %.3f %.3f",
 				sdb[n].course.yaw_in, sdb[n].course.pitch_in)));
 		}
@@ -986,13 +986,13 @@ int do_set_yaw (double yaw, dbref enactor)
 	} else {
 		if (sdb[n].status.autopilot) {
 			sdb[n].status.autopilot = 0;
-			do_console_notify(n, console_helm, 0, 0,
+			console_message(n, "helm",
 			  ansi_cmd(enactor, "Autopilot disengaged"));
 		}
 		sdb[n].course.yaw_in = fmod(sdb[n].course.yaw_in + yaw,360);
 		if (sdb[n].course.yaw_in < 0.0)
 			sdb[n].course.yaw_in += 360.0;
-		do_console_notify(n, console_helm, 0, 0,
+		console_message(n, "helm",
 			ansi_cmd(enactor, tprintf("Yaw adjusted %+.3f to %.3f",
 			yaw, sdb[n].course.yaw_in)));
 		return 1;
@@ -1019,13 +1019,13 @@ int do_set_pitch (double pitch, dbref enactor)
 	} else {
 		if (sdb[n].status.autopilot) {
 			sdb[n].status.autopilot = 0;
-			do_console_notify(n, console_helm, 0, 0,
+			console_message(n, "helm",
 			  ansi_cmd(enactor, "Autopilot disengaged"));
 		}
 		sdb[n].course.pitch_in = fmod(sdb[n].course.pitch_in + pitch,360);
 		if (sdb[n].course.pitch_in < 0.0)
 			sdb[n].course.pitch_in += 360.0;
-		do_console_notify(n, console_helm, 0, 0,
+		console_message(n, "helm",
 			ansi_cmd(enactor, tprintf("Pitch adjusted %+.3f to %.3f",
 			pitch, sdb[n].course.pitch_in)));
 		return 1;
@@ -1052,13 +1052,13 @@ int do_set_roll (double roll, dbref enactor)
 	} else {
 		if (sdb[n].status.autopilot) {
 			sdb[n].status.autopilot = 0;
-			do_console_notify(n, console_helm, 0, 0,
+			console_message(n, "helm",
 			  ansi_cmd(enactor, "Autopilot disengaged"));
 		}
 		sdb[n].course.roll_in = fmod(sdb[n].course.roll_in + roll,360);
 		if (sdb[n].course.roll_in < 0.0)
 			sdb[n].course.roll_in += 360.0;
-		do_console_notify(n, console_helm, 0, 0,
+		console_message(n, "helm",
 			ansi_cmd(enactor, tprintf("Roll adjusted %+.3f to %.3f",
 			roll, sdb[n].course.roll_in)));
 		return 1;
@@ -1093,12 +1093,12 @@ int do_set_intercept (int contact, dbref enactor)
 			sdb[n].course.yaw_in = sdb2bearing(n, x);
 			sdb[n].course.pitch_in = sdb2elevation(n, x);
 			if (sdb[n].course.roll_in != 0.0) {
-				do_console_notify(n, console_helm, 0, 0,
+				console_message(n, "helm",
 				  ansi_cmd(enactor, tprintf("Intercept course to %s set %.3f %.3f %.3f",
 				  unparse_identity(n, x), sdb[n].course.yaw_in, sdb[n].course.pitch_in,
 				  sdb[n].course.roll_in)));
 			} else {
-				do_console_notify(n, console_helm, 0, 0,
+				console_message(n, "helm",
 				  ansi_cmd(enactor, tprintf("Intercept course to %s set %.3f %.3f",
 				  unparse_identity(n, x), sdb[n].course.yaw_in, sdb[n].course.pitch_in)));
 			}
@@ -1131,7 +1131,7 @@ int do_set_evade (int contact, dbref enactor)
 		} else {
 			if (sdb[n].status.autopilot) {
 				sdb[n].status.autopilot = 0;
-				do_console_notify(n, console_helm, 0, 0,
+				console_message(n, "helm",
 				  ansi_cmd(enactor, "Autopilot disengaged"));
 			}
 			sdb[n].coords.xd = sdb[x].coords.x;
@@ -1144,12 +1144,12 @@ int do_set_evade (int contact, dbref enactor)
 			if (sdb[n].course.pitch_in < 0.0)
 				sdb[n].course.pitch_in += 360.0;
 			if (sdb[n].course.roll_in != 0.0) {
-				do_console_notify(n, console_helm, 0, 0,
+				console_message(n, "helm",
 				  ansi_cmd(enactor, tprintf("Evasive course from %s set %.3f %.3f %.3f",
 				  unparse_identity(n, x), sdb[n].course.yaw_in, sdb[n].course.pitch_in,
 				  sdb[n].course.roll_in)));
 			} else {
-				do_console_notify(n, console_helm, 0, 0,
+				console_message(n, "helm",
 				  ansi_cmd(enactor, tprintf("Evasive course from %s set %.3f %.3f",
 				  unparse_identity(n, x), sdb[n].course.yaw_in, sdb[n].course.pitch_in)));
 			}
@@ -1182,12 +1182,12 @@ int do_set_parallel (int contact, dbref enactor)
 		} else {
 			if (sdb[n].status.autopilot) {
 				sdb[n].status.autopilot = 0;
-				do_console_notify(n, console_helm, 0, 0,
+				console_message(n, "helm",
 				  ansi_cmd(enactor, "Autopilot disengaged"));
 			}
 			sdb[n].course.yaw_in = sdb[x].course.yaw_out;
 			sdb[n].course.pitch_in = sdb[x].course.pitch_out;
-			do_console_notify(n, console_helm, 0, 0,
+			console_message(n, "helm",
 			  ansi_cmd(enactor, tprintf("Parallel course for %s set %.3f %.3f",
 			  unparse_identity(n, x), sdb[n].course.yaw_in, sdb[n].course.pitch_in)));
 			return 1;
@@ -1206,7 +1206,7 @@ int do_set_coords_manual (double x, double y, double z, dbref enactor)
 		sdb[n].coords.xo = sdb[n].coords.x - pc2su(x);
 		sdb[n].coords.yo = sdb[n].coords.y - pc2su(y);
 		sdb[n].coords.zo = sdb[n].coords.z - pc2su(z);
-		do_console_notify(n, console_helm, 0, 0,
+		console_message(n, "helm",
 			ansi_cmd(enactor, tprintf("Relative coordinates set to %.3f %.3f %.3f",
 				x, y, z)));
 		return 1;
@@ -1224,7 +1224,7 @@ int do_set_coords_reset (dbref enactor)
 		sdb[n].coords.xo = 0;
 		sdb[n].coords.yo = 0;
 		sdb[n].coords.zo = 0;
-		do_console_notify(n, console_helm, 0, 0,
+		console_message(n, "helm",
 			ansi_cmd(enactor, tprintf("Relative coordinates reset to %.3f %.3f %.3f",
 				su2pc(sdb[n].coords.x), su2pc(sdb[n].coords.y), su2pc(sdb[n].coords.z))));
 		return 1;
@@ -1248,7 +1248,7 @@ int do_set_coords_layin (double x, double y, double z, dbref enactor)
 		sdb[n].coords.xd = pc2su(x) + sdb[n].coords.xo;
 		sdb[n].coords.yd = pc2su(y) + sdb[n].coords.yo;
 		sdb[n].coords.zd = pc2su(z) + sdb[n].coords.zo;
-		do_console_notify(n, console_helm, 0, 0,
+		console_message(n, "helm",
 			ansi_cmd(enactor, tprintf("Coordinates %.3f %.3f %.3f laid in", x, y, z)));
 		return 1;
 	}
@@ -1274,7 +1274,7 @@ int do_set_coords_engage (dbref enactor)
 	} else {
 		sdb[n].course.yaw_in = xy2bearing(sdb[n].coords.xd - sdb[n].coords.x, sdb[n].coords.yd - sdb[n].coords.y);
 		sdb[n].course.pitch_in = xyz2elevation(sdb[n].coords.xd - sdb[n].coords.x, sdb[n].coords.yd - sdb[n].coords.y, sdb[n].coords.zd - sdb[n].coords.z);
-		do_console_notify(n, console_helm, 0, 0,
+		console_message(n, "helm",
 			ansi_cmd(enactor, tprintf("Course %.3f %.3f engaged", sdb[n].course.yaw_in, sdb[n].course.pitch_in)));
 		return 1;
 	}
@@ -1375,20 +1375,20 @@ int do_set_speed (double speed, dbref enactor)
 		}
 		if (fabs(sdb[n].move.in) >= 1.0) {
 			if (fabs(sdb[n].move.in) > sdb[n].engine.warp_cruise) {
-				do_console_notify(n, console_helm, console_engineering, 0,
+				console_message(n, "helm engineering",
 				  ansi_cmd(enactor, tprintf("Speed set to warp %.6f %s%sOVERLOAD%s",
 				  sdb[n].move.in, ANSI_BLINK, ANSI_RED, ANSI_NORMAL)));
 			} else
-				do_console_notify(n, console_helm, console_engineering, 0,
+				console_message(n, "helm engineering",
 				  ansi_cmd(enactor, tprintf("Speed set to warp %.6f",
 				  sdb[n].move.in)));
 		} else {
 			if (fabs(sdb[n].move.in) > sdb[n].engine.impulse_cruise) {
-				do_console_notify(n, console_helm, console_engineering, 0,
+				console_message(n, "helm engineering",
 				  ansi_cmd(enactor, tprintf("Speed set to %.3f%% impulse %s%sOVERLOAD%s",
 				  sdb[n].move.in * 100.0, ANSI_BLINK, ANSI_RED, ANSI_NORMAL)));
 			} else
-				do_console_notify(n, console_helm, console_engineering, 0,
+				console_message(n, "helm engineering",
 				  ansi_cmd(enactor, tprintf("Speed set to %.3f%% impulse",
 				  sdb[n].move.in * 100.0)));
 		}
@@ -1454,7 +1454,7 @@ int do_set_shield (int shield, int active, dbref enactor)
 		}
 
 	if (flag) {
-		do_console_notify(n, console_helm, 0, 0, buffer);
+		console_message(n, "helm", buffer);
 		if (active) {
 			write_spacelog(enactor, sdb[n].object, "LOG: Shields raised");
 		} else
@@ -1585,10 +1585,10 @@ int do_set_weapon (int first, int last, int active, int weapon, dbref enactor)
 
 	if (flag_b || flag_m) {
 		if (active) {
-			do_console_notify(n, console_tactical, 0, 0,
+			console_message(n, "tactical",
 			  ansi_cmd(enactor, tprintf("%s online", buffer)));
 		} else
-			do_console_notify(n, console_tactical, 0, 0,
+			console_message(n, "tactical",
 			  ansi_cmd(enactor, tprintf("%s offline", buffer)));
 	}
 
@@ -1627,7 +1627,7 @@ void do_fed_shield_bug_check (int x)
 		}
 
 	if (flag) {
-		do_console_notify(x, console_helm, 0, 0, buffer);
+		console_message(x, "helm", buffer);
 		write_spacelog(sdb[x].object, sdb[x].object, "LOG: Shields raised automagically");
 		sdb[x].engine.version = 1;
 	}
@@ -1748,12 +1748,12 @@ int do_lock_weapon (int first, int last, int contact, int weapon, dbref enactor)
 	}
 
 	if (flag_b || flag_m) {
-		do_console_notify(n, console_tactical, 0, 0,
+		console_message(n, "tactical",
 		  ansi_cmd(enactor, tprintf("%s locked on %s", buffer, unparse_identity(n, x))));
 		if (!flag_lock) {
 			y = sdb2contact(x, n);
 			if (y != SENSOR_FAIL)
-				do_console_notify(x, console_tactical, console_science, console_helm,
+				console_message(x, "helm science tactical",
 				  ansi_warn(tprintf("%cWeapon lock from %s detected", BEEP_CHAR, unparse_identity(x, n))));
 		}
 	}
@@ -1862,7 +1862,7 @@ int do_unlock_weapon (int first, int last, int weapon, dbref enactor)
 	}
 
 	if (flag_b || flag_m) {
-		do_console_notify(n, console_tactical, 0, 0,
+		console_message(n, "tactical",
 		  ansi_cmd(enactor, tprintf("%s unlocked", buffer)));
 	}
 
@@ -1888,7 +1888,7 @@ int do_set_trans (int active, dbref enactor)
 			} else {
 				sdb[n].trans.active = 1;
 				sdb[n].trans.d_lock = sdb[n].trans.s_lock = 0;
-				do_console_notify(n, console_transporter, console_operation, console_helm,
+				console_message(n, "helm operation transporter",
 					ansi_cmd(enactor, "Transporters online"));
 				return 1;
 			}
@@ -1900,7 +1900,7 @@ int do_set_trans (int active, dbref enactor)
 			} else {
 				sdb[n].trans.active = 0;
 				sdb[n].trans.d_lock = sdb[n].trans.s_lock = 0;
-				do_console_notify(n, console_transporter, console_operation, console_helm,
+				console_message(n, "helm operation transporter",
 					ansi_cmd(enactor, "Transporters offline"));
 				return 1;
 			}
@@ -1940,18 +1940,18 @@ int do_set_trans_locked (int contact, int target, dbref enactor)
 			} else {
 				if (target) {
 					sdb[n].trans.d_lock = x;
-					do_console_notify(n, console_transporter, console_operation, 0,
+					console_message(n, "operation transporter",
 					  ansi_cmd(enactor, tprintf("Transporter dest lock on %s", unparse_identity(n, x))));
 				} else {
 					sdb[n].trans.s_lock = x;
-					do_console_notify(n, console_transporter, console_operation, 0,
+					console_message(n, "operation transporter",
 					  ansi_cmd(enactor, tprintf("Transporter source lock on %s", unparse_identity(n, x))));
 				}
 			}
 			if (x != n) {
 				y = sdb2contact(x, n);
 				if (y != SENSOR_FAIL)
-					do_console_notify(x, console_transporter, console_operation, console_tactical,
+					console_message(x, "operation tactical transporter",
 					  ansi_warn(tprintf("%cTransporter lock from %s detected", BEEP_CHAR, unparse_identity(x, n))));
 			}
 			return 1;
@@ -1979,7 +1979,7 @@ int do_set_trans_unlocked (dbref enactor)
 			notify(enactor, ansi_red("Transporters are not locked."));
 		} else {
 			sdb[n].trans.d_lock = sdb[n].trans.s_lock = 0;
-			do_console_notify(n, console_transporter, console_operation, 0,
+			console_message(n, "transporter operation",
 				ansi_cmd(enactor, "Transporters unlocked"));
 		}
 		return 1;
@@ -2010,7 +2010,7 @@ int do_set_tract (int active, dbref enactor)
 				sdb[n].tract.lock = 0;
 				sdb[n].status.tractoring = 0;
 				sdb[n].power.version = 1;
-				do_console_notify(n, console_operation, console_helm, 0,
+				console_message(n, "helm operation",
 					ansi_cmd(enactor, "Tractor beams online"));
 				return 1;
 			}
@@ -2030,7 +2030,7 @@ int do_set_tract (int active, dbref enactor)
 					sdb[n].power.version = 1;
 					sdb[x].power.version = 1;
 				}
-				do_console_notify(n, console_operation, console_helm, 0,
+				console_message(n, "helm operation",
 					ansi_cmd(enactor, "Tractor beams offline"));
 				return 1;
 			}
@@ -2483,7 +2483,7 @@ int do_set_docking_doors (int active, dbref enactor)
 				notify(enactor, ansi_red("Docking bay doors are already open."));
 			} else {
 				sdb[n].status.open_docking = 1;
-				do_console_notify(n, console_helm, console_operation, console_engineering,
+				console_message(n, "engineering helm operation",
 					ansi_cmd(enactor, "Docking bay doors open"));
 				return 1;
 			}
@@ -2492,7 +2492,7 @@ int do_set_docking_doors (int active, dbref enactor)
 				notify(enactor, ansi_red("Docking bay doors are already closed."));
 			} else {
 				sdb[n].status.open_docking = 0;
-				do_console_notify(n, console_helm, console_operation, console_engineering,
+				console_message(n, "engineering helm operation",
 					ansi_cmd(enactor, "Docking bay doors closed"));
 				return 1;
 			}
@@ -2515,7 +2515,7 @@ int do_set_landing_doors (int active, dbref enactor)
 				notify(enactor, ansi_red("Landing bay doors are already open."));
 			} else {
 				sdb[n].status.open_landing = 1;
-				do_console_notify(n, console_helm, console_operation, console_engineering,
+				console_message(n, "engineering helm operation",
 					ansi_cmd(enactor, "Landing bay doors open"));
 				return 1;
 			}
@@ -2524,7 +2524,7 @@ int do_set_landing_doors (int active, dbref enactor)
 				notify(enactor, ansi_red("Landing bay doors are already closed."));
 			} else {
 				sdb[n].status.open_landing = 0;
-				do_console_notify(n, console_helm, console_operation, console_engineering,
+				console_message(n, "engineering helm operation",
 					ansi_cmd(enactor, "Landing bay doors closed"));
 				return 1;
 			}
@@ -2586,13 +2586,13 @@ int do_set_dock (int contact, dbref enactor)
 			notify(enactor, ansi_red(tprintf("%s is being tractored.", Name(sdb[x].object))));
 		} else {
 			if (sdb[n].status.docked) {
-				do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
-				do_console_notify(l, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(l, "helm science tactical", ansi_alert(tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s slides out of dock.", Name(sdb[n].object)));
 				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "undocking from");
 			} else if (sdb[n].status.landed) {
-				do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
-				do_console_notify(l, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(l, "helm science tactical", ansi_alert(tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s lifts off from its landing pad.", Name(sdb[n].object)));
 				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "launching from");
 			}
@@ -2602,16 +2602,16 @@ int do_set_dock (int contact, dbref enactor)
 			if (trac)
 				moveit(sdb[sdb[n].status.tractoring].object, sdb[x].object, 1);
 
-			do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[x].object))));
-			do_console_notify(x, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[x].object))));
+			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[x].object))));
+			console_message(x, "helm science tactical", ansi_alert(tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s slides into dock.", Name(sdb[n].object)));
 			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "docking with");
 			
 			/* Notify space and consoles the tractoree slid in as well... */
 			if (trac) {
 				/* let the tractorer know what he did */
-				do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s tractors %s into dock with %s", Name(sdb[n].object), Name(sdb[trac].object),Name(sdb[x].object))));
-				do_console_notify(x, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s tractors %s into dock with %s", Name(sdb[n].object), Name(sdb[trac].object),Name(sdb[x].object))));
+				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s tractors %s into dock with %s", Name(sdb[n].object), Name(sdb[trac].object),Name(sdb[x].object))));
+				console_message(x, "helm science tactical", ansi_alert(tprintf("%s tractors %s into dock with %s", Name(sdb[n].object), Name(sdb[trac].object),Name(sdb[x].object))));
 				do_ship_notify(trac, tprintf("The %s pulls %s into dock.", Name(sdb[n].object),Name(sdb[trac].object)));
 				do_space_notify_two(trac, x, console_helm, console_tactical, console_science, "docking with");
 			}
@@ -2764,16 +2764,16 @@ int do_set_undock (dbref enactor)
 			notify(enactor, ansi_red(tprintf("%s's docking bay doors are closed.", Name(sdb[x].object))));
 		} else {
 			moveit(sdb[n].object, Location(sdb[x].object), 1);
-			do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[x].object))));
-			do_console_notify(x, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[x].object))));
+			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[x].object))));
+			console_message(x, "helm science tactical", ansi_alert(tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s slides out of dock.", Name(sdb[n].object)));
 			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "undocking from");
 
 			/* where we are going */
 			l = sdb[x].location;
 			if (l > 0 && l <= max_space_objects) {
-				do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[l].object))));
-				do_console_notify(l, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(l, "helm science tactical", ansi_alert(tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s slides into dock.", Name(sdb[n].object)));
 				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "docking with");
 				sdb[l].structure.cargo_mass += sdb[n].structure.displacement;
@@ -2871,20 +2871,20 @@ int do_set_land (int contact, dbref enactor)
 			notify(enactor, ansi_red(tprintf("%s is being tractored.", Name(sdb[x].object))));
 		} else {
 			if (sdb[n].status.docked) {
-				do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
-				do_console_notify(l, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(l, "helm science tactical", ansi_alert(tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s slides out of dock.", Name(sdb[n].object)));
 				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "undocking from");
 			} else if (sdb[n].status.landed) {
-				do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
-				do_console_notify(l, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(l, "helm science tactical", ansi_alert(tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s lifts off from its landing pad.", Name(sdb[n].object)));
 				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "launching from");
 			}
 
 			moveit(sdb[n].object, sdb[x].object, 1);
-			do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[x].object))));
-			do_console_notify(x, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[x].object))));
+			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[x].object))));
+			console_message(x, "helm science tactical", ansi_alert(tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s settles onto its landing pad.", Name(sdb[n].object)));
 			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "landing on");
 
@@ -2973,16 +2973,16 @@ int do_set_launch (dbref enactor)
 			notify(enactor, ansi_red(tprintf("%s's landing bay doors are closed.", Name(sdb[x].object))));
 		} else {
 			moveit(sdb[n].object, Location(sdb[x].object), 1);
-			do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[x].object))));
-			do_console_notify(x, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[x].object))));
+			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[x].object))));
+			console_message(x, "helms cience tactical", ansi_alert(tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s lifts off from its landing pad.", Name(sdb[n].object)));
 			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "launching from");
 
 			/* where we are going */
 			l = sdb[x].location;
 			if (l > 0 && l <= max_space_objects) {
-				do_console_notify(n, console_helm, console_tactical, console_science, ansi_cmd(enactor, tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[l].object))));
-				do_console_notify(l, console_helm, console_tactical, console_science, ansi_alert(tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[l].object))));
+				console_message(l, "helm science tactical", ansi_alert(tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s settles onto its landing pad.", Name(sdb[n].object)));
 				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "landing on");
 				sdb[l].structure.cargo_mass += sdb[n].structure.displacement;
@@ -3062,7 +3062,7 @@ void up_wormhole (int n1, int n2)
 	}
 	/* Mordak Aspace v1.0.0p1 Clear Contacts than Gate and reset sensors*/
 	for(tmp_c=0; tmp_c<sdb[n].sensor.contacts; tmp_c++) {
-	do_console_notify(n, console_helm, console_science, console_tactical,
+	console_message(n, "helm science tactical",
 		ansi_warn(tprintf("%s contact lost: %s",
 		unparse_type(sdb[n].slist.sdb[tmp_c]),
 		unparse_identity(n, sdb[n].slist.sdb[tmp_c]))));
@@ -3376,21 +3376,21 @@ int do_set_fix_damage (char *sys1, char *sys2, int type, char *name, dbref enact
 		if (fix_cost > sdb[n].structure.repair) {
 			*dmg += sdb[n].structure.repair / repair_mult[num] / mult / 100.0;
 			sdb[n].structure.repair = 0.0;
-			do_console_notify(n, console_damage, 0, 0,
+			console_message(n, "damage",
 			  ansi_cmd(enactor, tprintf("%s repaired to %s",
 			  system_name[num], unparse_percent(*dmg))));
 			if (type)
-				do_console_notify(x, console_damage, 0, 0,
+				console_message(x, "damage",
 				  ansi_alert(tprintf("%s repaired to %s by %s",
 				  system_name[num], unparse_percent(*dmg),
 				  Name(sdb[n].object))));
 		} else {
 			*dmg = 1.0;
 			sdb[n].structure.repair -= fix_cost;
-			do_console_notify(n, console_damage, 0, 0,
+			console_message(n, "damage",
 			  ansi_cmd(enactor, tprintf("%s repairs complete", system_name[num])));
 			if (type)
-				do_console_notify(x, console_damage, 0, 0,
+				console_message(x, "damage",
 				  ansi_alert(tprintf("%s repairs completed by %s",
 				  system_name[num], Name(sdb[n].object))));
 		}
@@ -3415,21 +3415,21 @@ int do_set_fix_damage (char *sys1, char *sys2, int type, char *name, dbref enact
 		if (fix_cost > sdb[n].structure.repair) {
 			sdb[x].structure.superstructure += sdb[n].structure.repair / repair_mult[0];
 			sdb[n].structure.repair = 0.0;
-			do_console_notify(n, console_damage, 0, 0,
+			console_message(n, "damage",
 			  ansi_cmd(enactor, tprintf("%s repaired to %s", system_name[0],
 			  unparse_percent(sdb[x].structure.superstructure / sdb[x].structure.max_structure))));
 			if (type)
-				do_console_notify(x, console_damage, 0, 0,
+				console_message(x, "damage",
 				  ansi_alert(tprintf("%s repaired to %s by %s", system_name[0],
 				  unparse_percent(sdb[x].structure.superstructure / sdb[x].structure.max_structure),
 				  Name(sdb[n].object))));
 		} else {
 			sdb[x].structure.superstructure = sdb[x].structure.max_structure;
 			sdb[n].structure.repair -= fix_cost;
-			do_console_notify(n, console_damage, 0, 0,
+			console_message(n, "damage",
 			  ansi_cmd(enactor, tprintf("%s repairs complete", system_name[0])));
 			if (type)
-				do_console_notify(x, console_damage, 0, 0,
+				console_message(x, "damage",
 				  ansi_alert(tprintf("%s repairs completed by %s", system_name[0],
 				  Name(sdb[n].object))));
 		}
@@ -3467,7 +3467,7 @@ int do_set_shield_freq (double frequency, dbref enactor)
 		notify(enactor, ansi_red("Valid shield frequencies are from 1.00 to 999.999 GHz."));
 	} else {
 		sdb[n].shield.freq = frequency;
-		do_console_notify(n, console_helm, console_engineering, 0,
+		console_message(n, "engineering helm",
 			ansi_cmd(enactor, tprintf("Shield frequencies set to %.3f GHz",
 				sdb[n].shield.freq)));
 		write_spacelog(enactor, sdb[n].object, tprintf("LOG: Shield frequencies set to %.6f GHz",
@@ -3489,7 +3489,7 @@ int do_set_cloak_freq (double frequency, dbref enactor)
 		notify(enactor, ansi_red("Valid cloaking device frequencies are from 1.00 to 999.999 GHz."));
 	} else {
 		sdb[n].cloak.freq = frequency;
-		do_console_notify(n, console_helm, console_engineering, 0,
+		console_message(n, "engineering helm",
 			ansi_cmd(enactor, tprintf("Cloaking device frequency set to %.3f GHz",
 				sdb[n].cloak.freq)));
                 write_spacelog(enactor, sdb[n].object, tprintf("LOG: Cloaking device frequency set to %.6f GHz",
@@ -3511,7 +3511,7 @@ int do_set_beam_freq (double frequency, dbref enactor)
 		notify(enactor, ansi_red("Valid beam weapon frequencies are from 1.00 to 999.999 GHz."));
 	} else {
 		sdb[n].beam.freq = frequency;
-		do_console_notify(n, console_tactical, console_engineering, 0,
+		console_message(n, "engineering tactical",
 			ansi_cmd(enactor, tprintf("Beam weapon frequencies set to %.3f GHz", sdb[n].beam.freq)));
                 write_spacelog(enactor, sdb[n].object, tprintf("LOG: Beam weapon frequencies set to %.6f GHz",
                 	sdb[n].beam.freq));
@@ -3532,7 +3532,7 @@ int do_set_missile_freq (double frequency, dbref enactor)
 		notify(enactor, ansi_red("Valid missile weapon frequencies are from 1.00 to 999.999 GHz."));
 	} else {
 		sdb[n].missile.freq = frequency;
-		do_console_notify(n, console_tactical, console_engineering, 0,
+		console_message(n, "engineering tactical",
 			ansi_cmd(enactor, tprintf("Missile weapon frequencies set to %.3f GHz", sdb[n].missile.freq)));
                 write_spacelog(enactor, sdb[n].object, tprintf("LOG: Missile weapon frequencies set to %.6f GHz",
                 	sdb[n].missile.freq));
@@ -3553,7 +3553,7 @@ int do_set_trans_freq (double frequency, dbref enactor)
 		notify(enactor, ansi_red("Valid transporter frequencies are from 1.00 to 999.999 GHz."));
 	} else {
 		sdb[n].trans.freq = frequency;
-		do_console_notify(n, console_transporter, console_engineering, console_operation,
+		console_message(n, "engineering operation transporter",
 			ansi_cmd(enactor, tprintf("Transporter frequency set to %.3f GHz", sdb[n].trans.freq)));
                 write_spacelog(enactor, sdb[n].object, tprintf("LOG: Transporter frequency set to %.6f GHz",
                 	sdb[n].trans.freq));
@@ -3574,7 +3574,7 @@ int do_set_tract_freq (double frequency, dbref enactor)
 		notify(enactor, ansi_red("Valid tractor beam frequency is from 1.00 to 999.999 GHz."));
 	} else {
 		sdb[n].tract.freq = frequency;
-		do_console_notify(n, console_operation, console_engineering, 0,
+		console_message(n, "engineering operation",
 			ansi_cmd(enactor, tprintf("Tractor beam frequency set to %.3f GHz", sdb[n].tract.freq)));
                 write_spacelog(enactor, sdb[n].object, tprintf("LOG: Tractor beam frequency set to %.6f GHz",
                 	sdb[n].tract.freq));
@@ -3638,10 +3638,10 @@ int do_set_refuel (char *name, char *fuel, double tons, dbref enactor)
 		} else {
 			sdb[n].fuel.antimatter -= amount;
 			sdb[x].fuel.antimatter += amount;
-			do_console_notify(n, console_operation, console_engineering, 0,
+			console_message(n, "engineering operation",
 				ansi_cmd(enactor, tprintf("%f tons of antimatter transferred to %s",
 				amount / 1000000.0, Name(sdb[x].object))));
-			do_console_notify(x, console_operation, console_engineering, 0,
+			console_message(x, "engineering operation",
 				ansi_alert(tprintf("%f tons of antimatter transferred from %s",
 				amount / 1000000.0, Name(sdb[n].object))));
 			return 1;
@@ -3662,10 +3662,10 @@ int do_set_refuel (char *name, char *fuel, double tons, dbref enactor)
 		} else {
 			sdb[n].fuel.deuterium -= amount;
 			sdb[x].fuel.deuterium += amount;
-			do_console_notify(n, console_operation, console_engineering, 0,
+			console_message(n, "engineering operation",
 				ansi_cmd(enactor, tprintf("%f tons of deuterium transferred to %s",
 				amount / 1000000.0, Name(sdb[x].object))));
-			do_console_notify(x, console_operation, console_engineering, 0,
+			console_message(x, "engineering operation",
 				ansi_alert(tprintf("%f tons of deuterium transferred from %s",
 				amount / 1000000.0, Name(sdb[n].object))));
 			return 1;
@@ -3686,10 +3686,10 @@ int do_set_refuel (char *name, char *fuel, double tons, dbref enactor)
 		} else {
 			sdb[n].fuel.reserves -= amount;
 			sdb[x].fuel.reserves += amount;
-			do_console_notify(n, console_operation, console_engineering, 0,
+			console_message(n, "engineering operation",
 				ansi_cmd(enactor, tprintf("%f GW hours of reserves transferred to %s",
 				amount / 3600.0, Name(sdb[x].object))));
-			do_console_notify(x, console_operation, console_engineering, 0,
+			console_message(x, "engineering operation",
 				ansi_alert(tprintf("%f GW hours of reserves transferred from %s",
 				amount / 3600.0, Name(sdb[n].object))));
 			return 1;
@@ -3741,10 +3741,10 @@ int do_set_defuel (char *fuel, double tons, dbref enactor)
 			} else {
 				sdb[n].fuel.antimatter -= amount;
 				sdb[x].fuel.antimatter += amount;
-				do_console_notify(n, console_operation, console_engineering, 0,
+				console_message(n, "engineering operation",
 					ansi_cmd(enactor, tprintf("%f tons of antimatter transferred to %s",
 					amount / 1000000.0, Name(sdb[x].object))));
-				do_console_notify(x, console_operation, console_engineering, 0,
+				console_message(x, "engineering operation",
 					ansi_alert(tprintf("%f tons of antimatter transferred from %s",
 					amount / 1000000.0, Name(sdb[n].object))));
 				return 1;
@@ -3764,10 +3764,10 @@ int do_set_defuel (char *fuel, double tons, dbref enactor)
 			} else {
 				sdb[n].fuel.deuterium -= amount;
 				sdb[x].fuel.deuterium += amount;
-				do_console_notify(n, console_operation, console_engineering, 0,
+				console_message(n, "engineering operation",
 					ansi_cmd(enactor, tprintf("%f tons of deuterium transferred to %s",
 					amount / 1000000.0, Name(sdb[x].object))));
-				do_console_notify(x, console_operation, console_engineering, 0,
+				console_message(x, "engineering operation",
 					ansi_alert(tprintf("%f tons of deuterium transferred from %s",
 					amount / 1000000.0, Name(sdb[n].object))));
 				return 1;
@@ -3787,10 +3787,10 @@ int do_set_defuel (char *fuel, double tons, dbref enactor)
 			} else {
 				sdb[n].fuel.reserves -= amount;
 				sdb[x].fuel.reserves += amount;
-				do_console_notify(n, console_operation, console_engineering, 0,
+				console_message(n, "engineering operation",
 					ansi_cmd(enactor, tprintf("%f GW hours of reserves transferred to %s",
 					amount / 3600.0, Name(sdb[x].object))));
-				do_console_notify(x, console_operation, console_engineering, 0,
+				console_message(x, "engineering operation",
 					ansi_alert(tprintf("%f GW hours of reserves transferred from %s",
 					amount / 3600.0, Name(sdb[n].object))));
 				return 1;
@@ -3803,7 +3803,7 @@ int do_set_defuel (char *fuel, double tons, dbref enactor)
 			if (amount > available)
 				amount = available;
 			sdb[n].fuel.antimatter -= amount;
-			do_console_notify(n, console_operation, console_engineering, 0,
+			console_message(n, "engineering operation",
 				ansi_cmd(enactor, tprintf("%f tons of antimatter dumped into space",
 				amount / 1000000.0)));
 			return 1;
@@ -3813,7 +3813,7 @@ int do_set_defuel (char *fuel, double tons, dbref enactor)
 			if (amount > available)
 				amount = available;
 			sdb[n].fuel.deuterium -= amount;
-			do_console_notify(n, console_operation, console_engineering, 0,
+			console_message(n, "engineering operation",
 				ansi_cmd(enactor, tprintf("%f tons of deuterium dumped into space",
 				amount / 1000000.0)));
 			return 1;
@@ -3823,7 +3823,7 @@ int do_set_defuel (char *fuel, double tons, dbref enactor)
 			if (amount > available)
 				amount = available;
 			sdb[n].fuel.reserves -= amount;
-			do_console_notify(n, console_operation, console_engineering, 0,
+			console_message(n, "engineering operation",
 				ansi_cmd(enactor, tprintf("%f GW hours of reserves dumped into space",
 				amount / 3600.0)));
 			return 1;
@@ -3851,7 +3851,7 @@ int do_set_autopilot (int flag, dbref enactor)
 			notify(enactor, ansi_red("Autopilot is already engaged."));
 		} else {
 			sdb[n].status.autopilot = 0;
-			do_console_notify(n, console_helm, 0, 0,
+			console_message(n, "helm",
 			  ansi_cmd(enactor, "Autopilot disengaged"));
 			return 1;
 		}
@@ -3863,7 +3863,7 @@ int do_set_autopilot (int flag, dbref enactor)
 			notify(enactor, ansi_red(tprintf("%s is already there.", Name(sdb[n].object))));
 		} else {
 			sdb[n].status.autopilot = 100;
-			do_console_notify(n, console_helm, 0, 0,
+			console_message(n, "helm",
 		  		ansi_cmd(enactor, "Autopilot engaged"));
 			return 1;
 		}
@@ -3881,7 +3881,7 @@ int do_set_iff_frequency (double frequency, dbref enactor)
 		notify(enactor, ansi_red("Valid IFF frequency is from 1.0 to 999.999 GHz."));
 	} else {
 		sdb[n].iff.frequency = frequency;
-		do_console_notify(n, console_tactical, console_operation, 0,
+		console_message(n, "operation tactical",
 			ansi_cmd(enactor, tprintf("IFF Frequency set to %.3f GHz", sdb[n].iff.frequency)));
 		write_spacelog(enactor, sdb[n].object, tprintf("LOG: IFF Frequency set to %.6f GHz", sdb[n].iff.frequency));
 		return 1;

@@ -19,7 +19,7 @@ void damage_structure (int x, double damage)
 	sdb[x].structure.superstructure -= damage;
 	if (sdb[x].structure.superstructure < -sdb[x].structure.max_structure)
 		sdb[x].structure.superstructure = -sdb[x].structure.max_structure;
-	do_console_notify(x, console_engineering, console_damage, 0,
+	console_message(x, "damage engineering",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[0], ANSI_WHITE,
 	  unparse_percent(sdb[x].structure.superstructure / sdb[x].structure.max_structure),
@@ -130,7 +130,7 @@ void damage_aux (int x, double damage)
 			damage_structure(x, sdb[x].power.aux * (get_random_long(0,10) + 1.0));
 		}
 	}
-	do_console_notify(x, console_engineering, console_damage, 0,
+	console_message(x, "damage engineering",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[1], ANSI_WHITE,
 	  unparse_percent(sdb[x].aux.damage),
@@ -147,7 +147,7 @@ void damage_batt (int x, double damage)
 	sdb[x].batt.damage -= damage / sdb[x].batt.gw;
 	if (sdb[x].batt.damage < -1.0)
 		sdb[x].batt.damage = -1.0;
-	do_console_notify(x, console_engineering, console_damage, 0,
+	console_message(x, "damage engineering",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[2], ANSI_WHITE,
 	  unparse_percent(sdb[x].batt.damage),
@@ -171,7 +171,7 @@ void damage_beam (int x, int beam, double damage)
 	  / ((sdb[x].blist.cost[beam] + sdb[x].blist.bonus[beam]) / 10.0);
 	if (sdb[x].blist.damage[beam] < -1.0)
 		sdb[x].blist.damage[beam] = -1.0;
-	do_console_notify(x, console_tactical, console_damage, 0,
+	console_message(x, "damage tactical",
 	  ansi_alert(tprintf("%s%s %d%s: %s %s",
 	  ANSI_CYAN, system_name[3], beam + 1, ANSI_WHITE,
 	  unparse_percent(sdb[x].blist.damage[beam]),
@@ -194,7 +194,7 @@ void damage_cloak (int x, double damage)
 	sdb[x].cloak.damage -= damage / (1.0 + (sdb[x].structure.max_structure / 100.0));
 	if (sdb[x].cloak.damage < -1.0)
 		sdb[x].cloak.damage = -1.0;
-	do_console_notify(x, console_helm, console_damage, 0,
+	console_message(x, "damage helm",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[4], ANSI_WHITE,
 	  unparse_percent(sdb[x].cloak.damage),
@@ -218,7 +218,7 @@ void damage_ew (int x, double damage)
 	sdb[x].sensor.ew_damage -= damage / (1.0 + (sdb[x].structure.max_structure / 10.0));
 	if (sdb[x].sensor.ew_damage < -1.0)
 		sdb[x].sensor.ew_damage = -1.0;
-	do_console_notify(x, console_tactical, console_science, console_damage,
+	console_message(x, "damage science tactical",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[5], ANSI_WHITE,
 	  unparse_percent(sdb[x].sensor.ew_damage),
@@ -239,7 +239,7 @@ void damage_impulse (int x, double damage)
 	sdb[x].engine.impulse_damage -= damage / (1.0 + (sdb[x].structure.max_structure / 10.0));
 	if (sdb[x].engine.impulse_damage < -1.0)
 		sdb[x].engine.impulse_damage = -1.0;
-	do_console_notify(x, console_engineering, console_damage, 0,
+	console_message(x, "damage engineering",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[6], ANSI_WHITE,
 	  unparse_percent(sdb[x].engine.impulse_damage),
@@ -257,7 +257,7 @@ void damage_lrs (int x, double damage)
 	sdb[x].sensor.lrs_damage -= damage / (1.0 + (sdb[x].structure.max_structure / 10.0));
 	if (sdb[x].sensor.lrs_damage < -1.0)
 		sdb[x].sensor.lrs_damage = -1.0;
-	do_console_notify(x, console_tactical, console_science, console_damage,
+	console_message(x, "damage science tactical",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[7], ANSI_WHITE,
 	  unparse_percent(sdb[x].sensor.lrs_damage),
@@ -288,7 +288,7 @@ void damage_main (int x, double damage)
 			damage_structure(x, sdb[x].power.main * (get_random_long(0,100) + 1.0));
 		}
 	}
-	do_console_notify(x, console_engineering, console_damage, 0,
+	console_message(x, "damage engineering",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[8], ANSI_WHITE,
 	  unparse_percent(sdb[x].main.damage),
@@ -306,7 +306,7 @@ void damage_missile (int x, int missile, double damage)
 	  / (sdb[x].mlist.warhead[missile] / 10.0);
 	if (sdb[x].mlist.damage[missile] < -1.0)
 		sdb[x].mlist.damage[missile] = -1.0;
-	do_console_notify(x, console_tactical, console_damage, 0,
+	console_message(x, "damage tactical",
 	  ansi_alert(tprintf("%s%s %d%s: %s %s",
 	  ANSI_CYAN, system_name[9], missile + 1, ANSI_WHITE,
 	  unparse_percent(sdb[x].mlist.damage[missile]),
@@ -329,7 +329,7 @@ void damage_shield (int x, int shield, double damage)
 	sdb[x].shield.damage[shield] -= damage / (1.0 + (sdb[x].structure.max_structure / 10.0));
 	if (sdb[x].shield.damage[shield] < -1.0)
 		sdb[x].shield.damage[shield] = -1.0;
-	do_console_notify(x, console_helm, console_damage, 0,
+	console_message(x, "damage helm",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, unparse_shield(shield), ANSI_WHITE,
 	  unparse_percent(sdb[x].shield.damage[shield]),
@@ -350,7 +350,7 @@ void damage_srs (int x, double damage)
 	sdb[x].sensor.srs_damage -= damage / (1.0 + (sdb[x].structure.max_structure / 10.0));
 	if (sdb[x].sensor.srs_damage < -1.0)
 		sdb[x].sensor.srs_damage = -1.0;
-	do_console_notify(x, console_tactical, console_science, console_damage,
+	console_message(x, "damage science tactical",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[11], ANSI_WHITE,
 	  unparse_percent(sdb[x].sensor.srs_damage),
@@ -371,7 +371,7 @@ void damage_tract (int x, double damage)
 	sdb[x].tract.damage -= damage / (1.0 + (sdb[x].structure.max_structure / 10.0));
 	if (sdb[x].tract.damage < -1.0)
 		sdb[x].tract.damage = -1.0;
-	do_console_notify(x, console_operation, console_damage, 0,
+	console_message(x, "damage operation",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[12], ANSI_WHITE,
 	  unparse_percent(sdb[x].tract.damage),
@@ -400,7 +400,7 @@ void damage_trans (int x, double damage)
 	sdb[x].trans.damage -= damage / (1.0 + (sdb[x].structure.max_structure / 10.0));
 	if (sdb[x].trans.damage < -1.0)
 		sdb[x].trans.damage = -1.0;
-	do_console_notify(x, console_operation, console_damage, console_transporter,
+	console_message(x, "damage operation transporter",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[13], ANSI_WHITE,
 	  unparse_percent(sdb[x].trans.damage),
@@ -423,7 +423,7 @@ void damage_warp (int x, double damage)
 	sdb[x].engine.warp_damage -= damage / (1.0 + (sdb[x].structure.max_structure / 10.0));
 	if (sdb[x].engine.warp_damage < -1.0)
 		sdb[x].engine.warp_damage = -1.0;
-	do_console_notify(x, console_engineering, console_damage, 0,
+	console_message(x, "damage engineering",
 	  ansi_alert(tprintf("%s%s%s: %s %s",
 	  ANSI_CYAN, system_name[14], ANSI_WHITE,
 	  unparse_percent(sdb[x].engine.warp_damage),

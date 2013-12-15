@@ -33,7 +33,7 @@ void report_eng_power (void)
 	  unparse_percent(sdb[n].alloc.operations),
 	  ansi_rainbow_scale(sdb[n].alloc.operations, 35)), sizeof(buffer) - 1);
 	strncat(buffer, format_l_end(), sizeof(buffer) - 1);
-	do_console_notify(n, console_engineering, 0, 0, buffer);
+	console_message(n, "engineering", buffer);
 
 	return;
 }
@@ -74,7 +74,7 @@ void report_helm_power (void)
 	  unparse_percent(sdb[n].alloc.cloak),
 	  ansi_rainbow_scale(sdb[n].alloc.cloak, 35)), sizeof(buffer) - 1);
 	strncat(buffer, format_l_end(), sizeof(buffer) - 1);
-	do_console_notify(n, console_helm, console_engineering, 0, buffer);
+	console_message(n, "helm engineering", buffer);
 
 	return;
 }
@@ -118,7 +118,7 @@ void report_tact_power (void)
 	  unparse_percent(sdb[n].alloc.eccm),
 	  ansi_rainbow_scale(sdb[n].alloc.eccm, 35)), sizeof(buffer) - 1);
 	strncat(buffer, format_l_end(), sizeof(buffer) - 1);
-	do_console_notify(n, console_tactical, console_science, console_engineering, buffer);
+	console_message(n, "engineering science tactical", buffer);
 
 	return;
 }
@@ -153,7 +153,7 @@ void report_ops_power (void)
 	  unparse_percent(sdb[n].alloc.miscellaneous),
 	  ansi_rainbow_scale(sdb[n].alloc.miscellaneous, 35)), sizeof(buffer) - 1);
 	strncat(buffer, format_l_end(), sizeof(buffer) - 1);
-	do_console_notify(n, console_operation, console_damage, console_engineering, buffer);
+	console_message(n, "damage engineering operation", buffer);
 
 	return;
 }
@@ -180,7 +180,7 @@ void report_shield_power (void)
 		  unparse_percent(sdb[n].alloc.shield[i]),
 		  ansi_rainbow_scale(sdb[n].alloc.shield[i], 35)), sizeof(buffer) - 1);
 	strncat(buffer, format_l_end(), sizeof(buffer) - 1);
-	do_console_notify(n, console_helm, console_engineering, 0, buffer);
+	console_message(n, "helm engineering", buffer);
 
 	return;
 }
@@ -210,7 +210,7 @@ void report_sensor_power (void)
 	  unparse_percent(sdb[n].alloc.eccm),
 	  ansi_rainbow_scale(sdb[n].alloc.eccm, 35)), sizeof(buffer) - 1);
 	strncat(buffer, format_l_end(), sizeof(buffer) - 1);
-	do_console_notify(n, console_tactical, console_science, console_engineering, buffer);
+	console_message(n, "engineering science tactical", buffer);
 
 	return;
 }
