@@ -1015,10 +1015,10 @@ extern int do_scanner_report (int a, char *s, dbref enactor);
 extern int do_nebula_report (dbref enactor);
 extern int do_border_report (dbref enactor);
 extern int do_planet_report (const char *s, int t, dbref enactor);
-extern char *do_sensor_contacts_bot (char *a, dbref enactor);
+extern void do_sensor_contacts_bot (char *a, dbref enactor, char *buff, char **bp);
 extern char *contact_flags (int x);
 extern char *contact_line (int contact);
-extern char *contact_line_bot (int contact);
+extern void contact_line_bot (int contact, char *buff, char **bp);
 extern char *planet_eta (int x, double r);
 
 /* from space_format.c */

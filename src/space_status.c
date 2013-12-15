@@ -196,12 +196,10 @@ int do_sensor_contacts (char *a, dbref enactor)
 	return 0;
 }
 
-char *contact_line_bot (int contact)
+void contact_line_bot (int contact, char *buff, char **bp)
 {
 	int x = sdb[n].slist.sdb[contact];
-	//int l;
-	//register int i;
-	static char buffer[1000], arc1[10], arc2[10];
+	static char arc1[10], arc2[10];
 	double level = sdb[n].slist.lev[contact] * 100.0;
 
 	if (level < 0.0) {
@@ -212,7 +210,7 @@ char *contact_line_bot (int contact)
 	strncpy(arc1, unparse_arc(sdb2arc(n, x)), sizeof(arc1) - 1);
 	strncpy(arc2, unparse_arc(sdb2arc(x, n)), sizeof(arc2) - 1);
 
-	snprintf(buffer, sizeof(buffer), "%d|%d|#%d|%d|%.0f|%.3f|%.3f|%.1f|%.3f|%.3f|%f|%.1f %.1f %.1f|%s|%s|%s|%s|%s|%d",
+	safe_format(buff, bp, "%d|%d|#%d|%d|%.0f|%.3f|%.3f|%.1f|%.3f|%.3f|%f|%.1f %.1f %.1f|%s|%s|%s|%s|%s|%d",
 	  sdb[n].slist.num[contact],
 	  x,
 	  sdb[x].object,
@@ -233,15 +231,12 @@ char *contact_line_bot (int contact)
 	  ((level < 50) && (sdb[x].structure.type < 3) ? "" : (sdb[x].cloak.active ? "(cloaked)" : unparse_class(x))),
 	  ((level < 50) && (sdb[x].structure.type < 3) ? "" : (sdb[x].cloak.active ? "(cloaked)" : Name(sdb[x].object))),
 	  sdb[x].move.empire);
-
-	return (buffer);
 }
 
-char *do_sensor_contacts_bot (char *a, dbref enactor)
+void do_sensor_contacts_bot (char *a, dbref enactor, char *buff, char **bp)
 {
 	static char buffer[BUFFER_LEN];
 	register int contact = contact2slist(n, atoi(a));
-	//int x;
 	int ctype = 0, first = 0;
 
 	switch (a[0]) {
@@ -265,41 +260,34 @@ char *do_sensor_contacts_bot (char *a, dbref enactor)
 	}
 
 	if (error_on_console(enactor)) {
-		return (char *) "#-1 ERROR ON CONSOLE";
+		safe_str("#-1 ERROR ON CONSOLE", buff, bp);
 	} else if (!sdb[n].sensor.contacts) {
-		return (char *) "#-1 NO CONTACTS";
+		safe_str("#-1 NO CONTACTS", buff, bp);
 	} else if (ctype != 0) {
-		strncpy(buffer, "", sizeof(buffer) - 1);
 		for (contact = 0 ; contact < sdb[n].sensor.contacts ; ++contact)
+		{
 			if (sdb[sdb[n].slist.sdb[contact]].structure.type == ctype) {
-				if (first)
-					strncat(buffer, "~", sizeof(buffer) - 1);
-				strncat(buffer, contact_line_bot(contact), sizeof(buffer) - 1);
+				if (first) {
+					safe_str("~", buff, bp);
+				}
+				contact_line_bot(contact, buff, bp);
 				++first;
 			}
-		if (first) {
-			return (buffer);
-		} else
-			return (char *) "#-1 NO CONTACTS";
+		}
 	} else if (contact != SENSOR_FAIL) {
-		strncpy(buffer, contact_line_bot(contact), sizeof(buffer) - 1);
-		return (buffer);
+		contact_line_bot(contact, buff, bp);
 	} else {
-		strncpy(buffer, "", sizeof(buffer) - 1);
 		for (ctype = 1 ; ctype < MAX_TYPE_NAME ; ++ctype) {
 			for (contact = 0 ; contact < sdb[n].sensor.contacts ; ++contact) {
 				if (sdb[sdb[n].slist.sdb[contact]].structure.type == ctype) {
-					if (first)
-						strncat(buffer, "~", sizeof(buffer) - 1);
-					strncat(buffer, contact_line_bot(contact), sizeof(buffer) - 1);
+					if (first) {
+						safe_str("~", buff, bp);
+					}
+					contact_line_bot(contact, buff, bp);
 					++first;
 				}
 			}
 		}
-		if (first) {
-			return (buffer);
-		} else
-			return (char *) "#-1 NO CONTACTS";
 	}
 }
 
