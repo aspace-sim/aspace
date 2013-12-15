@@ -1148,6 +1148,85 @@ void free_spaceconsole(void *ptr) {
 	mush_free(sc, "space_consoles");
 }
 
+void console_notify_all(int x, char *msg) {
+	ATTR *a, *b;
+	char *q, *pq, *console_mode, *c_pq, *show_message;
+	space_consoles *sc;
+	int index, result;
+	dbref console, user, parent;
+
+	show_message = (char *) mush_strdup(msg, "console_message");
+	
+	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
+	if (a != NULL) {
+		q = safe_atr_value(a);
+		pq = trim_space_sep(q, ' ');
+		while (pq) {
+			console = parse_dbref(split_token(&pq, ' '));
+					
+			if ( console != NOTHING )
+			{			
+				b = atr_get(console, CONSOLE_USER_ATTR_NAME);
+				if (b != NULL) {
+					user = parse_dbref(atr_value(b));
+					if (GoodObject(user)) {
+						notify(user, show_message);
+					}
+				}
+			}
+		}
+		free(q);
+		mush_free(show_message, "console_message");
+	}
+}
+
+void console_notify(int x, char *msg, int numargs, char **args) {
+	ATTR *a, *b;
+	char *q, *pq, *console_mode, *c_pq, *show_message;
+	space_consoles *sc;
+	int index, result;
+	dbref console, user, parent;
+
+	show_message = (char *) mush_strdup(msg, "console_message");
+	
+	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
+	if (a != NULL) {
+		q = safe_atr_value(a);
+		pq = trim_space_sep(q, ' ');
+		while (pq) {
+			console = parse_dbref(split_token(&pq, ' '));
+					
+			if ( console != NOTHING )
+			{			
+				for ( index = 0; index < numargs; index++) {
+					console_mode = args[index];
+					c_pq = tprintf("console_%s", console_mode); 
+				
+					if ( c_pq != NULL )
+					{
+						sc = hashfind(c_pq, &aspace_consoles);
+				
+						if (GoodObject(console) && sc != NULL) {
+							parent = Parent(console);
+							if ( parent == sc->console_dbref ) {
+								b = atr_get(console, CONSOLE_USER_ATTR_NAME);
+								if (b != NULL) {
+									user = parse_dbref(atr_value(b));
+									if (GoodObject(user)) {
+										notify(user, show_message);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		free(q);
+		mush_free(show_message, "console_message");
+	}
+}
+
 void console_message(int x, char *consoles, char *msg) {
 	ATTR *a, *b;
 	char *q, *pq, *the_console, *c_pq, *console_list, *show_message, *consoles2, *consoles_list[BUFFER_LEN / 2];
@@ -1217,10 +1296,50 @@ FUNCTION(local_fun_consolemsg)
 	return;
 }
 
+FUNCTION(local_fun_consolenotify)
+{
+	char *msg;
+	int x;
+	
+	x = parse_integer(args[0]);
+		
+	if (!GoodObject(sdb[x].object) || !SpaceObj(sdb[x].object)) {
+		write_spacelog(sdb[x].object, sdb[x].object, "BUG: invalid zone to zemit to.");
+		return;
+	}
+
+	msg = args[1];
+
+	console_notify(x, msg, nargs - 2, args + 2);
+	
+	return;
+}
+
+FUNCTION(local_fun_consolenotifyall)
+{
+	char *msg;
+	int x;
+	
+	x = parse_integer(args[0]);
+		
+	if (!GoodObject(sdb[x].object) || !SpaceObj(sdb[x].object)) {
+		write_spacelog(sdb[x].object, sdb[x].object, "BUG: invalid zone to zemit to.");
+		return;
+	}
+
+	msg = args[1];
+
+	console_notify_all(x, msg);
+	
+	return;
+}
+
 /* ------------------------------------------------------------------------ */
 
 void setupAspaceFunctions()
 {
+	function_add("CONSOLENOTIFYALL", local_fun_consolenotifyall, 2, 2, FN_ADMIN);
+	function_add("CONSOLENOTIFY", local_fun_consolenotify, 3, INT_MAX, FN_ADMIN);
 	function_add("CONSOLEMSG", local_fun_consolemsg, 3, 3, FN_ADMIN);
 	function_add("BORDER", local_fun_border, 1, 7, FN_ADMIN);
 	function_add((char *) "CDB", local_fun_cdb, 1, 5, FN_REG);
