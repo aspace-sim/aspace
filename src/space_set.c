@@ -2542,11 +2542,11 @@ int do_set_dock (int contact, dbref enactor)
 	//int s;
 	/* ASPACE TRAC DOCK CHANGES n is current ship, x is the dock sdb[n].status.tractoring is the tractoree */
     int tsize = 0; /* to put tractoree's size */
-	int tloc = 0; /* to put tractoree's loc */
+	//int tloc = 0; /* to put tractoree's loc */
 	int trac = sdb[n].status.tractoring; /* the sdb of the tractoree. */
     if (trac) {
 		tsize = sdb[sdb[n].status.tractoring].structure.displacement;
-		tloc = sdb[sdb[n].status.tractoring].location;
+		//tloc = sdb[sdb[n].status.tractoring].location; /* Removed due to not being used. */
 	}
 
 	if (error_on_console(enactor)) {

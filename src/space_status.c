@@ -305,7 +305,7 @@ char *do_sensor_contacts_bot (char *a, dbref enactor)
 
 /* ------------------------------------------------------------------------ */
 
-int do_iff_check (int contact, dbref enactor)
+int do_iff_check (int contact)
 {
 	int x = contact2sdb(n, contact);
 	

@@ -509,12 +509,10 @@ int repair_everything (void)
 
 void dump_space (dbref executor) /* dumps the sdb[] struct into the space objects */
 {
-	int result;
-
 	for (n = MIN_SPACE_OBJECTS ; n <= max_space_objects ; ++n)
 		if (sdb[n].structure.type) {
 			if (sdb[n].status.active && sdb[n].power.total == 0.0)
-				result = do_set_inactive(sdb[n].object);
+				do_set_inactive(sdb[n].object);
 			do_space_db_write(sdb[n].object, executor);
 		}
 

@@ -998,7 +998,7 @@ extern int do_set_intercept (int contact, dbref enactor);
 
 
 /* from space_status.c */
-extern int do_iff_check (int contact, dbref enactor);
+extern int do_iff_check (int contact);
 extern int do_sensor_contacts (char *a, dbref enactor);
 extern int do_sensor_report (int contact, dbref enactor);
 extern int do_eng_status (dbref enactor);
