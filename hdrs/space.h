@@ -110,6 +110,10 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 
 #endif
 
+#define FILENAME "space.conf"
+#define MAXBUF 1024
+#define DELIM "="
+
 /* ------------------------------------------------------------------------ */
 
 #define SENSOR_FAIL				  -100
@@ -301,6 +305,12 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 #define IFF_DATA_NUMBER           1
 
 /* ------------------------------------------------------------------------ */
+
+struct spaceconfig {
+	char mainReactor[MAXBUF];
+};
+
+struct spaceconfig configstruct;
 
 struct aspace_empire_info {
 	const char* name;
@@ -641,6 +651,10 @@ struct comms_database_t {
 };
 
 /* ------------------------------------------------------------------------ */
+
+/* from space_conf.c */
+extern struct spaceconfig get_space_config(char *filename);
+extern void loadSpaceConfig();
 
 /* from space_output.c - Raw outputs */
 extern char* output_shields_raw();

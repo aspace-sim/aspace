@@ -1273,9 +1273,13 @@ void initSpace()
 
 	hash_init(&aspace_consoles, 256, free_borderinfo);
 	
+	loadSpaceConfig();
+
 	(void) setupAspaceFunctions();
 	(void) setupAspaceFlags();
 	(void) dump_space(GOD);
 	(void) open_spacelog();
+
+	write_spacelog(1, 1, tprintf("%s", configstruct.mainReactor));
 }
 
