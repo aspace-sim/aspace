@@ -706,6 +706,7 @@ extern const char *damage_name[];
 extern double repair_mult[];
 
 /* from space_main.c */
+extern void setupAspaceConsoles();
 extern void initSpace();
 extern void dump_space(dbref);
 extern void console_message(int x, char *consoles, char *msg);
@@ -728,6 +729,7 @@ extern char *ansi_red_scale (double a, int max);
 extern char *ansi_stoplight_scale (double a, int max);
 
 /* from space_utils.c */
+extern int dbref2sdb(dbref x);
 extern int GoodSDB (int x);
 extern double ly2pc (double dist);
 extern double pc2ly (double dist);
