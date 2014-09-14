@@ -13,10 +13,15 @@ void free_borderinfo(void *ptr) {
   mush_free(border, "border_info");
 }
 
-void addNewBorder(int border_number, const char* name, double radius, double x, double y, double z, char *buff, char **bp)
+void addNewBorder(dbref executor, int border_number, const char* name, double radius, double x, double y, double z, char *buff, char **bp)
 {
 	aspace_borders* newBorder;
-	
+	newBorder = im_find(border_map, border_number);
+	if (newBorder != NULL) {
+		safe_str("#-1 BORDER ALREADY EXISTS", buff, bp);
+		return;
+	}
+		
 	newBorder = mush_malloc(sizeof(aspace_borders), "border_info");
 	
 	newBorder->name = mush_strdup(name, "spaceborder_name");
@@ -26,13 +31,14 @@ void addNewBorder(int border_number, const char* name, double radius, double x, 
 	newBorder->y = y;
 	newBorder->z = z;
 	
-	if( im_insert(border_map, border_number, newBorder ))
+	if( im_insert(border_map, border_number, newBorder )) {
 		safe_str("New Border Created.", buff, bp);
-	else
+		write_spacelog(executor, executor, tprintf("Border Created: %s", newBorder->name));
+	} else
 		safe_str("#-1 BORDER NOT CREATED.", buff, bp);
 }
 
-void deleteBorder(int border, char *buff, char **bp)
+void deleteBorder(dbref executor, int border, char *buff, char **bp)
 {
 	aspace_borders *theBorder;
 
@@ -42,11 +48,14 @@ void deleteBorder(int border, char *buff, char **bp)
 	}
 	
 	theBorder = im_find(border_map, border);
-	
-	if (theBorder != NULL)
+	if (theBorder !=NULL) {
+		write_spacelog(executor, executor, tprintf("Border deleted: %s", theBorder->name));
 		free_borderinfo(theBorder);
-		
-	im_delete(border_map, border);
+		im_delete(border_map, border);
+	} else {
+		safe_str("#-1 BORDER NOT FOUND", buff, bp);
+		return;
+	}
 }
 
 char *border_line_bot (int border_id, aspace_borders *sbi)
@@ -81,7 +90,7 @@ void list_borders(char *buff, char **bp)
         }
 }
 
-void edit_border(int border_id, const char* setting, const char* new_value, char *buff, char **bp)
+void edit_border(dbref executor, int border_id, const char* setting, const char* new_value, char *buff, char **bp)
 {
 	aspace_borders *si = NULL;
 
