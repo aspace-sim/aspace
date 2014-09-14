@@ -27,7 +27,7 @@ struct pennmush_flag_info aspace_flag_table[] =
 	{NULL,'0',0,0,0}
 };
 
-/* border stuff - no longer stored here. */
+
 void addConsole(char *console_name, dbref console_dbref)
 {
 	space_consoles *sc = NULL;
@@ -46,6 +46,8 @@ void lookup_space (const char *name, dbref *space)
 {
 	dbref thing;
 	int i = 0;
+	static char buffer[BUFFER_LEN];
+	snprintf(buffer, sizeof(buffer),"*%s*", name);
 
 	space[0] = NOTHING;
 
@@ -56,7 +58,7 @@ void lookup_space (const char *name, dbref *space)
 	} else
 		for (thing = 0; thing < db_top; thing++)
 			if (SpaceObj(thing) && GoodObject(thing))
-				if (local_wild_match(name, Name(thing), NULL))
+				if (local_wild_match(buffer, Name(thing), NULL))
 				{
 					space[i] = thing;
       					i++;
@@ -118,7 +120,10 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 			args[x] = blank;
 	switch (args[0][0]) {
 		case 'd': /* do */
-			n = parse_integer(args[1]);
+			if (is_dbref(args[1])) 
+				n = dbref2sdb(parse_dbref(args[1]));
+			else
+				n = parse_integer(args[1]);
 			if (!GoodSDB(n)) {
 				safe_str("#-1 SDB OUT OF RANGE", buff, bp); return; }
 			switch (parse_integer(args[2])) {
@@ -179,9 +184,7 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				case 54: safe_str(unparse_integer(do_set_pitch(parse_number(args[3]), enactor)), buff, bp); break;
 				case 55: safe_str(unparse_integer(do_set_roll(parse_number(args[3]), enactor)), buff, bp); break;
 				case 56: safe_str(unparse_integer(do_set_coords_engage(enactor)), buff, bp); break;
-	
 				case 58: safe_str(unparse_integer(do_set_parallel(parse_integer(args[3]), enactor)), buff, bp); break;
-				case 59: safe_str(unparse_integer(do_set_iff_frequency(parse_number(args[3]), enactor)), buff, bp); break;				
 				default: safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 			} break;
 		case 'e': /* empty */
@@ -191,11 +194,31 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 			safe_str(unparse_integer(x), buff, bp); break;
 		case 'f': /* function */
 			switch (args[2][0]) {
-				case 'a': /* angular velocity */
-					n = parse_integer(args[1]);
+				case 'i': /*Iff friendly check */
+					if (is_dbref(args[1])) 
+						n = dbref2sdb(parse_dbref(args[1]));
+					else
+						n = parse_integer(args[1]);
+					if (is_dbref(args[3])) 
+						n = dbref2sdb(parse_dbref(args[3]));
+					else
+						x = parse_integer(args[3]);
 					if (!GoodSDB(n)) {
 						safe_str("#-1 SDB 1 OUT OF RANGE", buff, bp); return; }
-					x = parse_integer(args[3]);
+					if (!GoodSDB(x)) {
+						safe_str("#-1 SDB 2 OUT OF RANGE", buff, bp); return; }
+					safe_str(unparse_integer(sdb2friendly(n, x)), buff, bp); break;
+				case 'a': /* angular velocity */
+					if (is_dbref(args[1])) 
+						n = dbref2sdb(parse_dbref(args[1]));
+					else
+						n = parse_integer(args[1]);
+					if (!GoodSDB(n)) {
+						safe_str("#-1 SDB 1 OUT OF RANGE", buff, bp); return; }
+					if (is_dbref(args[3])) 
+						n = dbref2sdb(parse_dbref(args[3]));
+					else
+						x = parse_integer(args[3]);
 					if (!GoodSDB(x)) {
 						safe_str("#-1 SDB 2 OUT OF RANGE", buff, bp); return; }
 					safe_str(unparse_number(sdb2angular(n, x)), buff, bp); break;
@@ -213,12 +236,18 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 					(void) dump_space(executor);
 					safe_chr('1', buff, bp); break;
 				case 'f': /* fix */
-					n = parse_integer(args[1]);
+					if (is_dbref(args[1])) 
+						n = dbref2sdb(parse_dbref(args[1]));
+					else
+						n = parse_integer(args[1]);
 					if (!GoodSDB(n)) {
 						safe_str("#-1 SDB OUT OF RANGE", buff, bp); return; }
 					safe_str(unparse_integer(repair_everything()), buff, bp); break;
 				case 'r': /* range */
-					n = parse_integer(args[1]);
+					if (is_dbref(args[1])) 
+						n = dbref2sdb(parse_dbref(args[1]));
+					else
+						n = parse_integer(args[1]);
 					if (!GoodSDB(n)) {
 						safe_str("#-1 SDB 1 OUT OF RANGE", buff, bp); return; }
 					x = parse_integer(args[3]);
@@ -226,10 +255,16 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 						safe_str("#-1 SDB 2 OUT OF RANGE", buff, bp); return; }
 					safe_str(unparse_range(sdb2range(n, x)), buff, bp); break;
 				case 's': /* shield */
-					n = parse_integer(args[1]);
+					if (is_dbref(args[1])) 
+						n = dbref2sdb(parse_dbref(args[1]));
+					else
+						n = parse_integer(args[1]);
 					if (!GoodSDB(n)) {
 						safe_str("#-1 SDB 1 OUT OF RANGE", buff, bp); return; }
-					x = parse_integer(args[3]);
+					if (is_dbref(args[3])) 
+						n = dbref2sdb(parse_dbref(args[3]));
+					else
+						x = parse_integer(args[3]);
 					if (!GoodSDB(x)) {
 						safe_str("#-1 SDB 2 OUT OF RANGE", buff, bp); return; }
 					s = sdb2shield(n, x);
@@ -237,7 +272,10 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 						safe_str(tprintf("%s Up", unparse_shield(s)), buff, bp); return; }
 					safe_str(tprintf("%s Dn", unparse_shield(s)), buff, bp); break;
 				case 't': /* transporter */
-					n = parse_integer(args[1]);
+					if (is_dbref(args[1])) 
+						n = dbref2sdb(parse_dbref(args[1]));
+					else
+						n = parse_integer(args[1]);
 					if (!GoodSDB(n)) {
 						safe_str("#-2 SDB 1 OUT OF RANGE", buff, bp); return; }
 					if (!sdb[n].trans.exist) {
@@ -291,14 +329,20 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				default: safe_str("#-1 NO SUCH SDB FUNCTION", buff, bp); break;
 			} break;
 		case 'g': /* get */
-			x = parse_integer(args[1]);
+			if (is_dbref(args[1])) 
+				x = dbref2sdb(parse_dbref(args[1]));
+			else
+				x = parse_integer(args[1]);
 			if (!GoodSDB(x)) {
 				safe_str("#-1 SDB OUT OF RANGE", buff, bp); return; }
 			do_space_db_get(x, args[2], args[3], args[4], args[5], buff, bp); break;
 		case 'i': /* iterate */
 			safe_str(unparse_integer(do_space_db_iterate()), buff, bp); break;
 		case 'p': /* put */
-			x = parse_integer(args[1]);
+			if (is_dbref(args[1])) 
+				x = dbref2sdb(parse_dbref(args[1]));
+			else
+				x = parse_integer(args[1]);
 			if (!GoodSDB(x)) {
 				safe_str("#-1 SDB OUT OF RANGE", buff, bp); return; }
 			do_space_db_put(x, args[2], args[3], args[4], args[5], args[6], buff, bp); break;
@@ -312,7 +356,10 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				safe_str("#-1 INVALID SPACE OBJECT", buff, bp); return; }
 			safe_str(unparse_integer(do_space_db_read(ship, executor)), buff, bp); break;
 		case 's': /* status */
-			n = parse_integer(args[1]);
+			if (is_dbref(args[1])) 
+				n = dbref2sdb(parse_dbref(args[1]));
+			else
+				n = parse_integer(args[1]);
 			if (!GoodSDB(n)) {
 				safe_str("#-1 SDB OUT OF RANGE", buff, bp); return; }
 			switch (parse_integer(args[2])) {
@@ -802,10 +849,42 @@ FUNCTION(local_fun_sd2secs)
 	}
 	return;
 }
+/* Re-written for efficiency. You can now pass a dbref to it, and it'l return the dbref if it's a real space object. 
+** -Qon 08/30/2014
+*/
+
+FUNCTION(local_fun_spacenum)
+{
+	int i = 0, results = 0;
+	static char msg[BUFFER_LEN];
+	snprintf(msg, sizeof(msg),"*%s*", args[0]);
+	dbref obj = NOTHING;
+	
+	if (is_dbref(args[0])) {
+		obj = parse_dbref(args[0]);
+	} else {
+		for (i = MIN_SPACE_OBJECTS; i <= max_space_objects; ++i) {
+			if (sdb[i].structure.type) {
+				if (local_wild_match(msg, Name(sdb[i].object), NULL)) {
+					obj = sdb[i].object;
+					results++;
+				}
+			}
+		}
+	}
+	if (GoodObject(obj) && SpaceObj(obj)) 
+		safe_dbref(obj, buff, bp);
+	else if (results > 1)
+		safe_str("#-2 AMBIGUOUS MATCH", buff, bp);
+	else
+		safe_str("#-1 SPACE OBJECT NOT FOUND", buff, bp);
+	return;
+}
 
 /* ------------------------------------------------------------------------ */
 // Jarek recoded along with lookup_space to return nice lists of possible matches
 /* ARGSUSED */
+/* Replaced.
 FUNCTION(local_fun_spacenum)
 {
 	dbref space[MAX_SPACE_OBJECTS];
@@ -825,7 +904,7 @@ FUNCTION(local_fun_spacenum)
 
 	return;
 }
-
+*/
 /* ------------------------------------------------------------------------ */
 // Jarek recoded along with lookup_space to return nice lists of possible matches
 /* ARGSUSED */
@@ -911,6 +990,7 @@ FUNCTION(local_fun_su2ly)
 	return;
 }
 
+
 /* ------------------------------------------------------------------------ */
 
 /* ARGSUSED */
@@ -995,18 +1075,20 @@ FUNCTION(local_fun_coords)
    int sdb_num = parse_integer(args[0]);
    int c_type = parse_integer(args[1]);
    
-   if (!GoodSDB(sdb_num))
-	safe_str("#-1 SDB OUT OF RANGE", buff, bp);
-   else {
-	if (c_type) 
-	    safe_str(tprintf("%f %f %f", sdb[sdb_num].coords.x / PARSEC, sdb[sdb_num].coords.y / PARSEC, 
-sdb[sdb_num].coords.z / PARSEC), buff, bp);
-	else
-	    safe_str(tprintf("%f %f %f", sdb[sdb_num].coords.x, sdb[sdb_num].coords.y, sdb[sdb_num].coords.z), buff, 
-bp);
-   }
-}
+   	if (Hasprivs(executor) || has_power_by_name(executor, "SDB-OK", NOTYPE) || has_power_by_name(executor, "SDB-READ", NOTYPE)) {
 
+		if (!GoodSDB(sdb_num))
+			safe_str("#-1 SDB OUT OF RANGE", buff, bp);
+		else {
+			if (c_type) 
+				safe_str(tprintf("%f %f %f", sdb[sdb_num].coords.x / PARSEC, sdb[sdb_num].coords.y / PARSEC, 
+					sdb[sdb_num].coords.z / PARSEC), buff, bp);
+			else
+				safe_str(tprintf("%f %f %f", sdb[sdb_num].coords.x, sdb[sdb_num].coords.y, sdb[sdb_num].coords.z), buff, bp);
+		}
+	} else 
+		safe_str("#-1 PERMISSION DENIED", buff, bp);
+}
 /* ------------------------------------------------------------------------ */
 
 FUNCTION(local_fun_inrange)
@@ -1108,21 +1190,21 @@ FUNCTION(local_fun_border)
 					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 5", nargs);
 					return;
 				}
-				addNewBorder(parse_integer(args[1]), args[2], parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6]), buff, bp); 
+				addNewBorder(executor, parse_integer(args[1]), args[2], parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6]), buff, bp); 
 			break;
 		case 'd': 
 				if (nargs != 1) {
 					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 1", nargs);
 					return;
 				}
-				deleteBorder(parse_integer(args[1]), buff, bp);
+				deleteBorder(executor, parse_integer(args[1]), buff, bp);
 			break;
 		case 'e': 
 				if (nargs != 3) {
 					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 3", nargs);
 					return;
 				}
-				edit_border(parse_integer(args[1]), args[2], args[3], buff, bp); 
+				edit_border(executor, parse_integer(args[1]), args[2], args[3], buff, bp); 
 			break;
 		case 'l': list_borders(buff, bp); break;
 	}
@@ -1174,7 +1256,8 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 	space_consoles *sc;
 	int index;
 	dbref console, user, parent;
-
+	
+	
 	show_message = (char *) mush_strdup(msg, "console_message");
 	
 	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
@@ -1185,29 +1268,33 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 			console = parse_dbref(split_token(&pq, ' '));
 					
 			if ( console != NOTHING )
-			{			
+			{	
+				if (!GoodObject(console))
+					continue;
+				parent = Parent(console);
+				
+				if( parent == console_fighter || parent == console_monitor) {
+					b = atr_get(console, CONSOLE_USER_ATTR_NAME);
+					if (b != NULL) {
+						user = parse_dbref(atr_value(b));
+						if (GoodObject(user))
+							notify(user,show_message);
+					}
+				}
 				for ( index = 0; index < numargs; index++) {
 					console_mode = args[index];
 					c_pq = tprintf("console_%s", console_mode); 
-				
-					if ( c_pq != NULL )
-					{
-						sc = hashfind(c_pq, &aspace_consoles);
-				
-						if (GoodObject(console) && sc != NULL) {
-							parent = Parent(console);
-							if ( parent == sc->console_dbref ) {
-								b = atr_get(console, CONSOLE_USER_ATTR_NAME);
-								if (b != NULL) {
-									user = parse_dbref(atr_value(b));
-									if (GoodObject(user)) {
-										notify(user, show_message);
-									}
-								}
-							}
+					sc = hashfind(c_pq, &aspace_consoles);
+					if (sc != NULL && parent == sc->console_dbref) {
+						b = atr_get(console, CONSOLE_USER_ATTR_NAME);
+						if (b != NULL) {
+							user = parse_dbref(atr_value(b));
+							if (GoodObject(user)) 
+								notify(user, show_message);
+							
 						}
 					}
-				}
+				}		
 			}
 		}
 		free(q);
@@ -1224,6 +1311,7 @@ void console_message(int x, char *consoles, char *msg) {
 	argc = list2arr(args, BUFFER_LEN, consoles2, ' ', 1);
 	
 	console_notify(x, msg, argc, args);
+	mush_free(consoles2, "console_message_consoles");
 }
 
 FUNCTION(local_fun_consolenotify)
@@ -1283,8 +1371,8 @@ void setupAspaceFunctions()
 	function_add("SD2SECS", local_fun_sd2secs, 1, 1, FN_REG);
 	function_add("SDB", local_fun_sdb, 1, 9, FN_REG);
 	function_add("SECS2SD", local_fun_secs2sd, 1, 1, FN_REG);
-	function_add("SPACENUM", local_fun_spacenum, 1, 1, FN_REG);
-	function_add("SPACENUMLIST", local_fun_spacenumlist, 1, 1, FN_REG);
+	function_add("SPACENUM", local_fun_spacenum, 1, 1, FN_ADMIN);
+	function_add("SPACENUMLIST", local_fun_spacenumlist, 1, 1, FN_ADMIN);
 	function_add("SPH2XYZ", local_fun_sph2xyz, 3, 3, FN_REG);
 	function_add("SUM", local_fun_sum, 1, 2, FN_REG);
 	function_add("SU2LY", local_fun_su2ly, 1, 1, FN_REG);
@@ -1313,21 +1401,45 @@ void setupAspacePowers()
 		  pFlagInfo->perms, pFlagInfo->negate_perms);
      }
 }
-
+void setupAspaceConsoles()
+{
+	if (GoodObject(CONSOLE_COMMUNICATION))
+		addConsole("console_communication", CONSOLE_COMMUNICATION);
+	if (GoodObject(CONSOLE_FIGHTER))
+		addConsole("console_fighter", CONSOLE_FIGHTER);
+	if (GoodObject(CONSOLE_TACTICAL))
+		addConsole("console_tactical", CONSOLE_TACTICAL);
+	if (GoodObject(CONSOLE_SECURITY))
+		addConsole("console_security", CONSOLE_SECURITY);
+	if (GoodObject(CONSOLE_HELM))
+		addConsole("console_helm", CONSOLE_HELM);
+	if (GoodObject(CONSOLE_ENGINEERING))
+		addConsole("console_engineering", CONSOLE_ENGINEERING);
+	if (GoodObject(CONSOLE_OPERATION))
+		addConsole("console_operation", CONSOLE_OPERATION);
+	if (GoodObject(CONSOLE_SCIENCE))
+		addConsole("console_science", CONSOLE_SCIENCE);
+	if (GoodObject(CONSOLE_DAMAGE))
+		addConsole("console_damage", CONSOLE_DAMAGE);
+	if (GoodObject(CONSOLE_TRANSPORTER))
+		addConsole("console_transporter", CONSOLE_TRANSPORTER);
+	if (GoodObject(CONSOLE_MONITOR))
+		addConsole("console_monitor", CONSOLE_MONITOR);
+	return;
+}
+	
 void initSpace()
 {	
 	border_map = NULL;
 	border_map = im_new();
 
-	hash_init(&aspace_consoles, 256, free_borderinfo);
-
+	hash_init(&aspace_consoles, 256, free_spaceconsole);
 	loadSpaceConfig();
-
 	(void) setupAspaceFunctions();
 	(void) setupAspaceFlags();
+	(void) setupAspacePowers();
 	(void) dump_space(GOD);
 	(void) open_spacelog();
-
-	write_spacelog(1, 1, tprintf("%f", configstruct.cochrane_rate));
+	(void) setupAspaceConsoles();
 }
 
