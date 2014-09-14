@@ -1154,7 +1154,7 @@ char *format_s_EW (int x)
 
 char *format_s_Shield (int x)
 {
-	static char buffer[100 * MAX_SHIELD_NAME];
+	static char buffer[200 * MAX_SHIELD_NAME];
 	register int i;
 	double d;
 
