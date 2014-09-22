@@ -1137,8 +1137,8 @@ int do_set_evade (int contact, dbref enactor)
 			sdb[n].coords.xd = sdb[x].coords.x;
 			sdb[n].coords.yd = sdb[x].coords.y;
 			sdb[n].coords.zd = sdb[x].coords.z;
-			sdb[n].course.yaw_in = fmod((sdb2bearing(n, x) + 180.0), 360);
-			sdb[n].course.pitch_in = fmod((360.0 - sdb2elevation(n, x)), 360);
+			sdb[n].course.yaw_in = sdb2bearing(x,n);
+			sdb[n].course.pitch_in = sdb2elevation(x,n);
 			if (sdb[n].course.yaw_in < 0.0)
 				sdb[n].course.yaw_in += 360.0;
 			if (sdb[n].course.pitch_in < 0.0)
