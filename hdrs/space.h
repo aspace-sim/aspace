@@ -306,12 +306,23 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 
 /* ------------------------------------------------------------------------ */
 
-struct spaceconfig {
-	double cochrane_rate;
-};
+typedef struct _spaceconfig {
+	double cochrane;
+	dbref security;
+	dbref helm;
+	dbref engineering;
+	dbref operation;
+	dbref science;
+	dbref damage;
+	dbref communication;
+	dbref tactical;
+	dbref transporter;
+	dbref monitor;
+	dbref fighter;
+	int nebula; // 0 = ASpace default, 1 = CustomNebs + aspace (default), 2 = Custom only
+} ASPACE_CONFIG;
 
-typedef struct spaceconfig SPACETAB;
-extern SPACETAB configstruct;
+extern ASPACE_CONFIG *aspace_config;
 
 struct aspace_empire_info {
 	const char* name;
@@ -653,9 +664,11 @@ struct comms_database_t {
 
 /* ------------------------------------------------------------------------ */
 
-/* from space_conf.c */
-extern struct spaceconfig get_space_config(char *filename);
-extern void loadSpaceConfig();
+/* from space_nebula.c */
+extern void free_nebulainfo(void *ptr);
+extern void addNewNebula(dbref executor, int index, const char* name, double radius, double x, double y, double z, char *buff, char **bp);
+extern void deleteNebula(dbref executor, int index, char *buff, char **bp);
+extern void list_nebulae(char *buff, char **bp);
 
 /* from space_output.c - Raw outputs */
 extern char* output_shields_raw();
