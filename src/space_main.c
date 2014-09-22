@@ -1434,7 +1434,6 @@ void initSpace()
 	border_map = im_new();
 
 	hash_init(&aspace_consoles, 256, free_spaceconsole);
-	loadSpaceConfig();
 	(void) setupAspaceFunctions();
 	(void) setupAspaceFlags();
 	(void) setupAspacePowers();
