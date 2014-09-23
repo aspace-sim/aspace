@@ -187,9 +187,9 @@ double sdb2range (int n1, int n2)
 int sdb2arc (int n1, int n2)
 {
 	int firing_arc = 0;
-	double x = sdb[n2].coords.x - sdb[n1].coords.x + 0.1;
-	double y = sdb[n2].coords.y - sdb[n1].coords.y + 0.1;
-	double z = sdb[n2].coords.z - sdb[n1].coords.z + 0.1;
+	double x = sdb[n2].coords.x - sdb[n1].coords.x - 0.1;
+	double y = sdb[n2].coords.y - sdb[n1].coords.y - 0.1;
+	double z = sdb[n2].coords.z - sdb[n1].coords.z - 0.1;
 	double r = sqrt(x * x + y * y + z * z);
 	double v1, v2, v3;
 	double forward_arc;
@@ -249,9 +249,9 @@ int sdb2arc (int n1, int n2)
 
 int sdb2shield (int n1, int n2)
 {
-	double x = sdb[n2].coords.x - sdb[n1].coords.x + 0.1;
-	double y = sdb[n2].coords.y - sdb[n1].coords.y + 0.1;
-	double z = sdb[n2].coords.z - sdb[n1].coords.z + 0.1;
+	double x = sdb[n2].coords.x - sdb[n1].coords.x - 0.1;
+	double y = sdb[n2].coords.y - sdb[n1].coords.y - 0.1;
+	double z = sdb[n2].coords.z - sdb[n1].coords.z - 0.1;
 	double r = sqrt(x * x + y * y + z * z);
 	double v1, v2, v3;
 	double fv1, fv2, fv3;
