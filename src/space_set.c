@@ -357,12 +357,12 @@ int do_set_fire (int first, int last, int weapon, int mode, dbref enactor)
 				strncat(buff_n, ansi_cmd(enactor,
 				  tprintf("Firing at %s: %s", unparse_identity(n, x), buff_x[i])), sizeof(buff_n) - 1);
 				if (sdb[x].tmp.i5) {
-					do_space_notify_two(n, x, console_helm, console_tactical, console_science,
+					do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science,
 					  "fires and hits");
 					write_spacelog(enactor, sdb[n].object, tprintf("LOG: Fired and hit, Beam %.6f GHz, Missile %.6f GHz",
 					  sdb[n].beam.freq, sdb[n].missile.freq));
 				} else {
-					do_space_notify_two(n, x, console_helm, console_tactical, console_science,
+					do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science,
 					  "fires and misses");
 				}
 				if (sdb[x].status.active && !sdb[x].status.crippled) {
@@ -2327,7 +2327,7 @@ int do_set_active (dbref enactor)
 	} else {
 		do_all_console_notify(n, ansi_cmd(enactor, "All systems initializing and starting up"));
 		do_ship_notify(n, tprintf("%s activates all systems.", Name(sdb[n].object)));
-		do_space_notify_one(n, console_helm, console_tactical, console_science,
+		do_space_notify_one(n, aspace_config.helm, aspace_config.tactical, aspace_config.science,
 		  "activates all systems");
 		for (i = 0; i < MAX_SHIELD_NAME; ++i)
 			sdb[n].shield.active[i] = 0;
@@ -2407,7 +2407,7 @@ int do_set_inactive (dbref enactor)
 	} else {
 		do_all_console_notify(n, ansi_cmd(enactor, "All systems shutting down"));
 		do_ship_notify(n, tprintf("%s deactivates all systems.",Name(sdb[n].object)));
-		do_space_notify_one(n, console_helm, console_tactical, console_science,
+		do_space_notify_one(n, aspace_config.helm, aspace_config.tactical, aspace_config.science,
 		  "deactivates all systems");
 		for (i = 0; i < MAX_SHIELD_NAME; ++i)
 			sdb[n].shield.active[i] = 0;
@@ -2589,12 +2589,12 @@ int do_set_dock (int contact, dbref enactor)
 				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				console_message(l, "helm science tactical", ansi_alert(tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s slides out of dock.", Name(sdb[n].object)));
-				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "undocking from");
+				do_space_notify_two(n, l, aspace_config.helm, aspace_config.tactical, aspace_config.science, "undocking from");
 			} else if (sdb[n].status.landed) {
 				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				console_message(l, "helm science tactical", ansi_alert(tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s lifts off from its landing pad.", Name(sdb[n].object)));
-				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "launching from");
+				do_space_notify_two(n, l, aspace_config.helm, aspace_config.tactical, aspace_config.science, "launching from");
 			}
 
 			moveit(sdb[n].object, sdb[x].object, 1);
@@ -2605,7 +2605,7 @@ int do_set_dock (int contact, dbref enactor)
 			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[x].object))));
 			console_message(x, "helm science tactical", ansi_alert(tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s slides into dock.", Name(sdb[n].object)));
-			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "docking with");
+			do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "docking with");
 			
 			/* Notify space and consoles the tractoree slid in as well... */
 			if (trac) {
@@ -2613,7 +2613,7 @@ int do_set_dock (int contact, dbref enactor)
 				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s tractors %s into dock with %s", Name(sdb[n].object), Name(sdb[trac].object),Name(sdb[x].object))));
 				console_message(x, "helm science tactical", ansi_alert(tprintf("%s tractors %s into dock with %s", Name(sdb[n].object), Name(sdb[trac].object),Name(sdb[x].object))));
 				do_ship_notify(trac, tprintf("The %s pulls %s into dock.", Name(sdb[n].object),Name(sdb[trac].object)));
-				do_space_notify_two(trac, x, console_helm, console_tactical, console_science, "docking with");
+				do_space_notify_two(trac, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "docking with");
 			}
 
 
@@ -2677,7 +2677,7 @@ int do_set_dock (int contact, dbref enactor)
 			sdb[n].status.docked = x;
 			sdb[n].status.landed = 0;
 			sdb[n].status.autopilot = 0;
-			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "docking with");
+			do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "docking with");
 			up_cochranes();
 			up_empire();
 			up_quadrant();
@@ -2716,7 +2716,7 @@ int do_set_dock (int contact, dbref enactor)
 			sdb[trac].status.docked = x;
 			sdb[trac].status.landed = 0;
 			sdb[trac].status.autopilot = 0;
-			do_space_notify_two(trac, x, console_helm, console_tactical, console_science, "docking with");
+			do_space_notify_two(trac, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "docking with");
 			up_cochranes();
 			up_empire();
 			up_quadrant();
@@ -2767,7 +2767,7 @@ int do_set_undock (dbref enactor)
 			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[x].object))));
 			console_message(x, "helm science tactical", ansi_alert(tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s slides out of dock.", Name(sdb[n].object)));
-			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "undocking from");
+			do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "undocking from");
 
 			/* where we are going */
 			l = sdb[x].location;
@@ -2775,7 +2775,7 @@ int do_set_undock (dbref enactor)
 				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[l].object))));
 				console_message(l, "helm science tactical", ansi_alert(tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s slides into dock.", Name(sdb[n].object)));
-				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "docking with");
+				do_space_notify_two(n, l, aspace_config.helm, aspace_config.tactical, aspace_config.science, "docking with");
 				sdb[l].structure.cargo_mass += sdb[n].structure.displacement;
 				sdb[l].engine.version = 1;
 				up_signature(l);
@@ -2815,7 +2815,7 @@ int do_set_undock (dbref enactor)
 			sdb[n].status.docked = l;
 			sdb[n].status.landed = 0;
 			sdb[n].status.autopilot = 0;
-			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "undocking from");
+			do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "undocking from");
 			up_cochranes();
 			up_empire();
 			up_quadrant();
@@ -2874,19 +2874,19 @@ int do_set_land (int contact, dbref enactor)
 				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				console_message(l, "helm science tactical", ansi_alert(tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s slides out of dock.", Name(sdb[n].object)));
-				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "undocking from");
+				do_space_notify_two(n, l, aspace_config.helm, aspace_config.tactical, aspace_config.science, "undocking from");
 			} else if (sdb[n].status.landed) {
 				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				console_message(l, "helm science tactical", ansi_alert(tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s lifts off from its landing pad.", Name(sdb[n].object)));
-				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "launching from");
+				do_space_notify_two(n, l, aspace_config.helm, aspace_config.tactical, aspace_config.science, "launching from");
 			}
 
 			moveit(sdb[n].object, sdb[x].object, 1);
 			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[x].object))));
 			console_message(x, "helm science tactical", ansi_alert(tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s settles onto its landing pad.", Name(sdb[n].object)));
-			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "landing on");
+			do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "landing on");
 
 			/* where we were */
 			if (l > 0 && l < max_space_objects) {
@@ -2929,7 +2929,7 @@ int do_set_land (int contact, dbref enactor)
 			sdb[n].status.landed = x;
 			sdb[n].status.docked = 0;
 			sdb[n].status.autopilot = 0;
-			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "landing on");
+			do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "landing on");
 			up_cochranes();
 			up_empire();
 			up_quadrant();
@@ -2976,7 +2976,7 @@ int do_set_launch (dbref enactor)
 			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[x].object))));
 			console_message(x, "helms cience tactical", ansi_alert(tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s lifts off from its landing pad.", Name(sdb[n].object)));
-			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "launching from");
+			do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "launching from");
 
 			/* where we are going */
 			l = sdb[x].location;
@@ -2984,7 +2984,7 @@ int do_set_launch (dbref enactor)
 				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[l].object))));
 				console_message(l, "helm science tactical", ansi_alert(tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[l].object))));
 				do_ship_notify(n, tprintf("The %s settles onto its landing pad.", Name(sdb[n].object)));
-				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "landing on");
+				do_space_notify_two(n, l, aspace_config.helm, aspace_config.tactical, aspace_config.science, "landing on");
 				sdb[l].structure.cargo_mass += sdb[n].structure.displacement;
 				sdb[l].engine.version = 1;
 				up_signature(l);
@@ -3024,7 +3024,7 @@ int do_set_launch (dbref enactor)
 			sdb[n].status.landed = l;
 			sdb[n].status.docked = 0;
 			sdb[n].status.autopilot = 0;
-			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "launching from");
+			do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "launching from");
 			up_cochranes();
 			up_empire();
 			up_quadrant();
@@ -3052,7 +3052,7 @@ void up_wormhole (int n1, int n2)
 	x = n2;
 	
 	do_ship_notify(n, tprintf("The %s shudders and rocks about violently for a few moments.", Name(sdb[n].object)));
-	do_space_notify_two(n, x, console_helm, console_tactical, console_science, "enters");
+	do_space_notify_two(n, x, aspace_config.helm, aspace_config.tactical, aspace_config.science, "enters");
 	if (sdb[n].cloak.active) {
 		alert_cloak_voided (n);
 		alert_ship_cloak_offline (n);
@@ -3075,7 +3075,7 @@ void up_wormhole (int n1, int n2)
 	sdb[n].coords.y = sdb[sdb[x].status.link].coords.y;
 	sdb[n].coords.z = sdb[sdb[x].status.link].coords.z;
 	sdb[n].status.autopilot = 0;
-	do_space_notify_one(sdb[x].status.link, console_helm, console_tactical, console_science, "expells an unknown contact");
+	do_space_notify_one(sdb[x].status.link, aspace_config.helm, aspace_config.tactical, aspace_config.science, "expells an unknown contact");
 	up_cochranes();
 	up_empire();
 	up_quadrant();

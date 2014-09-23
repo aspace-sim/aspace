@@ -307,7 +307,7 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 /* ------------------------------------------------------------------------ */
 
 typedef struct _spaceconfig {
-	double cochrane;
+	char cochrane[20]; // Yes this is weird. But @config doesn't support floating point numbers (yet).
 	dbref security;
 	dbref helm;
 	dbref engineering;
@@ -322,7 +322,7 @@ typedef struct _spaceconfig {
 	int nebula; // 0 = ASpace default, 1 = CustomNebs + aspace (default), 2 = Custom only
 } ASPACE_CONFIG;
 
-extern ASPACE_CONFIG *aspace_config;
+ASPACE_CONFIG aspace_config;
 
 struct aspace_empire_info {
 	const char* name;
@@ -333,13 +333,8 @@ struct aspace_empire_info {
 };
 
 intmap *border_map;
+intmap *nebula_map;
 
-HASHTAB aspace_consoles;
-
-typedef struct _space_consoles {
-	char *console_name;
-	dbref console_dbref;
-} space_consoles;
 
 typedef struct _space_border_info_ {
 	char* border_id;
@@ -697,17 +692,6 @@ extern int n;
 extern int max_space_objects;
 extern int max_comms_objects;
 
-extern dbref console_security;
-extern dbref console_helm;
-extern dbref console_engineering;
-extern dbref console_operation;
-extern dbref console_science;
-extern dbref console_damage;
-extern dbref console_communication;
-extern dbref console_tactical;
-extern dbref console_transporter;
-extern dbref console_monitor;
-extern dbref console_fighter;
 extern const char *shield_name[];
 extern const char *cloak_name[];
 extern const char *type_name[];
@@ -719,7 +703,7 @@ extern const char *damage_name[];
 extern double repair_mult[];
 
 /* from space_main.c */
-extern void setupAspaceConsoles();
+extern void setupAspaceConfig();
 extern void initSpace();
 extern void dump_space(dbref);
 extern void console_message(int x, char *consoles, char *msg);
@@ -829,6 +813,8 @@ extern void report_shield_power (void);
 extern void report_sensor_power (void);
 
 /* from space_alert.c */
+extern void alert_enter_nebula (int x);
+extern void alert_exit_nebula (int x);
 extern void alert_main_balance (int x);
 extern void alert_aux_balance (int x);
 extern void alert_batt_balance (int x);

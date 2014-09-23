@@ -28,17 +28,6 @@ struct pennmush_flag_info aspace_flag_table[] =
 };
 
 
-void addConsole(char *console_name, dbref console_dbref)
-{
-	space_consoles *sc = NULL;
-	
-	sc = mush_malloc(sizeof(space_consoles), "space_consoles");
-	sc->console_name = mush_strdup(console_name, "console_name");
-	sc->console_dbref = console_dbref;
-	
-	hash_add(&aspace_consoles, sc->console_name, sc);
-}
-
 /* ------------------------------------------------------------------------ */
 
 // Jarek recoded along with spacenum to return nice lists of possible matchs
@@ -395,6 +384,7 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 						cochrane = COCHRANE * 1000.0;
 					} else
 						cochrane = a;
+						strncpy(aspace_config.cochrane, unparse_number(a), sizeof(aspace_config.cochrane));
 					notify(executor, "Spacetime Cochrane constant set.");
 					safe_str(unparse_number(cochrane), buff, bp); break; 
 				case 'n': /* console */
@@ -404,60 +394,49 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 					switch (args[2][0]) {
 						case 'c': /* communication */
 							notify(executor, "Communications console parent dbref set.");
-							console_communication = console; 
-							addConsole("console_communication",console);
+							aspace_config.communication = console; 
 							break;
 						case 'd': /* damage */
 							notify(executor, "Damage Control console parent dbref set.");
-							console_damage = console; 
-							addConsole("console_damage",console);
+							aspace_config.damage = console; 
 							break;
 						case 'e': /* engineering */
 							notify(executor, "Engineering console parent dbref set.");
-							console_engineering = console; 
-							addConsole("console_engineering",console);
+							aspace_config.engineering = console; 							
 							break;
 						case 'f': /* fighter */
 							notify(executor, "Fighter/Shuttle console parent dbref set.");
-							console_fighter = console; 
-							addConsole("console_fighter",console);
+							aspace_config.fighter = console; 							
 							break;
 						case 'h': /* helm */
 							notify(executor, "Helm/Navigation console parent dbref set.");
-							console_helm = console; 
-							addConsole("console_helm",console);
+							aspace_config.helm = console; 							
 							break;
 						case 'm': /* monitor */
 							notify(executor, "Monitor console parent dbref set.");
-							console_monitor = console; 
-							addConsole("console_monitor",console);
+							aspace_config.monitor = console; 							
 							break;
 						case 'n': /* helm */
 							notify(executor, "Helm/Navigation console parent dbref set.");
-							console_helm = console; 
-							addConsole("console_navigation",console);
+							aspace_config.helm = console; 							
 							break;
 						case 'o': /* operations */
 							notify(executor, "Operations console parent dbref set.");
-							console_operation = console; 
-							addConsole("console_operation",console);
+							aspace_config.operation = console; 							
 							break;
 						case 's':
 							switch (args[2][1]) {
 								case 'c': /* science */
 									notify(executor, "Science console parent dbref set.");
-									console_science = console; 
-									addConsole("console_science",console);
+									aspace_config.science = console; 									
 									break;
 								case 'e': /* security */
 									notify(executor, "Security console parent dbref set.");
-									console_security = console; 
-									addConsole("console_security",console);
+									aspace_config.security = console; 									
 									break;
 								case 'h': /* fighter */
 									notify(executor, "Fighter/Shuttle console parent dbref set.");
-									console_fighter = console; 
-									addConsole("console_shuttle",console);
+									aspace_config.fighter = console; 									
 									break;
 								default: safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 							} break;
@@ -465,20 +444,17 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 							switch (args[2][1]) {
 								case 'a': /* tactical */
 									notify(executor, "Tactical/Weapons console parent dbref set.");
-									console_tactical = console; 
-									addConsole("console_tactical",console);
+									aspace_config.tactical = console;									
 									break;
 								case 'r': /* transporter */
 									notify(executor, "Transporter console parent dbref set.");
-									console_transporter = console;
-									addConsole("console_transporter",console);									
+									aspace_config.transporter = console;									
 									break;
 								default : safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 							} break;
 						case 'w': /* tactical */
 							notify(executor, "Tactical/Weapons console parent dbref set.");
-							console_tactical = console; 
-							addConsole("console_weapons",console);
+							aspace_config.tactical = console; 							
 							break;
 						default: safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 					}
@@ -1069,18 +1045,25 @@ FUNCTION(local_fun_xyz2sph)
 	}
 	return;
 }
-
 FUNCTION(local_fun_coords)
 {
-   int sdb_num = parse_integer(args[0]);
+   int sdb_num; 
    int c_type = parse_integer(args[1]);
-   
+	
+	if(is_dbref(args[0]))
+		sdb_num = dbref2sdb(parse_dbref(args[0]));
+	else
+		sdb_num = parse_integer(args[0]);
+		
    	if (Hasprivs(executor) || has_power_by_name(executor, "SDB-OK", NOTYPE) || has_power_by_name(executor, "SDB-READ", NOTYPE)) {
 
 		if (!GoodSDB(sdb_num))
 			safe_str("#-1 SDB OUT OF RANGE", buff, bp);
 		else {
-			if (c_type) 
+			if (c_type == 2)  // Trimmed 
+				safe_str(tprintf("%.0f %.0f %.0f", sdb[sdb_num].coords.x / PARSEC, sdb[sdb_num].coords.y / PARSEC, 
+					sdb[sdb_num].coords.z / PARSEC), buff, bp);
+			else if (c_type == 1)
 				safe_str(tprintf("%f %f %f", sdb[sdb_num].coords.x / PARSEC, sdb[sdb_num].coords.y / PARSEC, 
 					sdb[sdb_num].coords.z / PARSEC), buff, bp);
 			else
@@ -1214,11 +1197,6 @@ FUNCTION(local_fun_border)
 
 /* ------------------------------------------------------------------------ */
 
-void free_spaceconsole(void *ptr) {
-	space_consoles *sc = (space_consoles *) ptr;
-	mush_free(sc->console_name, "console_name");
-	mush_free(sc, "space_consoles");
-}
 
 void console_notify_all(int x, char *msg) {
 	ATTR *a, *b;
@@ -1249,15 +1227,12 @@ void console_notify_all(int x, char *msg) {
 		mush_free(show_message, "console_message");
 	}
 }
-
 void console_notify(int x, char *msg, int numargs, char **args) {
 	ATTR *a, *b;
-	char *q, *pq, *console_mode, *c_pq, *show_message;
-	space_consoles *sc;
+	char *q, *pq, *console_mode, *show_message;
 	int index;
 	dbref console, user, parent;
-	
-	
+		
 	show_message = (char *) mush_strdup(msg, "console_message");
 	
 	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
@@ -1267,40 +1242,52 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 		while (pq) {
 			console = parse_dbref(split_token(&pq, ' '));
 					
-			if ( console != NOTHING )
-			{	
-				if (!GoodObject(console))
+			if ( console == NOTHING )
+				continue;
+			if (!GoodObject(console))
 					continue;
-				parent = Parent(console);
-				
-				if( parent == console_fighter || parent == console_monitor) {
-					b = atr_get(console, CONSOLE_USER_ATTR_NAME);
-					if (b != NULL) {
-						user = parse_dbref(atr_value(b));
-						if (GoodObject(user))
-							notify(user,show_message);
-					}
-				}
-				for ( index = 0; index < numargs; index++) {
-					console_mode = args[index];
-					c_pq = tprintf("console_%s", console_mode); 
-					sc = hashfind(c_pq, &aspace_consoles);
-					if (sc != NULL && parent == sc->console_dbref) {
-						b = atr_get(console, CONSOLE_USER_ATTR_NAME);
-						if (b != NULL) {
-							user = parse_dbref(atr_value(b));
-							if (GoodObject(user)) 
-								notify(user, show_message);
-							
-						}
-					}
-				}		
+			parent = Parent(console);
+			if (!GoodObject(parent))
+				continue;
+			b = atr_get(console, CONSOLE_USER_ATTR_NAME);
+			if (!b)
+				continue;
+			if( parent == aspace_config.fighter || parent == aspace_config.monitor) {
+				user = parse_dbref(atr_value(b));
+				if (GoodObject(user))
+					notify(user,show_message);
 			}
-		}
+			for ( index = 0; index < numargs; index++) {
+				console_mode = args[index];
+				if (!strcmp(console_mode, "helm") && parent == aspace_config.helm) 
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "tactical") && parent == aspace_config.tactical)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "engineering") && parent == aspace_config.engineering)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "operation") && parent == aspace_config.operation)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "science") && parent == aspace_config.science)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "damage") && parent == aspace_config.damage)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "communication") && parent == aspace_config.communication)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "transporter") && parent == aspace_config.transporter)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "security") && parent == aspace_config.security)
+					user = parse_dbref(atr_value(b));	
+				else
+					user = 0;
+			}
+			if (GoodObject(user))
+				notify(user, show_message);			
+		}		
 		free(q);
 		mush_free(show_message, "console_message");
 	}
 }
+
 
 void console_message(int x, char *consoles, char *msg) {
 	char *args[BUFFER_LEN], *consoles2;
@@ -1351,7 +1338,38 @@ FUNCTION(local_fun_consolenotifyall)
 	
 	return;
 }
-
+FUNCTION(local_fun_nebula)
+{
+	if (!args[0] || !*args[0]) {
+		safe_str("#-1 NO FUNCTION NAME GIVEN", buff, bp);
+		return;
+	}
+	if (aspace_config.nebula < 1) {
+		safe_str("#-1 DISABLED IN CONFIG", buff, bp);
+		return;
+	}
+	nargs -= 1;
+	
+	switch (args[0][0]) {
+		case 'a': 
+				if (nargs != 6) {
+					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 5", nargs);
+					return;
+				}
+				addNewNebula(executor, parse_integer(args[1]), args[2], parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6]), buff, bp); 
+			break;
+		case 'd': 
+				if (nargs != 1) {
+					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 1", nargs);
+					return;
+				}
+				deleteNebula(executor, parse_integer(args[1]), buff, bp);
+			break;
+		case 'l': list_nebulae(buff, bp); break;
+	}
+	
+	return;
+}
 /* ------------------------------------------------------------------------ */
 
 void setupAspaceFunctions()
@@ -1378,6 +1396,8 @@ void setupAspaceFunctions()
 	function_add("SU2LY", local_fun_su2ly, 1, 1, FN_REG);
 	function_add("SU2PC", local_fun_su2pc, 1, 1, FN_REG);
 	function_add("XYZ2SPH", local_fun_xyz2sph, 3, 3, FN_REG);
+	function_add("NEBULA", local_fun_nebula, 1, 7, FN_ADMIN);
+
 }
 
 void setupAspaceFlags()
@@ -1401,44 +1421,50 @@ void setupAspacePowers()
 		  pFlagInfo->perms, pFlagInfo->negate_perms);
      }
 }
-void setupAspaceConsoles()
+/* Adds our config options. Next Penn PL should have an option for custom group names, until then we'll stick it in cosmetic.
+** Add the options first, then attempt to load aspace.cnf. 
+** Also intialize our spce configs to default values
+*/
+void setupAspaceConfig()
 {
-	if (GoodObject(CONSOLE_COMMUNICATION))
-		addConsole("console_communication", CONSOLE_COMMUNICATION);
-	if (GoodObject(CONSOLE_FIGHTER))
-		addConsole("console_fighter", CONSOLE_FIGHTER);
-	if (GoodObject(CONSOLE_TACTICAL))
-		addConsole("console_tactical", CONSOLE_TACTICAL);
-	if (GoodObject(CONSOLE_SECURITY))
-		addConsole("console_security", CONSOLE_SECURITY);
-	if (GoodObject(CONSOLE_HELM))
-		addConsole("console_helm", CONSOLE_HELM);
-	if (GoodObject(CONSOLE_ENGINEERING))
-		addConsole("console_engineering", CONSOLE_ENGINEERING);
-	if (GoodObject(CONSOLE_OPERATION))
-		addConsole("console_operation", CONSOLE_OPERATION);
-	if (GoodObject(CONSOLE_SCIENCE))
-		addConsole("console_science", CONSOLE_SCIENCE);
-	if (GoodObject(CONSOLE_DAMAGE))
-		addConsole("console_damage", CONSOLE_DAMAGE);
-	if (GoodObject(CONSOLE_TRANSPORTER))
-		addConsole("console_transporter", CONSOLE_TRANSPORTER);
-	if (GoodObject(CONSOLE_MONITOR))
-		addConsole("console_monitor", CONSOLE_MONITOR);
-	return;
+	const char *group = "cosmetic";
+	strncpy(aspace_config.cochrane, "1298.737508", sizeof(aspace_config.cochrane));
+	aspace_config.security = CONSOLE_SECURITY;
+	aspace_config.helm = CONSOLE_HELM;
+	aspace_config.engineering = CONSOLE_ENGINEERING;
+	aspace_config.operation = CONSOLE_OPERATION;
+	aspace_config.science = CONSOLE_SCIENCE;
+	aspace_config.damage = CONSOLE_DAMAGE;
+	aspace_config.communication = aspace_config.communication;
+	aspace_config.tactical = CONSOLE_TACTICAL;
+	aspace_config.monitor = CONSOLE_MONITOR;
+	aspace_config.fighter = CONSOLE_FIGHTER;
+	aspace_config.nebula = 1;
+	add_config("cochrane_constant", cf_str, aspace_config.cochrane, sizeof aspace_config.cochrane, group);
+	add_config("console_security", cf_dbref, &aspace_config.security, sizeof aspace_config.security, group);
+	add_config("console_helm", cf_dbref, &aspace_config.helm, sizeof aspace_config.helm, group);
+	add_config("console_engineering", cf_dbref, &aspace_config.engineering, sizeof aspace_config.engineering, group);
+	add_config("console_operation", cf_dbref, &aspace_config.operation, sizeof aspace_config.operation, group);
+	add_config("console_science", cf_dbref, &aspace_config.science, sizeof aspace_config.science, group);
+	add_config("console_damage", cf_dbref, &aspace_config.damage, sizeof aspace_config.damage, group);
+	add_config("console_communication", cf_dbref, &aspace_config.communication, sizeof aspace_config.communication, group);
+	add_config("console_tactical", cf_dbref, &aspace_config.tactical, sizeof aspace_config.tactical, group);
+	add_config("console_monitor", cf_dbref, &aspace_config.monitor, sizeof aspace_config.monitor, group);
+	add_config("console_fighter", cf_dbref, &aspace_config.fighter, sizeof aspace_config.fighter, group);
+	add_config("nebula_type", cf_int, &aspace_config.nebula, sizeof aspace_config.nebula, group);
+	(void)config_file_startup("aspace.cnf", 0);
 }
-	
 void initSpace()
 {	
 	border_map = NULL;
 	border_map = im_new();
-
-	hash_init(&aspace_consoles, 256, free_spaceconsole);
+	nebula_map = im_new();
+	
+	(void) setupAspaceConfig();
 	(void) setupAspaceFunctions();
 	(void) setupAspaceFlags();
 	(void) setupAspacePowers();
 	(void) dump_space(GOD);
 	(void) open_spacelog();
-	(void) setupAspaceConsoles();
 }
 

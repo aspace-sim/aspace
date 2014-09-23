@@ -12,18 +12,6 @@ int n;
 int max_space_objects = MIN_SPACE_OBJECTS;
 int max_comms_objects = MIN_COMMS_OBJECTS;
 
-dbref console_security = CONSOLE_SECURITY;
-dbref console_helm = CONSOLE_HELM;
-dbref console_engineering = CONSOLE_ENGINEERING;
-dbref console_operation = CONSOLE_OPERATION;
-dbref console_science = CONSOLE_SCIENCE;
-dbref console_damage = CONSOLE_DAMAGE;
-dbref console_communication = CONSOLE_COMMUNICATION;
-dbref console_tactical = CONSOLE_TACTICAL;
-dbref console_transporter = CONSOLE_TRANSPORTER;
-dbref console_monitor = CONSOLE_MONITOR;
-dbref console_fighter = CONSOLE_FIGHTER;
-
 /* ------------------------------------------------------------------------ */
 
 const char *shield_name[] = {

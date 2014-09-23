@@ -142,17 +142,31 @@ double xyz2vis (double x, double y, double z)
 	double dy = fabs(py - (round(py / 100.0) * 100.0));
 	double dz = fabs(pz - (round(pz / 100.0) * 100.0));
 	double vis;
-
-	vis = 1.1 - (1.0 / (1.0 + dx * dx + dy * dy + dz * dz));
-
-	if (vis < 0.0) {
-		return 0.0;
-	} else if (vis > 1.0) {
-		return 1.0;
-	} else
-		return vis;
+	register int i = 0;
+	aspace_borders *nebula;
+	double range;
+		
+	if (aspace_config.nebula >= 1 && im_count(nebula_map) > 0) {
+		for (i = 1; i <= im_count(nebula_map); i++) {
+			nebula = im_find(nebula_map, i);
+			if (!nebula)
+				continue;
+			range = xyz2range(x, y, z, nebula->x, nebula->y, nebula->z) / PARSEC;
+			if (range > nebula->radius)
+				continue;
+			// If we get this far, we are inside a custom nebula. 
+			dx = (px - (nebula->x / PARSEC)) / (0.5 * nebula->radius);
+			dy = (py - (nebula->y / PARSEC)) / (0.5 * nebula->radius);
+			dz = (pz - (nebula->z / PARSEC)) / (0.5 * nebula->radius);
+			vis = 1.1 - (1.0 / (1.0 + dx * dx + dy * dy + dz * dz));
+			return ( vis > 1.0 ? 1.0 : vis < 0 ? 0.0 : vis);
+		}
+	} else if (aspace_config.nebula <= 1)  {
+		vis = 1.1 - (1.0 / (1.0 + dx * dx + dy * dy + dz * dz));
+		return ( vis > 1.0 ? 1.0 : vis < 0 ? 0.0 : vis);
+	}
+	return 1.0;
 }
-
 /* ------------------------------------------------------------------------ */
 
 double sdb2bearing (int n1, int n2)
@@ -576,17 +590,18 @@ double sdb2dissipation (int x, int shield)
 
 double xyz2cochranes (double x, double y, double z)
 {
+	double cochranes = atof(aspace_config.cochrane);
+	
 	double px = x / PARSEC;
 	double py = y / PARSEC;
 	double pz = z / PARSEC;
 	double r = (px * px + py * py) / 256000000.0 + (pz * pz) / 240000.0;
 
 	if (r < 1.0) {
-		return ((1.0 - r) / 0.671223 * cochrane) + 1.0;
+		return ((1.0 - r) / 0.671223 * cochranes) + 1.0;
 	} else
 		return 1.0;
 }
-
 /* ------------------------------------------------------------------------ */
 
 double sdb2angular (int n1, int n2)

@@ -1,0 +1,33 @@
+# configuration file for ASpace 
+#
+# Here you will set the dbrefs of your consoles, select the behavior of nebulae
+# and set the space-time cochrane value 
+## This File should be in your game directory. Same place as your mush.cnf
+
+
+## This sets global cochrane value. If you don't understand this, leave it alone. (or play with it)
+## it affects how fast warp factors are.
+
+cochrane_constant 1298.737508
+
+## This sets the behavior of nebulae. 
+## 0 = Old ASpace style auto-generated nebulae. Custom nebulae disabled.
+## 1 = Old Aspace style auto generated nebulae, and custom nebulae using nebula()
+## 2 = Custom nebulae ONLY.
+nebula_type 1
+
+## Console dbrefs. Uncomment and put the dbref of your consoles here
+## You can also set these up in-game using sdb(), but this is the preferred method.
+## Note: These will override the #defines in space.h if used, that is why they default to being commented out.
+
+#console_security #-1
+#console_helm #-1
+#console_engineering #-1
+#console_operation #-1
+#console_science #-1
+#console_damage #-1
+#console_communication #-1
+#console_tactical #-1
+#console_monitor #-1
+#console_fighter #-1
+

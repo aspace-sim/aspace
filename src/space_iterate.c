@@ -653,10 +653,16 @@ void up_quadrant (void)
 
 void up_visibility (void)
 {
+	double vis = xyz2vis(sdb[n].coords.x, sdb[n].coords.y, sdb[n].coords.z);
+	
 	if (sdb[n].status.docked || sdb[n].status.landed) {
 		sdb[n].sensor.visibility = 1.0;
 	} else {
-		sdb[n].sensor.visibility = xyz2vis(sdb[n].coords.x, sdb[n].coords.y, sdb[n].coords.z);
+		if (sdb[n].sensor.visibility == 1.0 && vis < 1.0)
+			alert_enter_nebula(n);
+		else if (sdb[n].sensor.visibility < 1.0 && vis == 1.0) 
+			alert_exit_nebula(n);
+		sdb[n].sensor.visibility = vis;
 	}
 	return;
 }
