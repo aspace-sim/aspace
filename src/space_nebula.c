@@ -6,6 +6,7 @@
 
 /* ------------------------------------------------------------------------ */
 
+
 int round2 (double x)
 {
 	if (x < 0.0) {
@@ -23,7 +24,6 @@ int do_nebula_report (dbref enactor)
 	double cx[2], cy[2], cz[2];
 	double dx, dy, dz;
 	register int x, y, z;
-	
 	register int i = 0;
 	aspace_borders *nebula;
 	double range;
@@ -44,9 +44,8 @@ int do_nebula_report (dbref enactor)
 	} else {
 		snprintf(buffer, sizeof(buffer),
 		  "%s%s--[%sNebula Report%s]--------------------------------------------------------------%s\n%sNebulae              Bearing Range   Core Vis Core Coordinates%s\n%s-------------------- ------- ------- -------- ---------------------------------%s\n",
-		  ANSI_HEADERTOP(n), "", ANSI_TITLE(n), ANSI_HEADERBOTTOM(n), ANSI_NORMAL,
-		  ANSI_TEXT(n), ANSI_WHITE, ANSI_HEADERBOTTOM(n), ANSI_WHITE);
-		
+		  ANSI_HILITE, ANSI_BLUE, ANSI_YELLOW, ANSI_BLUE, ANSI_NORMAL,
+		  ANSI_CYAN, ANSI_WHITE, ANSI_BLUE, ANSI_WHITE);
 		if (aspace_config.nebula >= 1 && im_count(nebula_map) > 0) {
 			for (i = 1; i <= im_count(nebula_map); i++) {
 				nebula = im_find(nebula_map, i);
@@ -73,10 +72,10 @@ int do_nebula_report (dbref enactor)
 						dy = cy[y] * PARSEC;
 						dz = cz[z] * PARSEC;
 						strncat(buffer, tprintf("%-20.20s %3d %-3d %-7.7s %7.3f%% %10.3f %10.3f %10.3f\n", nbuff,
-						(int) round2(xy2bearing((dx - sdb[n].coords.x), (dy - sdb[n].coords.y))),
-						(int) round2(xyz2elevation((dx - sdb[n].coords.x), (dy - sdb[n].coords.y), (dz - sdb[n].coords.z))),
-						unparse_range(xyz2range(sdb[n].coords.x, sdb[n].coords.y, sdb[n].coords.z, dx, dy, dz)),
-						xyz2vis(dx, dy, dz) * 100.0,
+							(int) round2(xy2bearing((dx - sdb[n].coords.x), (dy - sdb[n].coords.y))),
+							(int) round2(xyz2elevation((dx - sdb[n].coords.x), (dy - sdb[n].coords.y), (dz - sdb[n].coords.z))),
+							unparse_range(xyz2range(sdb[n].coords.x, sdb[n].coords.y, sdb[n].coords.z, dx, dy, dz)),
+							xyz2vis(dx, dy, dz) * 100.0,
 						cx[x] - sdb[n].coords.xo / PARSEC,
 						cy[y] - sdb[n].coords.yo / PARSEC,
 						cz[z] - sdb[n].coords.zo / PARSEC), sizeof(buffer) - 1);
@@ -84,14 +83,14 @@ int do_nebula_report (dbref enactor)
 				}
 			}
 		}
-		strncat(buffer, format_l_line(n), sizeof(buffer) - 1);
+		strncat(buffer, format_l_line(), sizeof(buffer) - 1);
 		strncat(buffer, format_Course(n), sizeof(buffer) - 1);
 		strncat(buffer, format_Speed(n), sizeof(buffer) - 1);
 		strncat(buffer, "\n", sizeof(buffer) - 1);
 		strncat(buffer, format_Location(n), sizeof(buffer) - 1);
 		strncat(buffer, format_Velocity(n), sizeof(buffer) - 1);
 		strncat(buffer, "\n", sizeof(buffer) - 1);
-		strncat(buffer, format_l_end(n), sizeof(buffer) - 1);
+		strncat(buffer, format_l_end(), sizeof(buffer) - 1);
 
 		notify(enactor, buffer);
 		return 1;
@@ -113,10 +112,6 @@ void addNewNebula(dbref executor, int index, const char* name, double radius, do
 	
 	if (newNebula != NULL) {
 		safe_str("#-1 NEBULA # ALREADY IN USE", buff, bp);
-		return;
-	}
-	if (aspace_config.nebula < 1) {
-		safe_str("#-1 DISABLED IN CONFIG", buff, bp);
 		return;
 	}
 		
@@ -164,10 +159,7 @@ void list_nebulae(char *buff, char **bp)
 {
 	int index = 0;
 	aspace_borders *nebula;
-    if (aspace_config.nebula < 1) {
-		safe_str("#-1 DISABLED IN CONFIG", buff, bp);
-		return;
-	}
+   
 	safe_format(buff, bp, "%-20.20s %-7.7s %-10.10s %-10.10s %-10.10s\n", "Name", "Radius", "X", "Y", "Z");
 	for (index = 1; index <= im_count(border_map); index++) {
 		nebula = im_find(nebula_map, index);
