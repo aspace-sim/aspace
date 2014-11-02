@@ -811,7 +811,10 @@ void up_vectors (void)
 	double sr = sin(sdb[n].course.roll_out * d2r);
 	double cr = cos(sdb[n].course.roll_out * d2r);
 
-/* Original rotation matrix. Has issues with 90 degree angles
+/* Original rotation matrix. Has issues with 90 degree angles 
+// Working on a solution still
+*/
+
 	sdb[n].course.d[0][0] = cy * cp;
 	sdb[n].course.d[0][1] = sy * cp;
 	sdb[n].course.d[0][2] = sp;
@@ -822,18 +825,7 @@ void up_vectors (void)
 	sdb[n].course.d[2][1] = (cy * sr) - (sy * sp * cr);
 	sdb[n].course.d[2][2] = (cp * cr);
 	sdb[n].course.version = 0;
-*/
-	sdb[n].course.d[0][0] = cy*cp;
-	sdb[n].course.d[0][1] = -sy;
-	sdb[n].course.d[0][2] = cy*sp;
-	
-	sdb[n].course.d[1][0] = (sr*sp) + (cr*cp*sy);
-	sdb[n].course.d[1][1] = cr*cy;
-	sdb[n].course.d[1][2] = (cr*sy*sp) - (cp*sr);
-	
-	sdb[n].course.d[2][0] = (cp*sr*sy) - (cr *sp);
-	sdb[n].course.d[2][1] = cy*sr;
-	sdb[n].course.d[2][2] = (cr*cp) + (sr*sy*sp);
+
 	return;
 }
 
