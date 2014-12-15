@@ -616,6 +616,8 @@ double sdb2angular (int n1, int n2)
 	return fabs(acos(x) * 180 / PI);
 }
 
+// Returns the SDB # of a dbref, if it's a space object,returns 0 if it's not.
+// note: only works on /loaded/ space objects.
 int dbref2sdb(dbref x)
 {
 	register int i = 0;
@@ -629,5 +631,15 @@ int dbref2sdb(dbref x)
 				return i;
 	return 0;
 }
+// Returns 1 if both are within 0.001 of the same IFF frequency
+int sdb2friendly(int n1, int n2)
+{
+	if (!GoodSDB(n1) || !GoodSDB(n2)) 
+		return 0;
 
+		if (fabs(sdb[n1].iff.frequency - sdb[n2].iff.frequency ) > 0.001)
+		return 1;
+	else
+		return 0;
+}
 /* ------------------------------------------------------------------------ */
