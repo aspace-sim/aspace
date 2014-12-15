@@ -616,4 +616,18 @@ double sdb2angular (int n1, int n2)
 	return fabs(acos(x) * 180 / PI);
 }
 
+int dbref2sdb(dbref x)
+{
+	register int i = 0;
+	
+	if (!GoodObject(x)) 
+		return 0;
+
+		for (i = MIN_SPACE_OBJECTS; i <= max_space_objects; ++i)
+		if (sdb[i].structure.type) 
+			if (sdb[i].object == x)
+				return i;
+	return 0;
+}
+
 /* ------------------------------------------------------------------------ */
