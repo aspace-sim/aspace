@@ -729,6 +729,7 @@ extern char *ansi_red_scale (double a, int max);
 extern char *ansi_stoplight_scale (double a, int max);
 
 /* from space_utils.c */
+extern int sdb2friendly(int n1, int n2);
 extern int dbref2sdb(dbref x);
 extern int GoodSDB (int x);
 extern double ly2pc (double dist);
