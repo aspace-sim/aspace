@@ -185,6 +185,8 @@ FUNCTION(local_fun_sdb) /* sdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				case 55: safe_str(unparse_integer(do_set_roll(parse_number(args[3]), enactor)), buff, bp); break;
 				case 56: safe_str(unparse_integer(do_set_coords_engage(enactor)), buff, bp); break;
 				case 58: safe_str(unparse_integer(do_set_parallel(parse_integer(args[3]), enactor)), buff, bp); break;
+				case 59: safe_str(unparse_integer(do_set_iff_frequency(parse_number(args[3]), enactor)), buff, bp); break;
+
 				default: safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp); break;
 			} break;
 		case 'e': /* empty */
