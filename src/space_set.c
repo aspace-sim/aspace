@@ -2597,10 +2597,11 @@ int do_set_dock (int contact, dbref enactor)
 				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "launching from");
 			}
 
-			moveit(sdb[n].object, sdb[x].object, 1);
+			moveit(sdb[n].object, sdb[x].object, 1, enactor, "aspace");
+			
 			/* Aspace trac dock. Move the tractoree! */
 			if (trac)
-				moveit(sdb[sdb[n].status.tractoring].object, sdb[x].object, 1);
+				moveit(sdb[sdb[n].status.tractoring].object, sdb[x].object, 1, enactor, "aspace");
 
 			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[x].object))));
 			console_message(x, "helm science tactical", ansi_alert(tprintf("%s docking with %s", Name(sdb[n].object), Name(sdb[x].object))));
