@@ -2764,7 +2764,7 @@ int do_set_undock (dbref enactor)
 		} else if (!sdb[x].status.open_docking) {
 			notify(enactor, ansi_red(tprintf("%s's docking bay doors are closed.", Name(sdb[x].object))));
 		} else {
-			moveit(sdb[n].object, Location(sdb[x].object), 1);
+			moveit(sdb[n].object, Location(sdb[x].object), 1, enactor, "aspace");
 			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[x].object))));
 			console_message(x, "helm science tactical", ansi_alert(tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s slides out of dock.", Name(sdb[n].object)));
@@ -2883,7 +2883,7 @@ int do_set_land (int contact, dbref enactor)
 				do_space_notify_two(n, l, console_helm, console_tactical, console_science, "launching from");
 			}
 
-			moveit(sdb[n].object, sdb[x].object, 1);
+			moveit(sdb[n].object, sdb[x].object, 1, enactor, "aspace");
 			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[x].object))));
 			console_message(x, "helm science tactical", ansi_alert(tprintf("%s landing on %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s settles onto its landing pad.", Name(sdb[n].object)));
@@ -2973,7 +2973,7 @@ int do_set_launch (dbref enactor)
 		} else if (!sdb[x].status.open_landing) {
 			notify(enactor, ansi_red(tprintf("%s's landing bay doors are closed.", Name(sdb[x].object))));
 		} else {
-			moveit(sdb[n].object, Location(sdb[x].object), 1);
+			moveit(sdb[n].object, Location(sdb[x].object), 1, enactor, "aspace");
 			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[x].object))));
 			console_message(x, "helms cience tactical", ansi_alert(tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[x].object))));
 			do_ship_notify(n, tprintf("The %s lifts off from its landing pad.", Name(sdb[n].object)));
