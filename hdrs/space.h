@@ -806,7 +806,7 @@ extern char *unparse_class (int x);
 extern char *unparse_identity (int n1, int n2);
 
 /* from move.c */
-extern void moveit(dbref what, dbref where, int nomovemsgs);
+extern void moveit(dbref what, dbref where, int nomovemsgs, dbref enactor, const char *cause);
 
 /* from space_report.c */
 extern void report_eng_power (void);
