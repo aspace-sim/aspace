@@ -1227,10 +1227,10 @@ void console_notify_all(int x, char *msg) {
 	char *q, *pq, *show_message;
 	dbref console, user;
 
-	show_message = (char *) mush_strdup(msg, "console_message");
-	
 	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
-	if (a != NULL) {
+	
+	if (a && *AL_STR(a)) { // Attribute exists AND isn't empty
+		show_message = (char *) mush_strdup(msg, "console_message");
 		q = safe_atr_value(a);
 		pq = trim_space_sep(q, ' ');
 		while (pq) {
@@ -1249,6 +1249,9 @@ void console_notify_all(int x, char *msg) {
 		}
 		free(q);
 		mush_free(show_message, "console_message");
+	} else {
+		write_spacelog(GOD, ship, tprintf("CONSOLE_NOTIFY_ALL: Missing or Empty %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));
+		return;
 	}
 }
 
@@ -1259,16 +1262,14 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 	int index;
 	dbref console, user, parent;
 	
-	
-	show_message = (char *) mush_strdup(msg, "console_message");
-	
 	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
-	if (a != NULL) {
+	
+	if (a && *AL_STR(a)) { // Attribute exists AND isn't empty
+		show_message = (char *) mush_strdup(msg, "console_message");
 		q = safe_atr_value(a);
 		pq = trim_space_sep(q, ' ');
 		while (pq) {
 			console = parse_dbref(split_token(&pq, ' '));
-					
 			if ( console != NOTHING )
 			{	
 				if (!GoodObject(console))
@@ -1301,6 +1302,9 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 		}
 		free(q);
 		mush_free(show_message, "console_message");
+	} else {
+		write_spacelog(GOD, ship, tprintf("CONSOLE_NOTIFY: Missing or Empty %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));
+		return;
 	}
 }
 
