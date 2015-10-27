@@ -1204,30 +1204,31 @@ void console_notify_all(int x, char *msg) {
 	dbref console, user;
 
 	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
-
-	if (!a) {
-		write_spacelog(GOD, ship, tprintf("CONSOLE_NOTIFY_ALL: Missing %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));
-		return;
-	}
-	show_message = (char *) mush_strdup(msg, "console_message");
-	q = safe_atr_value(a);
-	pq = trim_space_sep(q, ' ');
-	while (pq) {
-		console = parse_dbref(split_token(&pq, ' '));
+	
+	if (a && *AL_STR(a)) {
+		show_message = (char *) mush_strdup(msg, "console_message");
+		q = safe_atr_value(a);
+		pq = trim_space_sep(q, ' ');
+		while (pq) {
+			console = parse_dbref(split_token(&pq, ' '));
 				
-		if ( console != NOTHING )
-		{			
-			b = atr_get(console, CONSOLE_USER_ATTR_NAME);
-			if (b != NULL) {
-				user = parse_dbref(atr_value(b));
-				if (GoodObject(user)) {
-					notify(user, show_message);
+			if ( console != NOTHING )
+			{			
+				b = atr_get(console, CONSOLE_USER_ATTR_NAME);
+				if (b != NULL) {
+					user = parse_dbref(atr_value(b));
+					if (GoodObject(user)) {
+						notify(user, show_message);
+					}
 				}
 			}
 		}
+		free(q);
+		mush_free(show_message, "console_message");
+	} else {
+		write_spacelog(GOD, ship, tprintf("CONSOLE_NOTIFY_ALL: Missing %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));
+		return;
 	}
-	free(q);
-	mush_free(show_message, "console_message");
 }
 void console_notify(int x, char *msg, int numargs, char **args) {
 	ATTR *a, *b;
@@ -1235,62 +1236,61 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 	int index;
 	dbref console, user, parent;
 		
-	
 	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
-	if (!a) {
+	if (a && *AL_STR(a)) {
+		show_message = (char *) mush_strdup(msg, "console_message");
+		q = safe_atr_value(a);
+		pq = trim_space_sep(q, ' ');
+		while (pq) {
+			console = parse_dbref(split_token(&pq, ' '));
+
+			if ( console == NOTHING )
+				continue;
+			if (!GoodObject(console))
+					continue;
+			parent = Parent(console);
+			if (!GoodObject(parent))
+				continue;
+			b = atr_get(console, CONSOLE_USER_ATTR_NAME);
+			if (!b)
+				continue;
+			if( parent == aspace_config.fighter || parent == aspace_config.monitor) {
+				user = parse_dbref(atr_value(b));
+				if (GoodObject(user))
+					notify(user,show_message);
+			}
+			for ( index = 0; index < numargs; index++) {
+				console_mode = args[index];
+				if (!strcmp(console_mode, "helm") && parent == aspace_config.helm) 
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "tactical") && parent == aspace_config.tactical)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "engineering") && parent == aspace_config.engineering)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "operation") && parent == aspace_config.operation)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "science") && parent == aspace_config.science)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "damage") && parent == aspace_config.damage)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "communication") && parent == aspace_config.communication)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "transporter") && parent == aspace_config.transporter)
+					user = parse_dbref(atr_value(b));
+				else if (!strcmp(console_mode, "security") && parent == aspace_config.security)
+					user = parse_dbref(atr_value(b));	
+				else
+					user = 0;
+			}
+			if (GoodObject(user))
+				notify(user, show_message);			
+		}		
+		free(q);
+		mush_free(show_message, "console_message");
+	} else {
 		write_spacelog(GOD, ship, tprintf("CONSOLE_NOTIFY: Missing %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));
 		return;
 	}
-	show_message = (char *) mush_strdup(msg, "console_message");
-	
-	q = safe_atr_value(a);
-	pq = trim_space_sep(q, ' ');
-	while (pq) {
-		console = parse_dbref(split_token(&pq, ' '));
-				
-		if ( console == NOTHING )
-			continue;
-		if (!GoodObject(console))
-				continue;
-		parent = Parent(console);
-		if (!GoodObject(parent))
-			continue;
-		b = atr_get(console, CONSOLE_USER_ATTR_NAME);
-		if (!b)
-			continue;
-		if( parent == aspace_config.fighter || parent == aspace_config.monitor) {
-			user = parse_dbref(atr_value(b));
-			if (GoodObject(user))
-				notify(user,show_message);
-		}
-		for ( index = 0; index < numargs; index++) {
-			console_mode = args[index];
-			if (!strcmp(console_mode, "helm") && parent == aspace_config.helm) 
-				user = parse_dbref(atr_value(b));
-			else if (!strcmp(console_mode, "tactical") && parent == aspace_config.tactical)
-				user = parse_dbref(atr_value(b));
-			else if (!strcmp(console_mode, "engineering") && parent == aspace_config.engineering)
-				user = parse_dbref(atr_value(b));
-			else if (!strcmp(console_mode, "operation") && parent == aspace_config.operation)
-				user = parse_dbref(atr_value(b));
-			else if (!strcmp(console_mode, "science") && parent == aspace_config.science)
-				user = parse_dbref(atr_value(b));
-			else if (!strcmp(console_mode, "damage") && parent == aspace_config.damage)
-				user = parse_dbref(atr_value(b));
-			else if (!strcmp(console_mode, "communication") && parent == aspace_config.communication)
-				user = parse_dbref(atr_value(b));
-			else if (!strcmp(console_mode, "transporter") && parent == aspace_config.transporter)
-				user = parse_dbref(atr_value(b));
-			else if (!strcmp(console_mode, "security") && parent == aspace_config.security)
-				user = parse_dbref(atr_value(b));	
-			else
-				user = 0;
-		}
-		if (GoodObject(user))
-			notify(user, show_message);			
-	}		
-	free(q);
-	mush_free(show_message, "console_message");
 }
 
 
