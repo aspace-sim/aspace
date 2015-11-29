@@ -1140,7 +1140,7 @@ int do_space_db_iterate (void)
 					if (sdb[n].move.v != 0.0) {
 						up_position();
 						up_cochranes();
-						up_empire();
+						up_empire(n);
 						up_quadrant();
 						up_visibility();
 					}
