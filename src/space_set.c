@@ -2378,7 +2378,7 @@ int do_set_active (dbref enactor)
 		sdb[n].status.time = sdb[n].move.time;
 		sdb[n].status.autopilot = 0;
 		up_cochranes();
-		up_empire();
+		up_empire(n);
 		up_quadrant();
 		up_vectors();
 		up_resolution();
