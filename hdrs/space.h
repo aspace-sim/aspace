@@ -919,7 +919,7 @@ extern void up_turn_rate (void);
 extern void up_cochranes (void);
 extern void up_velocity (void);
 extern void up_quadrant (void);
-extern void up_empire (void);
+extern void up_empire (int x);
 extern void up_visibility (void);
 extern void up_yaw_io (void);
 extern void up_pitch_io (void);
