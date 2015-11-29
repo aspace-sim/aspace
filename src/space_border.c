@@ -16,8 +16,7 @@ void free_borderinfo(void *ptr) {
 void addNewBorder(dbref executor, int border_number, const char* name, double radius, double x, double y, double z, char *buff, char **bp)
 {
 	aspace_borders* newBorder;
-	newBorder = im_find(border_map, border_number);
-	if (newBorder != NULL) {
+	if (im_exists(border_map, border_number)) {
 		safe_str("#-1 BORDER ALREADY EXISTS", buff, bp);
 		return;
 	}
@@ -33,11 +32,11 @@ void addNewBorder(dbref executor, int border_number, const char* name, double ra
 	
 	if( im_insert(border_map, border_number, newBorder )) {
 		safe_str("New Border Created.", buff, bp);
-		write_spacelog(executor, executor, tprintf("Border Created: %s", newBorder->name));
-	} else
+	} else {
+		mush_free(newBorder->name, "spaceborder_name");
 		safe_str("#-1 BORDER NOT CREATED.", buff, bp);
+	}
 }
-
 void deleteBorder(dbref executor, int border, char *buff, char **bp)
 {
 	aspace_borders *theBorder;
@@ -100,6 +99,7 @@ void edit_border(dbref executor, int border_id, const char* setting, const char*
 	{
 		switch (setting[0]) {
 			case 'n': /* Name */
+				mush_free(si->name, "spaceborder_name");
 				si->name = mush_strdup(new_value, "spaceborder_name");
 				safe_format(buff, bp, "Border Name changed for border %u to %s", border_id, si->name);
 				break;
@@ -131,7 +131,11 @@ void edit_border(dbref executor, int border_id, const char* setting, const char*
 char *unparse_empire (int x)
 {
 	aspace_borders *si;
-
+	if (x == 0) {
+		return (char *)"Neutral";
+	}
+	
+	}// Neutral
 	si = im_find(border_map, sdb[x].move.empire);
 	
 	if (si != NULL)
@@ -190,38 +194,57 @@ void alert_border_cross (int x, int a, int way)
  * Updates the space-object to reflect what empire it is currently inside
  * announces both inbound and outbound and also when you enter and depart
  */
-void up_empire (void)
+void up_empire (int x)
 {
-	double dx, dy, dz;
-	int index = 0;
-	aspace_borders *si = NULL;
+  double dx, dy, dz;
+  int i = 0, empire = 0;
+  aspace_borders *border;
+  double r = MAX_DOUBLE; 
+  int rref = -1;
 
-	for (index = 1; index <= im_count(border_map); index++)
-	{
-		si = im_find(border_map, index);
-		
-		if (si != NULL) {
-			dx = (si->x - sdb[n].coords.x) / PARSEC;
-			dy = (si->y - sdb[n].coords.y) / PARSEC;
-			dz = (si->z - sdb[n].coords.z) / PARSEC;
-			if ((dx * dx + dy * dy + dz * dz) < (si->radius * si->radius)) {
-	
-				if (sdb[n].move.empire != index) {
-					if ((int)get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
-						alert_exit_empire(n);
-						alert_border_cross (n, sdb[n].move.empire, 0);
-					}
-					sdb[n].move.empire = index;
-					if ((int)get_random_long(0,100) < ((int) (sdb[n].sensor.lrs_signature * sdb[n].sensor.visibility * 100.0))) {
-						alert_enter_empire(n);
-						alert_border_cross (n, sdb[n].move.empire, 1);
-					}
-				}
-				break;
-			}
-		}
-	}
-	return;
+  for (i = 0 ; i < im_count(border_map) ; ++i) {
+    border = im_find(border_map,i);
+    if (border) {
+      dx = (border->x - sdb[x].coords.x) / PARSEC;
+      dy = (border->y - sdb[x].coords.y) / PARSEC;
+      dz = (border->z - sdb[x].coords.z) / PARSEC;
+      double rr = (dx * dx + dy * dy + dz * dz);
+      if (rr < (border->radius * border->radius)) {
+        empire = i;
+        if (rr < r ) {
+          rref = i;
+          r = rr;
+        }
+        break;
+     }
+    }
+  }
+  if (rref > 0) 
+    empire = rref; // 'Most inside' of border
+  
+  if (sdb[x].move.empire != empire) {
+    
+    if (sdb[x].move.empire != 0) {
+      aspace_borders *ptr = im_find(border_map, sdb[x].move.empire);
+      if (ptr) { // We check this incase we are inside a border that no longer exists, just exit it silently.
+        alert_exit_empire(x);
+        if (getrandom(100) < ((int) (sdb[x].sensor.lrs_signature
+            * sdb[x].sensor.visibility * 100.0))) {
+          alert_border_cross (x,sdb[x].move.empire, 0);
+        }
+      }
+    }
+    sdb[x].move.empire = empire;
+    if (sdb[x].move.empire != 0) {
+      alert_enter_empire(x);
+      if (getrandom(100) < ((int) (sdb[x].sensor.lrs_signature
+       * sdb[x].sensor.visibility * 100.0))) {
+        alert_border_cross (x, sdb[x].move.empire, 1);
+      }
+    }
+  }
+
+  return;
 }
 
 /*
