@@ -16,7 +16,7 @@ void free_borderinfo(void *ptr) {
 void addNewBorder(dbref executor, int border_number, const char* name, double radius, double x, double y, double z, char *buff, char **bp)
 {
 	aspace_borders* newBorder;
-	if (im_exists(border_map, border_number)) {
+	if (border_number == 0  || im_exists(border_map, border_number)) {
 		safe_str("#-1 BORDER ALREADY EXISTS", buff, bp);
 		return;
 	}
@@ -46,7 +46,7 @@ void deleteBorder(dbref executor, int border, char *buff, char **bp)
 {
 	aspace_borders *theBorder;
 
-	if (!border) {
+	if (!border || border == 0) {
 		safe_str("#-1 BORDER NOT SUPPLIED", buff, bp);
 		return;
 	}
