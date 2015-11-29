@@ -32,6 +32,11 @@ void addNewBorder(dbref executor, int border_number, const char* name, double ra
 	
 	if( im_insert(border_map, border_number, newBorder )) {
 		safe_str("New Border Created.", buff, bp);
+		int i = 0;
+    		for (i = MIN_SPACE_OBJECTS; i <= max_space_objects; ++i) 
+      			if (sdb[i].status.active && sdb[i].structure.type)
+        			up_empire(i);
+
 	} else {
 		mush_free(newBorder->name, "spaceborder_name");
 		safe_str("#-1 BORDER NOT CREATED.", buff, bp);
@@ -51,6 +56,11 @@ void deleteBorder(dbref executor, int border, char *buff, char **bp)
 		write_spacelog(executor, executor, tprintf("Border deleted: %s", theBorder->name));
 		free_borderinfo(theBorder);
 		im_delete(border_map, border);
+		int i = 0;
+    		for (i = MIN_SPACE_OBJECTS; i <= max_space_objects; ++i) 
+      			if (sdb[i].status.active && sdb[i].structure.type)
+        			up_empire(i);
+
 	} else {
 		safe_str("#-1 BORDER NOT FOUND", buff, bp);
 		return;
