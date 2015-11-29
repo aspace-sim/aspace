@@ -100,7 +100,7 @@ void damage_structure (int x, double damage)
 			sdb[x].status.tractoring = 0;
 		}
 		up_cochranes();
-		up_empire();
+		up_empire(x);
 		up_quadrant();
 		up_vectors();
 		up_resolution();
@@ -494,7 +494,7 @@ int repair_everything (void)
 	sdb[n].power.version = 1;
 	sdb[n].cloak.version = 1;
 	up_cochranes();
-	up_empire();
+	up_empire(n);
 	up_quadrant();
 	up_vectors();
 	up_resolution();
