@@ -219,13 +219,12 @@ void up_empire (int x)
       dy = (border->y - sdb[x].coords.y) / PARSEC;
       dz = (border->z - sdb[x].coords.z) / PARSEC;
       double rr = (dx * dx + dy * dy + dz * dz);
-      if (rr < (border->radius * border->radius)) {
+      if (rr  < (border->radius * border->radius)) {
         empire = i;
-        if (rr < r ) {
+        if (rr = fabs(-rr - (border->radius * border->radius))  < r ) {
           rref = i;
           r = rr;
         }
-        break;
      }
     }
   }
