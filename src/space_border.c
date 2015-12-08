@@ -141,7 +141,7 @@ void edit_border(dbref executor, int border_id, const char* setting, const char*
 char *unparse_empire (int x)
 {
 	aspace_borders *si;
-	if (x == 0) {
+	if (sdb[x].move.empire == 0) {
 		return (char *)"Neutral";
 	}
 	
