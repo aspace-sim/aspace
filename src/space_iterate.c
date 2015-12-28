@@ -1060,12 +1060,15 @@ void up_repair (void)
 int do_space_db_iterate (void)
 {
 	register int count = 0;
+	// mudtime is sometimes in accurate. Grab the current time ourself.
+	time_t now;
+	time(&now);
 	
 	for (n = MIN_SPACE_OBJECTS; n <= max_space_objects; ++n)
 		if (sdb[n].status.active && sdb[n].structure.type) {
 				++count;
-				sdb[n].move.dt = mudtime - sdb[n].move.time;
-				sdb[n].move.time = mudtime;
+				sdb[n].move.dt = now - sdb[n].move.time;
+				sdb[n].move.time = now;
 				if (sdb[n].move.dt > 0.0) {
 					if (sdb[n].structure.type == 1)
 						if (sdb[n].move.time - sdb[n].status.time > 3600) {
