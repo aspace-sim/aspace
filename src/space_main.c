@@ -1250,7 +1250,7 @@ void console_notify_all(int x, char *msg) {
 		free(q);
 		mush_free(show_message, "console_message");
 	} else {
-		write_spacelog(GOD, ship, tprintf("CONSOLE_NOTIFY_ALL: Missing or Empty %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));
+		write_spacelog(GOD, sdb[x].object, tprintf("CONSOLE_NOTIFY_ALL: Missing or Empty %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));
 		return;
 	}
 }
@@ -1303,7 +1303,7 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 		free(q);
 		mush_free(show_message, "console_message");
 	} else {
-		write_spacelog(GOD, ship, tprintf("CONSOLE_NOTIFY: Missing or Empty %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));
+		write_spacelog(GOD, sdb[x].object, tprintf("CONSOLE_NOTIFY: Missing or Empty %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));
 		return;
 	}
 }
