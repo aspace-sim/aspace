@@ -945,7 +945,7 @@ int debug_space (int x)
 	up_cochranes();
 	up_turn_rate();
 	up_vectors();
-	up_empire();
+	up_empire(x);
 	up_quadrant();
 	up_resolution();
 	up_signature(x);
