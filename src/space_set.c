@@ -2457,7 +2457,7 @@ int do_set_inactive (dbref enactor)
 		sdb[n].status.time = sdb[n].move.time;
 		sdb[n].status.autopilot = 0;
 		up_cochranes();
-		up_empire();
+		up_empire(n);
 		up_quadrant();
 		up_vectors();
 		up_resolution();
@@ -2680,7 +2680,7 @@ int do_set_dock (int contact, dbref enactor)
 			sdb[n].status.autopilot = 0;
 			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "docking with");
 			up_cochranes();
-			up_empire();
+			up_empire(n);
 			up_quadrant();
 			up_vectors();
 			up_resolution();
@@ -2719,7 +2719,7 @@ int do_set_dock (int contact, dbref enactor)
 			sdb[trac].status.autopilot = 0;
 			do_space_notify_two(trac, x, console_helm, console_tactical, console_science, "docking with");
 			up_cochranes();
-			up_empire();
+			up_empire(n);
 			up_quadrant();
 			up_vectors();
 			up_resolution();
@@ -2818,7 +2818,7 @@ int do_set_undock (dbref enactor)
 			sdb[n].status.autopilot = 0;
 			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "undocking from");
 			up_cochranes();
-			up_empire();
+			up_empire(n);
 			up_quadrant();
 			up_vectors();
 			up_resolution();
@@ -2932,7 +2932,7 @@ int do_set_land (int contact, dbref enactor)
 			sdb[n].status.autopilot = 0;
 			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "landing on");
 			up_cochranes();
-			up_empire();
+			up_empire(n);
 			up_quadrant();
 			up_vectors();
 			up_resolution();
@@ -3027,7 +3027,7 @@ int do_set_launch (dbref enactor)
 			sdb[n].status.autopilot = 0;
 			do_space_notify_two(n, x, console_helm, console_tactical, console_science, "launching from");
 			up_cochranes();
-			up_empire();
+			up_empire(n);
 			up_quadrant();
 			up_vectors();
 			up_resolution();
@@ -3078,7 +3078,7 @@ void up_wormhole (int n1, int n2)
 	sdb[n].status.autopilot = 0;
 	do_space_notify_one(sdb[x].status.link, console_helm, console_tactical, console_science, "expells an unknown contact");
 	up_cochranes();
-	up_empire();
+	up_empire(n);
 	up_quadrant();
 	up_resolution();
 	up_signature(n);
@@ -3401,7 +3401,7 @@ int do_set_fix_damage (char *sys1, char *sys2, int type, char *name, dbref enact
 		sdb[x].cloak.version = 1;
 		sdb[x].status.time = sdb[x].move.time;
 		up_cochranes();
-		up_empire();
+		up_empire(x);
 		up_quadrant();
 		up_vectors();
 		up_resolution();
@@ -3445,7 +3445,7 @@ int do_set_fix_damage (char *sys1, char *sys2, int type, char *name, dbref enact
 		sdb[x].cloak.version = 1;
 		sdb[x].status.time = sdb[x].move.time;
 		up_cochranes();
-		up_empire();
+		up_empire(x);
 		up_quadrant();
 		up_vectors();
 		up_resolution();
