@@ -145,7 +145,7 @@ char *unparse_empire (int x)
 		return (char *)"Neutral";
 	}
 	
-	}// Neutral
+	// Neutral
 	si = im_find(border_map, sdb[x].move.empire);
 	
 	if (si != NULL)
