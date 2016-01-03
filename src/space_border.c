@@ -237,7 +237,7 @@ void up_empire (int x)
       aspace_borders *ptr = im_find(border_map, sdb[x].move.empire);
       if (ptr) { // We check this incase we are inside a border that no longer exists, just exit it silently.
         alert_exit_empire(x);
-        if (getrandom(100) < ((int) (sdb[x].sensor.lrs_signature
+        if (get_random32(1,100) < ((int) (sdb[x].sensor.lrs_signature
             * sdb[x].sensor.visibility * 100.0))) {
           alert_border_cross (x,sdb[x].move.empire, 0);
         }
@@ -246,7 +246,7 @@ void up_empire (int x)
     sdb[x].move.empire = empire;
     if (sdb[x].move.empire != 0) {
       alert_enter_empire(x);
-      if (getrandom(100) < ((int) (sdb[x].sensor.lrs_signature
+      if (get_random32(1,100) < ((int) (sdb[x].sensor.lrs_signature
        * sdb[x].sensor.visibility * 100.0))) {
         alert_border_cross (x, sdb[x].move.empire, 1);
       }
