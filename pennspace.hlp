@@ -1,0 +1,440 @@
+& SPACE
+& ASPACE
+These files are released publicly with the understanding that every mention
+of the original author is left intact. Any changes made by yourself which
+benefit other users of these files should be sent to the author through
+email: myxtery@Btinternet.com.
+
+Here are the listed help files on Aspace Public Release Help Files v1.1.
+To see the files listed simply type: Help <Console>                   
+eg. Help Command Console.                                             
+                                                                     
+Command Console       Communications Console       Damage Console  
+Engineering Console   Fighter Console              Helm Console    
+Monitor Console       Navigation Console           Operations Console           
+Science Console       Tactical Console             Transporter Console
+Weapons Console	      Security Console
+
+Sensor Flags   
+& S2S
+& COMMUNICATIONS CONSOLE
+& CONS COMMUNICATIONS
+& DISTRESS
+s2s <contact>=<message>
+	(Available only in Fighter/Shuttle, Helm/Navigation, Monitor, 
+	Security, and Communications modes)                       
+
+DISTRESS
+	Broadcasts a general distress call.
+	(Available only in Communications mode.)
+
+STAT|CHANNELS
+        Displays information for the Communications Console mode
+        (CHANNELS command available in all modes.)
+
+SUB[SPACE] <CHANNEL> <ON|OFF>
+
+SUB[SPACE] <CHANNEL> FREQUENCY <FREQ>
+        Changes the frequency of the selected channel.
+
+SUB[SPACE] <CHANNEL> ENCRYPTION <ENC>
+        Changes the encryption of the selected channel.
+
+SUB[SPACE] SELECT <CHANNEL>
+        Selects the channel to transmit on.
+        (Available in all modes.)
+
+<SEND|TRANSMIT> <MESSAGE TEXT>
+        Sends a subspace message on the currently-selected channel.
+
+SUB[SPACE] <CHANNEL> COLOR <1|2> <ANSI CODE>
+        Adjusts the channel colors.
+
+
+& COMMAND CONSOLE
+& OPERATIONS CONSOLE
+& COMMAND/OPERATIONS CONSOLE
+& CONS COMMAND
+& CONS OPERATIONS
+& CONS OPS
+& OPS
+Power
+
+Dock <Contact> - Undock - Land <Planet> - Launch - Gate <Anomaly>
+Airlock Stat - List Pads - Pad Stat - List Ports - Port Stat
+Clamp <Port/Pad> - Unclamp <Port/Pad> - Connect/Port <Port #>
+Connect/Pad <Pad #> - Disconnect
+
+Stat - Op Stat - Conn Stat
+Alloc <Transporters> <Tractors> <Misc>
+Op Alloc <Transpoters> <Tractors> <Misc>
+Defuel <Tons> <Type>
+Refuel <Ship> with <Tons> <Type>
+
+SR - Sen Rep - Cont List - List Cont
+Set Sen <Type> (Types include: All, Ship, Base, Planet, Anomaly, Star)
+LRS <On|Off> - SRS <On|Off> - EW <On|Off>
+Bor Rep - Neb Rep - Star Nearest - Star Report <Star>
+
+Trac <On|Off>
+Trac Freq <Integer(1 - 999.999)> - Trac Lock <Contact #> - Trac Unlock
+
+Tran*sporter Freq*uency <Integer(1 - 999.999)>
+Trans Lock/<source or dest> <Contact#|Here>
+Tran Unlock
+
+& DAMAGE CONSOLE
+& CONS DAMAGE
+Power
+
+Con Stat - Dam Stat - Eng Stat
+Repair <System>
+Ext Dam Stat on <Contact> - Ext Repair <System> on <Contact>
+& SCIENCE CONSOLE
+& CONS SCIENCE
+Power
+Alloc <ecm> <eccm> - Sci Alloc <ecm> <eccm>
+
+SR - Sen Rep - Cont List - List Cont
+Set Sen <Type> (Types include: All, Ship, Base, Planet, Anomaly, Star)
+SRS <On|Off> - LRS <On|Off>
+Det <Contact> - Scan/<Type> <Contact>
+Bor Rep - Neb Rep - Star Nearest - Star Report <Star>
+
+SCAN TYPES ARE: 
+Beam, Defense, Engines, Fuel, Hull, Missile, Other, Power, & Visual
+
+Eta - Eta at <Speed>
+
+Stat - Con Stat - Sci Stat  - ECM - ECCM
+
+Set Coord <X Y Z> - Reset Coords
+& MONITOR CONSOLE
+& CONS MONITOR
+Power
+
+Stat - Con Stat - Dam Stat - Eng Stat - Helm Stat - Nav Stat - Oper Stat
+Tac Stat - Beam Stat - Miss Stat - Weap Stat - ECM - ECCM
+
+List Pads - List Ports - Pad Stat - Port Stat - Airlock Stat
+Connect/Pad <Pad #> - Connect/Port <Port #>
+Clamp <Pad/Port> - Unclamp <Pad/Port> - Disconnect
+
+SR - Sen Rep - Cont List - List Cont
+Set Sen <Type> (Types include: All, Ship, Base, Planet, Anomaly, Star)
+Det <Contact> - Scan/<Type> <Contact>
+Bor Rep - Neb Rep - Star Nearest - Star Report <Star>
+
+SCAN TYPES ARE:
+Beam, Defense, Engines, Fuel, Hull, Missile, Other, Power, & Visual
+
+ETA - Eta At <Speed>
+& TRANSPORTER CONSOLE
+& CONS TRANSPORTER
+Power - Alloc <Transporters> <Tractors> <Misc>
+
+Stat - Con Stat
+SR - Sen Rep - Cont List - List Cont
+Set Sen <Type> (Types include: All, Ship, Base, Planet, Anomaly, Star)
+Det <Contact> - Trans Det
+
+Tract On|Off - Trans <On|Off>
+
+Tran*sporter Freq*uency <Integer(1 - 999.999)>
+Trans Lock/<source or dest> <Contact#|Here>
+Trans list/<s*ource or d*estination>
+Trans Targ*et/<s*ource or d*estination> <room #>
+Trans scan
+tag <person or object>
+trans unlock
+Energize
+& FIGHTER CONSOLE
+& SHUTTLE CONSOLE
+& FIGHTER/SHUTTLE CONSOLE
+& CONS FIGHTER
+& CONS SHUTTLE
+Power - Act Sys - Deact Sys - Main(M/A) <Integer(0 - 100)>
+Fuss(Aux) <Integer(0 - 100)> - Batt <Integer(0 - 100)>
+
+Eng Alloc <Helm> <Tactical> <Operations>
+Helm Alloc <Movement> <Shields> <Cloak>
+Nav Alloc <Movement> <Shields> <Cloak>
+Op Alloc <Transporter> <Tractors> <Misc>
+Sci Alloc <ECM> <ECCM> - Sen Alloc <ECM> <ECCM>
+Shi Alloc <Fore> <Star> <Aft> <Port>
+Tac Alloc <Beam> <Missile> <EW> - Weap Alloc <Beam> <Missile> <EW>
+
+Defuel <Tons> <Type> - Refuel <Ship> with <Tons> <Type>
+
+Stat - Con Stat - Beam Stat - Dam Stat - Eng Stat - Helm Stat - Miss Stat
+Nav Stat - Op Stat - Sci Stat - Tac Stat - Weap Stat - ECM - ECCM
+Ext Dam Stat on <Contact>
+
+SRS <On|Off> - LRS <On|Off> - EW <On|Off>
+SR - Sen Rep - Cont List - List Cont
+Det <Contact> - Scan/<Type> <Contact>
+Set Sen <Type> (Types include: All, Ship, Base, Planet, Anomaly, Star)
+Bor Rep - Neb Rep - Star Nearest - Star Report <Star>
+
+SCAN TYPES ARE:
+Beam, Defense, Engines, Fuel, Hull, Missile, Other, Power, & Visual
+
+Dock <Contact> - Undock - Land <Planet> - Launch - Gate <Anomaly?>
+Airlock Stat - List Pads - Pad Stat - List Ports - Port Stat
+Clamp <Port/Pad> - Unclamp <Port/Pad> - Connect/Port <Port #>
+Connect/Pad <Pad #> - Disconnect
+
+See Also: Fighter Console2, presets
+& FIGHTER CONSOLE2
+& SHUTTLE CONSOLE2
+& FIGHTER/SHUTTLE2
+& CONS FIGHTER2
+& CONS SHUTTLE2
+& CONS FIG2
+& CONS SHUT2
+& FIG2
+& SHUT2
+Tractor <On|Off> - Trac Freq <Integer(1 - 999.999)>
+Trac Lock <Contact> - Trac Unlock
+
+Tran*sporter Freq*uency <Integer(1 - 999.999)>
+Trans Lock/<source or dest> <Contact#|Here>
+Trans list/<s*ource or d*estination>
+Trans Targ*et/<s*ource or d*estination> <room #>
+Trans scan
+tag <person or object>
+
+Roll <Integer(-360 to 360)> - Pitch <Integer(-360 to 360)>
+Yaw <Integer(-360 to 360)> - Evade <Contact> - Inter <Contact> - Para <Contact>
+Layin <X,Y,Z> - Set Coords <X,Y,Z> - Autop <On|Off> - Engage - Reset Coords
+
+Warp <Speed> - Imp <Speed> - Eta - Eta at <Speed>
+
+RAS - LAS - Raise <Shield> Shield - Lower <Shield> Shield
+
+Cloak <On|Off> - Cloak Freq <Integer(1 - 999.999)>
+
+Repair <System>
+
+See Also: Fighter Console3, presets
+& FIGHTER CONSOLE3
+& SHUTTLE CONSOLE3
+& FIGHTER/SHUTTLE3
+& CONS FIGHTER3
+& CONS SHUTTLE3
+& CONS FIG3
+& CONS SHUT3
+& FIG3
+All Weapon <On|Off> - All Beam <On|Off> - All Miss <On|Off>
+Beam <Beam #> <On|Off> - Miss <Miss #> <On|Off>
+Beam Freq <Integer(1 - 999.999)> - Miss Freq <Integer(1 - 999.999)>
+Weap Stat - Beam Stat - Miss Stat
+
+AWL <Contact> - Snap <Contact> - All Weap Lock <Contact>
+All Beam Lock <Contact> - All Miss Lock <Contact>
+Lock Weap <Weapon #> on <Contact> - Lock Beam <Beam #> on <Contact>
+Lock Miss <Miss #> on <Contact>
+
+AWU - Unsnap - All Weap Unlock
+All Beam Unlock - All Miss Unlock
+Unlock Weap <Weap #> - Unlock Beam <Beam #> - Unlock Miss <Miss #>
+
+Fire - Fire all Beam <Beam #> - Fire all Miss <Miss #>
+Fire Beam <Beam #> - Fire Miss <Miss #>
+
+Set Fire <Mode> (Modes include: Normal, Shields, Hull, Engines, Weapons,
+                 Sensors, Reactors)
+& ENGINEERING CONSOLE
+& CONS ENGINEERING
+Power - Act Sys - Deact Sys - Refuel <Ship> with <Tons> <Type>
+Main(M/A) <Integer(0 - 100)> - Fuss(Aux) <Integer(0 - 100)>
+Batt <Integer(0 - 100)>
+
+Alloc <Helm> <Tactical> <Operations>
+Eng Alloc <Helm> <Tactical> <Operations>
+Helm Alloc <Movement> <Shields> <Cloak>
+Shi Alloc <Fore> <Star> <Aft> <Port>
+Nav Alloc <Movement> <Shields> <Cloak>
+Tac Alloc <Beam> <Miss> <EW>
+Weap Alloc <Beam> <Miss> <EW>
+Sen Alloc <ECM> <ECCM>
+Sci Alloc <ECM> <ECCM>
+Op Alloc <Transporters> <Tractor> <Misc>
+
+Stat - Con Stat - Eng Stat
+
+Shield Freq <Integer(1 - 999.999)>
+Trac Freq <Integer(1 - 999.999)>
+Tran Freq <Integer(1 - 999.999)>
+Miss Freq <Integer(1 - 999.999)>
+Beam Freq <Integer(1 - 999.999)>
+Cloak Freq <Integer(1 - 999.999)>
+
+Warp <Speed> - Imp <Speed>
+
+See Also: presets
+
+& PRESETS
+
+These commands are available in Engineering, and fighter/shuttle modes
+of the space consoles.
+
+preset store <name>
+	This command stores your current allocations to preset 
+	you specify for <name>. 
+preset list
+	Displays a list of presets currently stored for the space object
+	you are currently on.
+preset view <name>
+	Displays details of an preset allocation.
+preset load <name>
+	Loads preset allocation and applies it to your current settings.
+preset delete <name>=yes
+	***COMING SOON*** Will allow you to delete an existing allocation
+
+& NAVIGATION CONSOLE
+& HELM CONSOLE
+& HELM/NAVIGATION CONSOLE
+& CONS HELM
+& CONS NAVIGATION
+Power - Alloc <Movement> <Shields> <Cloak>
+Helm Alloc <Movement> <Shields> <Cloak>
+Nav Alloc <Movement> <Shields> <Cloak>
+Shi Alloc <Fore> <Star> <Aft> <Port>
+
+Stat - Con Stat - Nav Stat - Helm Stat
+SRS <On|Off> - LRS <On|Off>
+SR - Sen Rep - Cont List - List Cont
+Set Sen <Type> (Types include: Ship, Base, Planet, Anomaly, Star)
+Det <Contact> - Scan/<Type> <Contact>
+Bor Rep - Neb Rep - Star Nearest - Star Report <Star>
+
+SCAN TYPES ARE:
+Beam, Defense, Engines, Fuel, Hull, Missile, Other, Power, & Visual
+
+Dock <Contact> - Undock - Land <Contact> - Launch - Gate <Anomaly>
+List Pads - List Ports - Pad Stat - Port Stat - Airlock Stat
+Connect/Pad <Pad #>  - Connect/Port <Port #> -  Disconnect
+Clamp <Port/Pad> - Unclamp <Port/Pad>
+
+Roll <Integer(-360 to 360)> - Pitch <Integer(-360 to 360)>
+Yaw <Integer(-360 to 360)> - Course <?>
+Evade <Contact> - Inter <Contact> - Para <Contact> - Layin <x y z>
+Set Coord <x y z> - Reset Coord
+Autop On|Off - Engage 
+
+Warp <Speed> - Imp <Speed> - Eta - Eta at <Speed>
+
+Tran <On|Off> - Trac <On|Off>
+
+Shield Freq <Integer(1 - 999.999)>
+RAS - LAS
+Raise <Shield> Shield - Lower <Shield> Shield
+Cloak <On|Off> - Cloak Freq <Integer(1 - 999.999)>
+& SENSOR FLAGS
+On the Sensor Report you'll notice a 'Flags' column. Heres what those letters
+mean. Thanks to Wayne@Paradox and the players for helping me out.
+
+a - Accelerating                   A - Systems Activated
+b - Beams Armed                    B - Beams Locked On You
+c - Connected                      C - Cloaked
+d - Docked
+e - Reactors Running               E - EW On
+l - Landed
+m - Missiles Armed                 M - Missiles Locked On You
+                                   S - Shields Raised
+t - Being Tractored                T - Tractoring a Contact
+                                   X - Tee-hee-hee. Crippled!
+& TACTICAL/WEAPONS CONSOLE
+& TACTICAL CONSOLE
+& WEAPONS CONSOLE
+& CONS WEAPONS
+& CONS TACTICAL
+& CONS WEAP
+& CONS TAC
+& TAC
+& WEAP
+Power - Alloc <Beam> <Missile> <EW> - Sen Alloc <ECM> <ECCM>
+Tac Alloc <Beam> <Missile> <EW> - Weap Alloc <Beam> <Missile> <EW>
+
+Stat - Con Stat - Tac Stat - Beam  Stat - Miss Stat - Weap Stat
+SRS <On|Off> - LRS <On|Off>
+SR - Sen Rep - Cont List - List Cont
+Set Sen <Type> (Types include: Ship, Base, Planet, Anomaly, Star)
+Det <Contact> - Scan/<Type> <Contact>
+Bor Rep - Neb Rep - Star Nearest - Star Report <Star>
+
+SCAN TYPES ARE:
+Beam, Defense, Engines, Fuel, Hull, Missile, Other, Power, & Visual
+
+See Also: Tactical/Weapons Console2
+& TACTICAL/WEAPONS CONSOLE2
+& TACTICAL CONSOLE2
+& WEAPONS CONSOLE2
+& CONS WEAPONS2
+& CONS TACTICAL2
+& CONS TAC2
+& CONS WEAP2
+& TAC2
+& WEAP2
+All Weapon <On|Off> - All Beam <On|Off> - All Miss <On|Off>
+Beam <Beam #> <On|Off> - Miss <Miss #> On|Off
+Beam Freq <Integer(1 - 999.999)> - Miss Freq <Integer(1 - 999.999)>
+Weap Stat - Beam Stat - Miss Stat
+
+AWL <Contact> - Snap <Contact> - All Weap Lock <Contact>
+All Beam Lock <Contact> - All Miss Lock <Contact>
+Lock Weap <Weapon #> on <Contact> - Lock Beam <Beam #> on <Contact>
+Lock Miss <Miss #> on <Contact>
+
+AWU - Unsnap - All Weap Unlock
+All Beam Unlock - All Miss Unlock
+Unlock Weap <Weap #> - Unlock Beam <Beam #> - Unlock Miss <Miss #>
+
+Fire - Fire all Beam <Beam #> - Fire all Miss <Miss #>
+Fire Beam <Beam #> - Fire Miss <Miss #>
+
+Set Fire <Mode> (Modes include: Normal, Shields, Hull, Engines, Weapons,
+                 Sensors, Reactors)
+
+&Security
+&Security List
+&Sweep
+
+The space-object-based security system is dependant on security lists
+located on the space object.  There are five lists:  Prisoner, Guest,
+Crew, Security, and Command.
+
+The following commands are available on the Security Mode consoles:
+
+security list - This command is available in Security or Monitor modes
+   and simply lists who is on the security lists for a space object.
+
+security add <person> to <list> - Available in security mode only.
+   This command adds a person to the specified security list. Note
+   that you can only add a person up to your own level. So you can't
+   add a person to the Command level if you are only on the Crew level,
+   yourself. This command also functions as the command to move a person
+   from one list to another, providing that they originate at or below
+   your own level. This means it's possible for you to add yourself to
+   the prisoner list! Further, the person you are adding must be present
+   on the space object for this to work.
+
+security remove <person> - This command removes a person from the
+   security lists, providing they're already on it. You can only remove
+   people who are at or below your own level.
+
+security sweep - This command allows you to perform an internal scan
+   of the space object.  Beings must be registered on a security list
+   and be carrying a communicator in order for positive identification
+   to be made.  If either of those two conditions are not met, you
+   will only be able to see the race of the person located.
+
+Commands not requiring a console:
+
+locate <person> - Locates a person on a space object. Note that you
+   have to be a Guest-or-better on the security lists, and the person
+   you're locating must ALSO be on a security list (as well as have a
+   communicator) in order for the system to look for them. This command
+   is available anywhere on a space object.
+
