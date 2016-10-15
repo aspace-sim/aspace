@@ -18,7 +18,7 @@ void do_console_notify (int x, dbref parent1, dbref parent2, dbref parent3, cons
 
 	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
 	if (a != NULL) {
-		q = safe_atr_value(a);
+		q = safe_atr_value(a, "space.console.notify");
 		pq = trim_space_sep(q, ' ');
 		while (pq) {
 			console = parse_dbref(split_token(&pq, ' '));
@@ -39,7 +39,7 @@ void do_console_notify (int x, dbref parent1, dbref parent2, dbref parent3, cons
 				}
 			}
 		}
-		free(q);
+		mush_free(q, "space.console.notify");
 	}
 	return;
 }
@@ -59,7 +59,7 @@ void do_all_console_notify (int x, const char *msg)
 
 	a = atr_get(sdb[x].object, CONSOLE_ATTR_NAME);
 	if (a != NULL) {
-		q = safe_atr_value(a);
+		q = safe_atr_value(a, "space.console.notify.all");
 		pq = trim_space_sep(q, ' ');
 		if (*pq) {
 			while (pq) {
@@ -75,7 +75,7 @@ void do_all_console_notify (int x, const char *msg)
 				}
 			}
 		}
-		free(q);
+		mush_free(q, "space.console.notify.all");
 	}
 	return;
 }
@@ -95,7 +95,7 @@ void do_ship_notify(int x, const char *msg)
 
 	a = atr_get(sdb[x].object, "ROOMS");
 	if (a != NULL) {
-		q = safe_atr_value(a);
+		q = safe_atr_value(a, "space.ship.notify");
 		pq = trim_space_sep(q, ' ');
 		if (*pq) {
 			while (pq) {
@@ -107,7 +107,7 @@ void do_ship_notify(int x, const char *msg)
 				}
 			}
 		}
-		free(q);
+		mush_free(q, "space.ship.notify");
 	}
 	return;
 }
@@ -133,7 +133,7 @@ void do_space_notify_one (int x, dbref parent1, dbref parent2, dbref parent3, co
 							if (contact != SENSOR_FAIL) {
 								a = atr_get(sdb[i].object, CONSOLE_ATTR_NAME);
 								if (a != NULL) {
-									q = safe_atr_value(a);
+									q = safe_atr_value(a, "space.notify.one");
 									pq = trim_space_sep(q, ' ');
 									if (*pq) {
 										while (pq) {
@@ -160,7 +160,7 @@ void do_space_notify_one (int x, dbref parent1, dbref parent2, dbref parent3, co
 											}
 										}
 									}
-									free(q);
+									mush_free(q, "space.notify.one");
 								}
 							}
 						}
@@ -194,7 +194,7 @@ void do_space_notify_two (int n1, int n2, dbref parent1, dbref parent2, dbref pa
 							if (contact1 != SENSOR_FAIL || contact2 != SENSOR_FAIL) {
 								a = atr_get(sdb[i].object, CONSOLE_ATTR_NAME);
 								if (a != NULL) {
-									q = safe_atr_value(a);
+									q = safe_atr_value(a, "space.notify.two");
 									pq = trim_space_sep(q, ' ');
 									if (*pq) {
 										while (pq) {
@@ -221,7 +221,7 @@ void do_space_notify_two (int n1, int n2, dbref parent1, dbref parent2, dbref pa
 											}
 										}
 									}
-									free(q);
+									mush_free(q, "space.notify.two");
 								}
 							}
 						}

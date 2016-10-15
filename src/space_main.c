@@ -1134,7 +1134,7 @@ FUNCTION(local_fun_inrange)
 
 						if (a != NULL)
 						{
-							relay = safe_atr_value(a);
+							relay = safe_atr_value(a, "space.relay");
 
 							if(the_range <= q && relay != NULL)
 							{
@@ -1152,6 +1152,7 @@ FUNCTION(local_fun_inrange)
                                     safe_str(" ", buff, bp);
 								}
 							}
+							mush_free(relay, "space.relay");
 						}
 						a = NULL;
 					}
@@ -1231,7 +1232,7 @@ void console_notify_all(int x, char *msg) {
 	
 	if (a && *AL_STR(a)) { // Attribute exists AND isn't empty
 		show_message = (char *) mush_strdup(msg, "console_message");
-		q = safe_atr_value(a);
+		q = safe_atr_value(a, "space.consoles.all");
 		pq = trim_space_sep(q, ' ');
 		while (pq) {
 			console = parse_dbref(split_token(&pq, ' '));
@@ -1247,7 +1248,7 @@ void console_notify_all(int x, char *msg) {
 				}
 			}
 		}
-		free(q);
+		mush_free(q, "space.consoles.all");
 		mush_free(show_message, "console_message");
 	} else {
 		write_spacelog(GOD, sdb[x].object, tprintf("CONSOLE_NOTIFY_ALL: Missing or Empty %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));
@@ -1266,7 +1267,7 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 	
 	if (a && *AL_STR(a)) { // Attribute exists AND isn't empty
 		show_message = (char *) mush_strdup(msg, "console_message");
-		q = safe_atr_value(a);
+		q = safe_atr_value(a, "space.consoles.some");
 		pq = trim_space_sep(q, ' ');
 		while (pq) {
 			console = parse_dbref(split_token(&pq, ' '));
@@ -1300,7 +1301,7 @@ void console_notify(int x, char *msg, int numargs, char **args) {
 				}		
 			}
 		}
-		free(q);
+		mush_free(q, "space.consoles.some");
 		mush_free(show_message, "console_message");
 	} else {
 		write_spacelog(GOD, sdb[x].object, tprintf("CONSOLE_NOTIFY: Missing or Empty %s ATTRIBUTE on #%d (%d)",CONSOLE_ATTR_NAME, sdb[x].object, x));

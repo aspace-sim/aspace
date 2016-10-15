@@ -1181,10 +1181,10 @@ int do_scanner_report (int a, char *s, dbref enactor)
 			case 9:
 				d = atr_get(sdb[x].object, "DESCRIBE");
 				if (d) {
-					sp = sbuf = safe_atr_value(d);
+					sp = sbuf = safe_atr_value(d, "space.describe");
 					process_expression(desc, &dp, &sp, sdb[x].object, enactor, enactor,
 		    			 PE_DEFAULT, PT_DEFAULT, NULL);
-		    		free(sbuf);
+		    		mush_free(sbuf, "space.describe");
 		    		*dp = '\0';
 					strncat(buffer, desc, sizeof(buffer) - 1);
 					strncat(buffer, "\n", sizeof(buffer) - 1);
