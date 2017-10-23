@@ -106,7 +106,7 @@ typedef char array_t[MAX_LIST][MAX_NAME+1];
 
 #if ( NUMVERSION > 1008003007 )
 
-  #define get_random_long(x,y) get_random32(x,y)
+  #define get_random_long(x,y) get_random_u32(x,y)
 
 #endif
 
