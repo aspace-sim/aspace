@@ -1365,7 +1365,7 @@ void setupAspaceFunctions()
 {
 	function_add("CONSOLENOTIFYALL", local_fun_consolenotifyall, 2, 2, FN_ADMIN);
 	function_add("CONSOLENOTIFY", local_fun_consolenotify, 3, INT_MAX, FN_ADMIN);
-	function_add("BORDER", local_fun_border, 1, 7, FN_ADMIN);
+	function_add("BORDER", local_fun_border, 1, 8, FN_ADMIN);
 	function_add((char *) "CDB", local_fun_cdb, 1, 5, FN_REG);
 	function_add("INRANGE", local_fun_inrange, 2, 5, FN_REG);
 	function_add("COORDS", local_fun_coords, 2, 2, FN_REG);

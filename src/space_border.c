@@ -33,7 +33,7 @@ void addNewBorder(dbref executor, int border_number, const char* name, int space
 	
 	if( im_insert(border_map, border_number, newBorder )) {
 		safe_str("New Border Created.", buff, bp);
-    write_spacelog(executor, executor, tprintf("Border deleted: %s", newBorder->name));
+    write_spacelog(executor, executor, tprintf("Border added: %s", newBorder->name));
 		int i = 0;
     		for (i = MIN_SPACE_OBJECTS; i <= max_space_objects; ++i) 
       			if (sdb[i].status.active && sdb[i].structure.type)
@@ -92,7 +92,7 @@ void list_borders(char *buff, char **bp)
 	int first = 0;
 	int index = 0;
         	
-       for (index = 1; index <= im_count(border_map); index++) {
+  for (index = 1; index <= im_count(border_map); index++) {
 		if (first) {
 			safe_str("~", buff, bp);
 		}
