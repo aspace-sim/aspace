@@ -235,7 +235,6 @@ void contact_line_bot (int contact, char *buff, char **bp)
 
 void do_sensor_contacts_bot (char *a, dbref enactor, char *buff, char **bp)
 {
-	static char buffer[BUFFER_LEN];
 	register int contact = contact2slist(n, atoi(a));
 	int ctype = 0, first = 0;
 

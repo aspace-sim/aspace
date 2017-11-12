@@ -338,11 +338,12 @@ typedef struct _space_border_info_ {
 typedef struct _aspace_border_info {
 	const char *name;
 	int empire_id;
+    int space;
 	double radius;
 	double x;
 	double y;
 	double z;
-} aspace_borders;
+} space_border;
 
 struct allocate_t {
 	 int    version;
@@ -662,7 +663,7 @@ extern char* output_shields_raw();
 
 /* from space_border.c - not everything yet */
 extern void free_borderinfo(void *ptr);
-extern void addNewBorder(dbref executor, int border_number, const char* name, double radius, double x, double y, double z, char *buff, char **bp);
+extern void addNewBorder(dbref executor, int border_number, const char* name, int space, double radius, double x, double y, double z, char *buff, char **bp);
 extern void deleteBorder(dbref executor, int border, char *buff, char **bp);
 extern void list_borders(char *buff, char **bp);
 extern void edit_border(dbref executor, int border_id, const char* setting, const char* new_value, char *buff, char **bp);
@@ -843,7 +844,7 @@ extern void alert_yaw (int x);
 extern void alert_pitch (int x);
 extern void alert_roll (int x);
 extern void alert_max_repair (int x);
-extern void alert_border_cross (int x, int a, int way);
+extern void alert_border_cross (int x, int way);
 extern void alert_tract_unlock (int n1, int n2, dbref enactor);
 extern void alert_tract_lock (int n1, int n2, dbref enactor);
 extern void alert_tract_attempt (int n1, int n2, dbref enactor);

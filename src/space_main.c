@@ -1189,11 +1189,11 @@ FUNCTION(local_fun_border)
 	
 	switch (args[0][0]) {
 		case 'a': 
-				if (nargs != 6) {
-					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 5", nargs);
+				if (nargs != 7) {
+					safe_format(buff, bp, "#-1 INVALID NUMBER OF ARGUMENTS %d. REQUIRES 6", nargs);
 					return;
 				}
-				addNewBorder(executor, parse_integer(args[1]), args[2], parse_number(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6]), buff, bp); 
+				addNewBorder(executor, parse_integer(args[1]), args[2], parse_integer(args[3]), parse_number(args[4]), parse_number(args[5]), parse_number(args[6]), parse_number(args[7]), buff, bp); 
 			break;
 		case 'd': 
 				if (nargs != 1) {

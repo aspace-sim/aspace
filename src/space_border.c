@@ -8,23 +8,24 @@
 /* New functions for dealing with the new border system */
 
 void free_borderinfo(void *ptr) {
-  aspace_borders *border = (aspace_borders *) ptr;
+  space_border *border = (space_border *) ptr;
   mush_free(border->name, "spaceborder_name");
   mush_free(border, "border_info");
 }
 
-void addNewBorder(dbref executor, int border_number, const char* name, double radius, double x, double y, double z, char *buff, char **bp)
+void addNewBorder(dbref executor, int border_number, const char* name, int space, double radius, double x, double y, double z, char *buff, char **bp)
 {
-	aspace_borders* newBorder;
+	space_border* newBorder;
 	if (border_number == 0  || im_exists(border_map, border_number)) {
 		safe_str("#-1 BORDER ALREADY EXISTS", buff, bp);
 		return;
 	}
 		
-	newBorder = mush_malloc(sizeof(aspace_borders), "border_info");
+	newBorder = mush_malloc(sizeof(space_border), "border_info");
 	
 	newBorder->name = mush_strdup(name, "spaceborder_name");
 	newBorder->empire_id = 0;
+  newBorder->space = space;
 	newBorder->radius = radius;
 	newBorder->x = x;
 	newBorder->y = y;
@@ -32,6 +33,7 @@ void addNewBorder(dbref executor, int border_number, const char* name, double ra
 	
 	if( im_insert(border_map, border_number, newBorder )) {
 		safe_str("New Border Created.", buff, bp);
+    write_spacelog(executor, executor, tprintf("Border deleted: %s", newBorder->name));
 		int i = 0;
     		for (i = MIN_SPACE_OBJECTS; i <= max_space_objects; ++i) 
       			if (sdb[i].status.active && sdb[i].structure.type)
@@ -44,7 +46,7 @@ void addNewBorder(dbref executor, int border_number, const char* name, double ra
 }
 void deleteBorder(dbref executor, int border, char *buff, char **bp)
 {
-	aspace_borders *theBorder;
+	space_border *theBorder;
 
 	if (!border || border == 0) {
 		safe_str("#-1 BORDER NOT SUPPLIED", buff, bp);
@@ -67,14 +69,15 @@ void deleteBorder(dbref executor, int border, char *buff, char **bp)
 	}
 }
 
-char *border_line_bot (int border_id, aspace_borders *sbi)
+char *border_line_bot (int border_id, space_border *sbi)
 {
 	static char buffer[1000];
 
 	if (sbi != NULL) {
-		snprintf(buffer, sizeof(buffer), "%d|%s|%.1f|%.1f|%.1f|%.1f",
+		snprintf(buffer, sizeof(buffer), "%d|%s|%d|%.1f|%.1f|%.1f|%.1f",
 			border_id,
 			sbi->name,
+      sbi->space,
 			sbi->radius,
 			sbi->x,
 			sbi->y,
@@ -101,7 +104,7 @@ void list_borders(char *buff, char **bp)
 
 void edit_border(dbref executor, int border_id, const char* setting, const char* new_value, char *buff, char **bp)
 {
-	aspace_borders *si = NULL;
+	space_border *si = NULL;
 
 	si = im_find(border_map, border_id);
 	
@@ -112,22 +115,32 @@ void edit_border(dbref executor, int border_id, const char* setting, const char*
 				mush_free(si->name, "spaceborder_name");
 				si->name = mush_strdup(new_value, "spaceborder_name");
 				safe_format(buff, bp, "Border Name changed for border %u to %s", border_id, si->name);
+        write_spacelog(executor, executor, tprintf("Border modified: %s", si->name));
 				break;
 			case 'r': /* Radius */
 				si->radius = parse_number(new_value);
 				safe_format(buff, bp, "Border Radius changed for border %u to %f", border_id, si->radius);
+        write_spacelog(executor, executor, tprintf("Border modified: %s", si->name));
 				break;
+      case 's': /* Space */
+        si->space = parse_integer(new_value);
+        safe_format(buff, bp, "Border Space changed for border %u to %d", border_id, si->space);
+        write_spacelog(executor, executor, tprintf("Border modified: %s", si->name));
+        break;
 			case 'x': /* X Coordinate of Centre */
 				si->x = parse_number(new_value);
 				safe_format(buff, bp, "Border CoordX changed for border %u to %f", border_id, si->x);
+        write_spacelog(executor, executor, tprintf("Border modified: %s", si->name));
 				break;
 			case 'y': /* Y Coordinate of Centre */
 				si->y = parse_number(new_value);
 				safe_format(buff, bp, "Border CoordY changed for border %u to %f", border_id, si->y);
+        write_spacelog(executor, executor, tprintf("Border modified: %s", si->name));
 				break;
 			case 'z': /* Z Coordinate of Centre */
 				si->z = parse_number(new_value);
 				safe_format(buff, bp, "Border CoordZ changed for border %u to %f", border_id, si->z);
+        write_spacelog(executor, executor, tprintf("Border modified: %s", si->name));
 				break;
 			default: safe_str("#-1 BORDER SETTING NOT FOUND.", buff, bp);
 				break;
@@ -140,7 +153,7 @@ void edit_border(dbref executor, int border_id, const char* setting, const char*
 /* Used for returning the empire name that the space-object is in */
 char *unparse_empire (int x)
 {
-	aspace_borders *si;
+	space_border *si;
 	if (sdb[x].move.empire == 0) {
 		return (char *)"Neutral";
 	}
@@ -170,18 +183,42 @@ void alert_exit_empire (int x)
 	return;
 }
 
+double sdb2true_speed (int x)
+{
+    double v1, v2;
+
+    v1 = fabs(sdb[x].move.out);
+
+    if (sdb[x].status.tractored) {
+      v2 = fabs(sdb[sdb[x].status.tractored].move.out);
+      v1 = (v1 > v2) ? v1 : v2;
+    } else if (sdb[x].status.tractoring) {      
+      v2 = fabs(sdb[sdb[x].status.tractoring].move.out);
+      v1 = (v1 > v2) ? v1 : v2;
+    }
+
+    return v1;
+}
+
 /*
  * Alerts any space-object that is in range of the inbound or outbound border crossing
  */
-void alert_border_cross (int x, int a, int way)
+void alert_border_cross (int x, int way)
 {
 	register int i;
 
+  // Only alert if we're actually moving. Otherwise this is a fluke of the dynamic borders, or Admin placing objects.
+  if (sdb2true_speed(x) == 0.0)
+    return;
+  
+  if (x <= 0)
+    return;
+    
 	if (sdb[x].move.out != 0.0)
 		for (i = MIN_SPACE_OBJECTS; i <= max_space_objects; ++i)
 			if (sdb[i].status.active)
 				 if (sdb[i].space == sdb[x].space)
-					if (sdb[i].move.empire == a)
+					if (sdb[i].move.empire == sdb[x].move.empire)
 						if (i != x)
 							if (sdb2range(x, i) < MAX_NOTIFICATION_DISTANCE) {
 								if (way) {
@@ -207,48 +244,56 @@ void alert_border_cross (int x, int a, int way)
 void up_empire (int x)
 {
   double dx, dy, dz;
-  int i = 0, empire = 0;
-  aspace_borders *border;
-  double r = MAX_DOUBLE; 
-  int rref = -1;
-
-  for (i = 0 ; i < im_count(border_map) ; ++i) {
-    border = im_find(border_map,i);
-    if (border) {
+  register int i = 0;
+  space_border *border;
+  double best_range = MAX_DOUBLE; 
+  double best_empire = 0;
+  
+  // This needs to be <= because we don't start at 0.
+  for (i = 1 ; i <= im_count(border_map); ++i) {
+    border = im_find(border_map, i);
+    if (border) { 
+    
+    // A border space of '0' indicates it's visible in all universes.
+      if (border->space != 0 && (border->space != sdb[x].space))
+        continue;
+      
       dx = (border->x - sdb[x].coords.x) / PARSEC;
       dy = (border->y - sdb[x].coords.y) / PARSEC;
       dz = (border->z - sdb[x].coords.z) / PARSEC;
-      double rr = (dx * dx + dy * dy + dz * dz);
-      if (rr  < (border->radius * border->radius)) {
-        empire = i;
-        if (rr = fabs(-rr - (border->radius * border->radius))  < r ) {
-          rref = i;
-          r = rr;
+      double range = (dx * dx + dy * dy + dz * dz);
+      double inside_range = fabs(range - (border->radius * border->radius));
+      
+      if (range <= (border->radius * border->radius)) { // In radius
+        if (best_empire <=0 || inside_range < best_range ) { // Closer to the center of this than previous best
+          best_range = range;
+          best_empire = i;
         }
      }
     }
   }
-  if (rref > 0) 
-    empire = rref; // 'Most inside' of border
   
-  if (sdb[x].move.empire != empire) {
-    
+  if (sdb[x].move.empire != best_empire) {
     if (sdb[x].move.empire != 0) {
-      aspace_borders *ptr = im_find(border_map, sdb[x].move.empire);
-      if (ptr) { // We check this incase we are inside a border that no longer exists, just exit it silently.
+      space_border *ptr = im_find(border_map, sdb[x].move.empire);
+      space_border *optr = im_find(border_map, best_empire);
+      int same = 0;
+      if (ptr && optr && !strcasecmp(ptr->name, optr->name))
+        same = 1;
+      if (ptr && !same) { // Exit silently if old border doesnt exist, or if the name matches the new border
         alert_exit_empire(x);
-        if (get_random_long(1,100) < ((int) (sdb[x].sensor.lrs_signature
+        if ((int)get_random_u32(1,100) < ((int) (sdb[x].sensor.lrs_signature
             * sdb[x].sensor.visibility * 100.0))) {
-          alert_border_cross (x,sdb[x].move.empire, 0);
+          alert_border_cross (x, 0);
         }
       }
     }
-    sdb[x].move.empire = empire;
+    sdb[x].move.empire = best_empire;
     if (sdb[x].move.empire != 0) {
       alert_enter_empire(x);
-      if (get_random_long(1,100) < ((int) (sdb[x].sensor.lrs_signature
+      if ((int)get_random_u32(1,100) < ((int) (sdb[x].sensor.lrs_signature
        * sdb[x].sensor.visibility * 100.0))) {
-        alert_border_cross (x, sdb[x].move.empire, 1);
+        alert_border_cross (x, 1);
       }
     }
   }
@@ -263,7 +308,7 @@ int do_border_report (dbref enactor)
 {
 	static char buffer[BUFFER_LEN];
 	int index = 0;
-	aspace_borders *sbi;
+	space_border *sbi;
 	
 	double range;
 
@@ -282,8 +327,9 @@ int do_border_report (dbref enactor)
 		for (index = 1; index <= im_count(border_map); index++)
 		{
 			sbi = im_find(border_map, index);
-		
-			if (sbi != NULL) {
+      if (sbi != NULL) {
+        if (sbi->space != sdb[n].space)
+          continue;
 				range = xyz2range(sdb[n].coords.x, sdb[n].coords.y, sdb[n].coords.z, sbi->x, sbi->y, sbi->z) / PARSEC;
 				if (fabs(range - sbi->radius) >= 100.0)
 					continue;

@@ -121,42 +121,66 @@ int do_space_db_read (dbref ship, dbref executor)
 		mush_free(array, "arrayarray");
 		return 0;
 	}
-
-	if (result != ALLOCATE_DATA_NUMBER) {
+  if (result == 19) { // older allocate attribute 
+  	result += convert_long(array[0], 0, &sdb[x].alloc.version);
+	  result += convert_double(array[1], 0.0, &sdb[x].alloc.helm);
+	  result += convert_double(array[2], 0.0, &sdb[x].alloc.tactical);
+	  result += convert_double(array[3], 0.0, &sdb[x].alloc.operations);
+	  result += convert_double(array[4], 0.0, &sdb[x].alloc.movement);
+	  result += convert_double(array[5], 0.0, &sdb[x].alloc.shields);
+	  result += convert_double(array[6], 0.0, &sdb[x].alloc.shield[0]);
+	  result += convert_double(array[7], 0.0, &sdb[x].alloc.shield[1]);
+	  result += convert_double(array[8], 0.0, &sdb[x].alloc.shield[2]);
+	  result += convert_double(array[9], 0.0, &sdb[x].alloc.shield[3]);
+    sdb[x].alloc.shield[4] = sdb[x].alloc.shield[0];
+	  sdb[x].alloc.shield[5] = sdb[x].alloc.shield[0];
+	  result += convert_double(array[10], 0.0, &sdb[x].alloc.cloak);
+	  result += convert_double(array[11], 0.0, &sdb[x].alloc.beams);
+	  result += convert_double(array[12], 0.0, &sdb[x].alloc.missiles);
+	  result += convert_double(array[13], 0.0, &sdb[x].alloc.sensors);
+	  result += convert_double(array[14], 0.0, &sdb[x].alloc.ecm);
+	  result += convert_double(array[15], 0.0, &sdb[x].alloc.eccm);
+	  result += convert_double(array[16], 0.0, &sdb[x].alloc.transporters);
+	  result += convert_double(array[17], 0.0, &sdb[x].alloc.tractors);
+	  result += convert_double(array[18], 0.0, &sdb[x].alloc.miscellaneous);
+	  mush_free(array, "arrayarray");
+    
+  } else if (result != ALLOCATE_DATA_NUMBER) {
 		write_spacelog(executor, ship, "READ: Unable to Crack ALLOCATE Attribute Format.");
 		mush_free(array, "arrayarray");
 		return 0;
     }
-
-	result += convert_long(array[0], 0, &sdb[x].alloc.version);
-	result += convert_double(array[1], 0.0, &sdb[x].alloc.helm);
-	result += convert_double(array[2], 0.0, &sdb[x].alloc.tactical);
-	result += convert_double(array[3], 0.0, &sdb[x].alloc.operations);
-	result += convert_double(array[4], 0.0, &sdb[x].alloc.movement);
-	result += convert_double(array[5], 0.0, &sdb[x].alloc.shields);
-	result += convert_double(array[6], 0.0, &sdb[x].alloc.shield[0]);
-	result += convert_double(array[7], 0.0, &sdb[x].alloc.shield[1]);
-	result += convert_double(array[8], 0.0, &sdb[x].alloc.shield[2]);
-	result += convert_double(array[9], 0.0, &sdb[x].alloc.shield[3]);
-	result += convert_double(array[10], 0.0, &sdb[x].alloc.shield[4]);
-	result += convert_double(array[11], 0.0, &sdb[x].alloc.shield[5]);
-	result += convert_double(array[12], 0.0, &sdb[x].alloc.cloak);
-	result += convert_double(array[13], 0.0, &sdb[x].alloc.beams);
-	result += convert_double(array[14], 0.0, &sdb[x].alloc.missiles);
-	result += convert_double(array[15], 0.0, &sdb[x].alloc.sensors);
-	result += convert_double(array[16], 0.0, &sdb[x].alloc.ecm);
-	result += convert_double(array[17], 0.0, &sdb[x].alloc.eccm);
-	result += convert_double(array[18], 0.0, &sdb[x].alloc.transporters);
-	result += convert_double(array[19], 0.0, &sdb[x].alloc.tractors);
-	result += convert_double(array[20], 0.0, &sdb[x].alloc.miscellaneous);
-	mush_free(array, "arrayarray");
-	
+  else {
+  	result += convert_long(array[0], 0, &sdb[x].alloc.version);
+  	result += convert_double(array[1], 0.0, &sdb[x].alloc.helm);
+  	result += convert_double(array[2], 0.0, &sdb[x].alloc.tactical);
+  	result += convert_double(array[3], 0.0, &sdb[x].alloc.operations);
+  	result += convert_double(array[4], 0.0, &sdb[x].alloc.movement);
+  	result += convert_double(array[5], 0.0, &sdb[x].alloc.shields);
+  	result += convert_double(array[6], 0.0, &sdb[x].alloc.shield[0]);
+  	result += convert_double(array[7], 0.0, &sdb[x].alloc.shield[1]);
+  	result += convert_double(array[8], 0.0, &sdb[x].alloc.shield[2]);
+	  result += convert_double(array[9], 0.0, &sdb[x].alloc.shield[3]);
+    result += convert_double(array[10], 0.0, &sdb[x].alloc.shield[4]);
+	  result += convert_double(array[11], 0.0, &sdb[x].alloc.shield[5]);
+	  result += convert_double(array[12], 0.0, &sdb[x].alloc.cloak);
+	  result += convert_double(array[13], 0.0, &sdb[x].alloc.beams);
+	  result += convert_double(array[14], 0.0, &sdb[x].alloc.missiles);
+	  result += convert_double(array[15], 0.0, &sdb[x].alloc.sensors);
+	  result += convert_double(array[16], 0.0, &sdb[x].alloc.ecm);
+  	result += convert_double(array[17], 0.0, &sdb[x].alloc.eccm);
+	  result += convert_double(array[18], 0.0, &sdb[x].alloc.transporters);
+	  result += convert_double(array[19], 0.0, &sdb[x].alloc.tractors);
+	  result += convert_double(array[20], 0.0, &sdb[x].alloc.miscellaneous);
+	  mush_free(array, "arrayarray");
+	}
+  
 	if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Convert ALLOCATE Attribute.");
 		return 0;
 	}
 
-	if (result != ALLOCATE_DATA_NUMBER) {
+	if (result != ALLOCATE_DATA_NUMBER && result != 19) {
 		write_spacelog(executor, ship, "READ: Unable to Convert ALLOCATE Attribute Format.");
 		return 0;
     }
@@ -547,9 +571,12 @@ int do_space_db_read (dbref ship, dbref executor)
 	if (sdb[x].beam.exist) {
 		a = atr_get(ship, BEAM_RECYCLE_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: Unable to Read BEAM_RECYCLE Attribute.");
-			return 0;
+			write_spacelog(executor, ship, "READ: Unable to Read BEAM_RECYCLE Attribute. Using default (30s)");
+			for (i = 0; i < sdb[x].beam.banks; ++i) {
+        sdb[x].blist.recycle[i] = 30;
+      }
 		}
+    else {
 
 		array = mush_calloc(sdb[x].beam.banks + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].beam.banks + 1, atr_value(a), ' ', 1);
@@ -575,9 +602,9 @@ int do_space_db_read (dbref ship, dbref executor)
 		if (result < sdb[x].beam.banks) {
 			write_spacelog(executor, ship, "READ: Unable to Convert BEAM_RECYCLE Attribute Format.");
 			return 0;
-		}
-	}
-
+	  	}
+  	}
+  }
 /* MISSILE */
 
 	a = atr_get(ship, MISSILE_ATTR_NAME);
@@ -954,10 +981,12 @@ int do_space_db_read (dbref ship, dbref executor)
 	if (sdb[x].missile.exist) {
 		a = atr_get(ship, MISSILE_RECYCLE_ATTR_NAME);
 		if (a == NULL) {
-			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_RECYCLE Attribute.");
-			return 0;
+			write_spacelog(executor, ship, "READ: Unable to Read MISSILE_RECYCLE Attribute. Using default (90s)");
+			for (i = 0; i < sdb[x].missile.tubes; ++i)
+        sdb[x].mlist.recycle[i] = 90;
 		}
-
+else
+{
 		array = mush_calloc(sdb[x].missile.tubes + 1, sizeof(char *), "arrayarray");
 		result = list2arr(array, sdb[x].missile.tubes + 1, atr_value(a), ' ', 1);
 
@@ -984,7 +1013,7 @@ int do_space_db_read (dbref ship, dbref executor)
 			return 0;
 		}
 	}
-
+  }
 /* ENGINE */
 
  	a = atr_get(ship, ENGINE_ATTR_NAME);
@@ -1171,12 +1200,30 @@ int do_space_db_read (dbref ship, dbref executor)
 		mush_free(array, "arrayarray");
 		return 0;
 	}
-	if (result != SHIELD_DATA_NUMBER) {
+  if (result == 12) {
+    result += convert_double(array[0], 0.0, &sdb[x].shield.ratio);
+    result += convert_long(array[1], 0, &sdb[x].shield.maximum);
+    result += convert_double(array[2], 0.0, &sdb[x].shield.freq);
+    result += convert_long(array[3], 0, &sdb[x].shield.exist);
+    result += convert_long(array[4], 0, &sdb[x].shield.active[0]);
+    result += convert_long(array[5], 0, &sdb[x].shield.active[1]);
+    result += convert_long(array[6], 0, &sdb[x].shield.active[2]);
+    result += convert_long(array[7], 0, &sdb[x].shield.active[3]);
+    sdb[x].shield.active[4] = sdb[x].shield.active[0];
+    sdb[x].shield.active[5] = sdb[x].shield.active[0];
+    result += convert_double(array[8], 0.0, &sdb[x].shield.damage[0]);
+    result += convert_double(array[9], 0.0, &sdb[x].shield.damage[1]);
+    result += convert_double(array[10], 0.0, &sdb[x].shield.damage[2]);
+    result += convert_double(array[11], 0.0, &sdb[x].shield.damage[3]);
+    sdb[x].shield.damage[4] = 1.0;
+    sdb[x].shield.damage[5] = 1.0;
+    mush_free(array, "arrayarray");
+  }
+	else if (result != SHIELD_DATA_NUMBER) {
 		write_spacelog(executor, ship, "READ: Unable to Crack SHIELD Attribute Format.");
 		mush_free(array, "arrayarray");
 		return 0;
-	}
-
+	} else {
     result += convert_double(array[0], 0.0, &sdb[x].shield.ratio);
     result += convert_long(array[1], 0, &sdb[x].shield.maximum);
     result += convert_double(array[2], 0.0, &sdb[x].shield.freq);
@@ -1193,13 +1240,15 @@ int do_space_db_read (dbref ship, dbref executor)
     result += convert_double(array[13], 0.0, &sdb[x].shield.damage[3]);
     result += convert_double(array[14], 0.0, &sdb[x].shield.damage[4]);
     result += convert_double(array[15], 0.0, &sdb[x].shield.damage[5]);
-	mush_free(array, "arrayarray");
+	  mush_free(array, "arrayarray");
+  }
+  
     if (result == 0) {
 		write_spacelog(executor, ship, "READ: Unable to Convert SHIELD Attribute.");
 		return 0;
     }
 
-    if (result != SHIELD_DATA_NUMBER) {
+    if (result != SHIELD_DATA_NUMBER && result != 12) {
 		write_spacelog(executor, ship, "READ: Unable to Convert SHIELD Attribute Format.");
 		return 0;
 	}
