@@ -3,6 +3,4 @@ aspace
 
 ASpace space simulator for the PennMUSH MU* Server
 
-* test
-* test2
-* test3
+* See the Wiki link above for instructions on how to install and setup ASpace.
