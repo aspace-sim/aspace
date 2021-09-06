@@ -512,8 +512,6 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
     static char msg[BUFFER_LEN];
     char *mp = msg;
     ATTR *a;
-	
-	PE_REGS *pe_regs = pe_regs_create(PE_REGS_ARG, "function_name");
 
 	if (!Wizard(Owner(executor))) {
 		safe_str("#-1 PERMISSION DENIED", buff, bp);
@@ -650,20 +648,6 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 					safe_str("#-1 BAD SDB NUMBER", buff, bp);
 					return;
 				}
-				for (i = 0; i < 10; i++) {
-					snprintf(ibuf1, sizeof(ibuf1), "%d", x);
-					snprintf(dbuf1, sizeof(dbuf1), "#%d", enactor);
-					snprintf(dbuf2, sizeof(dbuf2), "#%d", executor);
-					snprintf(nbuf1, sizeof(nbuf1), "%g", freq);
-					snprintf(nbuf2, sizeof(nbuf2), "%.0f", max_range);
-					
-					pe_regs_setenv(pe_regs, 0, nbuf1);
-					pe_regs_setenv(pe_regs, 1, dbuf1);
-					pe_regs_setenv(pe_regs, 2, dbuf2);
-					pe_regs_setenv(pe_regs, 4, ibuf1);
-					pe_regs_setenv(pe_regs, 6, nbuf2);
-					pe_regs_setenv(pe_regs, 8, args[3]);
-				}
 				a = atr_get(executor, ENCRYPTION_ATTR_NAME);
 				if (a == NULL) {
 					safe_str(args[4], msg, &mp);
@@ -674,77 +658,95 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				}
 				*mp = '\0';
 				for (i = MIN_COMMS_OBJECTS; i <= max_comms_objects; ++i) {
+				  PE_REGS *pe_regs;
 					if (cdb[i].object) {
 						if (freq < cdb[i].lower || freq > cdb[i].upper)
-						continue;
-					zone = Location(cdb[i].object);
-					if (GoodObject(zone)) {
-						if (Typeof(zone) != TYPE_ROOM) {
-							zone = Location(zone);
-							if (GoodObject(zone)) {
-								if (Typeof(zone) != TYPE_ROOM) {
-									zone = Location(zone);
-									if (GoodObject(zone)) {
-										if (Typeof(zone) != TYPE_ROOM) {
-											continue;
-										} else
-											zone = Zone(zone);
-									} else
-										continue;
-								} else
-									zone = Zone(zone);
-							} else
-								continue;
-						} else
-							zone = Zone(zone);
-					} else
-						continue;
-					if (!SpaceObj(zone))
-						continue;
-					a = atr_get(zone, SDB_ATTR_NAME);
-					if (a == NULL)
-						continue;
-					y = parse_integer(atr_value(a));
-					if (!GoodSDB(y))
-						continue;
-					range = sdb2range(x, y);
-					if (range > max_range)
-						continue;
-					if (!fetch_ufun_attrib(tprintf("#%d/%s", cdb[i].object, EXECUTE_ATTR_NAME), executor, &ufun, (UFUN_OBJECT | UFUN_REQUIRE_ATTR | UFUN_IGNORE_PERMS)))
-						continue;
-					snprintf(dbuf3, sizeof(dbuf3), "#%d", cdb[i].object);
-					snprintf(ibuf2, sizeof(ibuf2), "%d", y);
-					snprintf(nbuf3, sizeof(nbuf3), "%.0f", range);
-					pe_regs_setenv(pe_regs, 3, dbuf3);
-					pe_regs_setenv(pe_regs, 5, ibuf2);
-					pe_regs_setenv(pe_regs, 7, nbuf3);
-					if (e) {
-						a = atr_get(cdb[i].object, ENCRYPTION_ATTR_NAME);
-						if (a == NULL) {
-							pe_regs_setenv(pe_regs, 9, msg);
-						} else {
-							pe_regs_setenv(pe_regs, 9, space_crypt_code(atr_value(a), msg, 0));
-						} 
-					} else {
-						pe_regs_setenv(pe_regs, 9, msg);
-					}
-					call_ufun(&ufun, tbuf, executor, enactor, pe_info, pe_regs);
-					safe_str(tbuf, buff, bp);
-					pe_regs_free(pe_regs);
-					
-					safe_chr('1', buff, bp);
-					notify(executor, "transmission sent.");
-				}
+						  continue;
+  					zone = Location(cdb[i].object);
+  					if (GoodObject(zone)) {
+  						if (Typeof(zone) != TYPE_ROOM) {
+  							zone = Location(zone);
+  							if (GoodObject(zone)) {
+  								if (Typeof(zone) != TYPE_ROOM) {
+  									zone = Location(zone);
+  									if (GoodObject(zone)) {
+  										if (Typeof(zone) != TYPE_ROOM) {
+  											continue;
+  										} else
+  											zone = Zone(zone);
+  									} else
+  										continue;
+  								} else
+  									zone = Zone(zone);
+  							} else
+  								continue;
+  						} else
+  							zone = Zone(zone);
+  					} else
+  						continue;
+  					if (!SpaceObj(zone))
+  						continue;
+  					a = atr_get(zone, SDB_ATTR_NAME);
+  					if (a == NULL)
+  						continue;
+  					y = parse_integer(atr_value(a));
+  					if (!GoodSDB(y))
+  						continue;
+  					range = sdb2range(x, y);
+  					if (range > max_range)
+  						continue;
+  					if (!fetch_ufun_attrib(tprintf("#%d/%s", cdb[i].object, EXECUTE_ATTR_NAME), executor, &ufun, (UFUN_OBJECT | UFUN_REQUIRE_ATTR | UFUN_IGNORE_PERMS)))
+  						continue;
+
+  					pe_regs = pe_regs_create(PE_REGS_ARG, "function_name");
+  					snprintf(ibuf1, sizeof(ibuf1), "%d", x);
+  					snprintf(dbuf1, sizeof(dbuf1), "#%d", enactor);
+  					snprintf(dbuf2, sizeof(dbuf2), "#%d", executor);
+  					snprintf(nbuf1, sizeof(nbuf1), "%g", freq);
+  					snprintf(nbuf2, sizeof(nbuf2), "%.0f", max_range);
+  					snprintf(dbuf3, sizeof(dbuf3), "#%d", cdb[i].object);
+  					snprintf(ibuf2, sizeof(ibuf2), "%d", y);
+  					snprintf(nbuf3, sizeof(nbuf3), "%.0f", range);
+  					
+  					pe_regs_setenv(pe_regs, 0, nbuf1);
+  					pe_regs_setenv(pe_regs, 1, dbuf1);
+  					pe_regs_setenv(pe_regs, 2, dbuf2);
+  					pe_regs_setenv(pe_regs, 3, dbuf3);
+  					pe_regs_setenv(pe_regs, 4, ibuf1);
+  					pe_regs_setenv(pe_regs, 5, ibuf2);
+  					pe_regs_setenv(pe_regs, 6, nbuf2);
+  					pe_regs_setenv(pe_regs, 8, args[3]);
+  					pe_regs_setenv(pe_regs, 7, nbuf3);
+
+  					if (e) {
+  						a = atr_get(cdb[i].object, ENCRYPTION_ATTR_NAME);
+  						if (a == NULL) {
+  							pe_regs_setenv(pe_regs, 9, msg);
+  						} else {
+  							pe_regs_setenv(pe_regs, 9, space_crypt_code(atr_value(a), msg, 0));
+  						} 
+  					} else {
+  						pe_regs_setenv(pe_regs, 9, msg);
+  					}
+  					call_ufun(&ufun, tbuf, executor, enactor, pe_info, pe_regs);
+  					pe_regs_free(pe_regs);
+  					
+  				} // if(cdb[i].object)
+				} // for(cdb....)
+				
+			  safe_chr('1', buff, bp);
+  			notify(executor, "transmission sent.");
+  			
 			break;
 			default:
 				safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp);
 			break;
-		}
-	}
-	}
-
+		} //switch(args[0][0])
+	} //if Owner is Wizard
+	
 	return;
 }
+
 
 /* ------------------------------------------------------------------------ */
 
