@@ -697,25 +697,27 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
   						continue;
   					if (!fetch_ufun_attrib(tprintf("#%d/%s", cdb[i].object, EXECUTE_ATTR_NAME), executor, &ufun, (UFUN_OBJECT | UFUN_REQUIRE_ATTR | UFUN_IGNORE_PERMS)))
   						continue;
+
   					pe_regs = pe_regs_create(PE_REGS_ARG, "function_name");
   					snprintf(ibuf1, sizeof(ibuf1), "%d", x);
   					snprintf(dbuf1, sizeof(dbuf1), "#%d", enactor);
   					snprintf(dbuf2, sizeof(dbuf2), "#%d", executor);
   					snprintf(nbuf1, sizeof(nbuf1), "%g", freq);
   					snprintf(nbuf2, sizeof(nbuf2), "%.0f", max_range);
+  					snprintf(dbuf3, sizeof(dbuf3), "#%d", cdb[i].object);
+  					snprintf(ibuf2, sizeof(ibuf2), "%d", y);
+  					snprintf(nbuf3, sizeof(nbuf3), "%.0f", range);
   					
   					pe_regs_setenv(pe_regs, 0, nbuf1);
   					pe_regs_setenv(pe_regs, 1, dbuf1);
   					pe_regs_setenv(pe_regs, 2, dbuf2);
+  					pe_regs_setenv(pe_regs, 3, dbuf3);
   					pe_regs_setenv(pe_regs, 4, ibuf1);
+  					pe_regs_setenv(pe_regs, 5, ibuf2);
   					pe_regs_setenv(pe_regs, 6, nbuf2);
   					pe_regs_setenv(pe_regs, 8, args[3]);
-  					snprintf(dbuf3, sizeof(dbuf3), "#%d", cdb[i].object);
-  					snprintf(ibuf2, sizeof(ibuf2), "%d", y);
-  					snprintf(nbuf3, sizeof(nbuf3), "%.0f", range);
-  					pe_regs_setenv(pe_regs, 3, dbuf3);
-  					pe_regs_setenv(pe_regs, 5, ibuf2);
   					pe_regs_setenv(pe_regs, 7, nbuf3);
+
   					if (e) {
   						a = atr_get(cdb[i].object, ENCRYPTION_ATTR_NAME);
   						if (a == NULL) {
@@ -727,13 +729,14 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
   						pe_regs_setenv(pe_regs, 9, msg);
   					}
   					call_ufun(&ufun, tbuf, executor, enactor, pe_info, pe_regs);
-  					safe_str(tbuf, buff, bp);
   					pe_regs_free(pe_regs);
   					
-  					safe_chr('1', buff, bp);
-  					notify(executor, "transmission sent.");
   				} // if(cdb[i].object)
 				} // for(cdb....)
+				
+			  safe_chr('1', buff, bp);
+  			notify(executor, "transmission sent.");
+  			
 			break;
 			default:
 				safe_str("#-1 NO SUCH FIELD SELECTION", buff, bp);
