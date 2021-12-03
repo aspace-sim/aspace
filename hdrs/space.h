@@ -321,9 +321,9 @@ struct aspace_empire_info {
 	double z;
 };
 
-intmap *border_map;
+extern intmap *border_map;
 
-HASHTAB aspace_consoles;
+extern HASHTAB aspace_consoles;
 
 typedef struct _space_consoles {
 	char *console_name;

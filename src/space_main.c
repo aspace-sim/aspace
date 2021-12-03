@@ -5,6 +5,18 @@
 
 /* ------------------------------------------------------------------------ */
 
+intmap *border_map = NULL;
+HASHTAB aspace_consoles;
+
+struct plugin_info {
+  char *name;
+  char *author;
+  char *app_version;
+  int version_id;
+  char shortdesc[30];
+  char description[BUFFER_LEN];
+};
+
 struct pennmush_flag_info
 {
 	const char* name;
@@ -1412,29 +1424,17 @@ void setupAspacePowers()
 }
 void setupAspaceConsoles()
 {
-	if (GoodObject(CONSOLE_COMMUNICATION))
-		addConsole("console_communication", CONSOLE_COMMUNICATION);
-	if (GoodObject(CONSOLE_FIGHTER))
-		addConsole("console_fighter", CONSOLE_FIGHTER);
-	if (GoodObject(CONSOLE_TACTICAL))
-		addConsole("console_tactical", CONSOLE_TACTICAL);
-	if (GoodObject(CONSOLE_SECURITY))
-		addConsole("console_security", CONSOLE_SECURITY);
-	if (GoodObject(CONSOLE_HELM))
-		addConsole("console_helm", CONSOLE_HELM);
-	if (GoodObject(CONSOLE_ENGINEERING))
-		addConsole("console_engineering", CONSOLE_ENGINEERING);
-	if (GoodObject(CONSOLE_OPERATION))
-		addConsole("console_operation", CONSOLE_OPERATION);
-	if (GoodObject(CONSOLE_SCIENCE))
-		addConsole("console_science", CONSOLE_SCIENCE);
-	if (GoodObject(CONSOLE_DAMAGE))
-		addConsole("console_damage", CONSOLE_DAMAGE);
-	if (GoodObject(CONSOLE_TRANSPORTER))
-		addConsole("console_transporter", CONSOLE_TRANSPORTER);
-	if (GoodObject(CONSOLE_MONITOR))
-		addConsole("console_monitor", CONSOLE_MONITOR);
-	return;
+	if (GoodObject(CONSOLE_COMMUNICATION)) addConsole("console_communication", CONSOLE_COMMUNICATION);
+	if (GoodObject(CONSOLE_FIGHTER)) addConsole("console_fighter", CONSOLE_FIGHTER);
+	if (GoodObject(CONSOLE_TACTICAL)) addConsole("console_tactical", CONSOLE_TACTICAL);
+	if (GoodObject(CONSOLE_SECURITY)) addConsole("console_security", CONSOLE_SECURITY);
+	if (GoodObject(CONSOLE_HELM)) addConsole("console_helm", CONSOLE_HELM);
+	if (GoodObject(CONSOLE_ENGINEERING)) addConsole("console_engineering", CONSOLE_ENGINEERING);
+	if (GoodObject(CONSOLE_OPERATION)) addConsole("console_operation", CONSOLE_OPERATION);
+	if (GoodObject(CONSOLE_SCIENCE)) addConsole("console_science", CONSOLE_SCIENCE);
+	if (GoodObject(CONSOLE_DAMAGE)) addConsole("console_damage", CONSOLE_DAMAGE);
+	if (GoodObject(CONSOLE_TRANSPORTER)) addConsole("console_transporter", CONSOLE_TRANSPORTER);
+	if (GoodObject(CONSOLE_MONITOR)) addConsole("console_monitor", CONSOLE_MONITOR);
 }
 	
 void initSpace()
@@ -1452,3 +1452,22 @@ void initSpace()
 	(void) setupAspaceConsoles();
 }
 
+bool plugin_timer(void *data __attribute__((__unused__)))
+{
+  do_space_db_iterate();
+  /* The callback has to be set back up or it'll only run once. */
+  return false;
+}
+
+
+int plugin_init() {
+  initSpace();
+  sq_register_loop(1, plugin_timer, NULL, NULL);
+  return 1;
+}
+
+struct plugin_info p = { "ASpace Space Simulator", "Ray Herring", "1.0.0", 100000, "Simulate near real-time space", "The ability to simulate near real-time space with planets, bases, ships, etc...">
+
+struct plugin_info *get_plugin() {
+  return &p;
+}
