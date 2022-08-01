@@ -3,7 +3,7 @@
 #include "config.h"
 #include "space.h"
 
-struct db_stat_info current_state;
+struct db_stat_info aspace_current_state;
 
 /*----------------------------------------------------------------------------*/
 
