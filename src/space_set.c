@@ -23,22 +23,22 @@ int do_set_fire (int first, int last, int weapon, int mode, dbref enactor)
 	} else if (weapon < 0 || weapon > 2 || mode < 0 || mode > 6) {
 		return 0;
 	} else if (weapon == 1 && !sdb[n].beam.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no %ss.", Name(sdb[n].object), system_name[3])));
+		notify_format(enactor, ansi_red("%s has no %ss.", Name(sdb[n].object), system_name[3]));
 		return 0;
 	} else if (weapon == 2 && !sdb[n].missile.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no %ss.", Name(sdb[n].object), system_name[9])));
+		notify_format(enactor, ansi_red("%s has no %ss.", Name(sdb[n].object), system_name[9]));
 		return 0;
 	} else if (!weapon && !sdb[n].beam.exist && !sdb[n].missile.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no weapons.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no weapons.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot fire weapons while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot fire weapons while cloaked.", Name(sdb[n].object)));
 		return 0;
 	}
 
@@ -244,30 +244,30 @@ int do_set_fire (int first, int last, int weapon, int mode, dbref enactor)
 
 	if (!weapon && !is_b_load && !is_m_load) {
 		if (!is_b_active) {
-			notify(enactor, ansi_red(tprintf("No %ss are online.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss are online.", system_name[3]));
 		} else if (!is_b_lock) {
-			notify(enactor, ansi_red(tprintf("No %ss are locked.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss are locked.", system_name[3]));
 		} else if (!is_b_arm) {
-			notify(enactor, ansi_red(tprintf("No %ss are powered.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss are powered.", system_name[3]));
 		} else if (!is_b_arc) {
-			notify(enactor, ansi_red(tprintf("No %ss have targets in firing arc.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss have targets in firing arc.", system_name[3]));
 		} else if (!is_b_range) {
-			notify(enactor, ansi_red(tprintf("No %ss have targets in range.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss have targets in range.", system_name[3]));
 		} else if (!is_b_load) {
-			notify(enactor, ansi_red(tprintf("No %ss are recycled.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss are recycled.", system_name[3]));
 		}
 		if (!is_m_active) {
-			notify(enactor, ansi_red(tprintf("No %ss are online.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss are online.", system_name[9]));
 		} else if (!is_m_lock) {
-			notify(enactor, ansi_red(tprintf("No %ss are locked.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss are locked.", system_name[9]));
 		} else if (!is_m_arm) {
-			notify(enactor, ansi_red(tprintf("No %ss are powered.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss are powered.", system_name[9]));
 		} else if (!is_m_arc) {
-			notify(enactor, ansi_red(tprintf("No %ss have targets in firing arc.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss have targets in firing arc.", system_name[9]));
 		} else if (!is_m_range) {
-			notify(enactor, ansi_red(tprintf("No %ss have targets in range.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss have targets in range.", system_name[9]));
 		} else if (!is_m_load) {
-			notify(enactor, ansi_red(tprintf("No %ss are recycled.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss are recycled.", system_name[9]));
 		}
 		for (i = 0; i < sdb[n].sensor.contacts; ++i) {
 			x = sdb[n].slist.sdb[i];
@@ -286,17 +286,17 @@ int do_set_fire (int first, int last, int weapon, int mode, dbref enactor)
 		return 0;
 	} else if (weapon == 1 && !is_b_load) {
 		if (!is_b_active) {
-			notify(enactor, ansi_red(tprintf("No %ss are online.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss are online.", system_name[3]));
 		} else if (!is_b_lock) {
-			notify(enactor, ansi_red(tprintf("No %ss are locked.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss are locked.", system_name[3]));
 		} else if (!is_b_arm) {
-			notify(enactor, ansi_red(tprintf("No %ss are powered.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss are powered.", system_name[3]));
 		} else if (!is_b_arc) {
-			notify(enactor, ansi_red(tprintf("No %ss have targets in firing arc.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss have targets in firing arc.", system_name[3]));
 		} else if (!is_b_range) {
-			notify(enactor, ansi_red(tprintf("No %ss have targets in range.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss have targets in range.", system_name[3]));
 		} else if (!is_b_load) {
-			notify(enactor, ansi_red(tprintf("No %ss are recycled.", system_name[3])));
+			notify_format(enactor, ansi_red("No %ss are recycled.", system_name[3]));
 		}
 		for (i = 0; i < sdb[n].sensor.contacts; ++i) {
 			x = sdb[n].slist.sdb[i];
@@ -315,17 +315,17 @@ int do_set_fire (int first, int last, int weapon, int mode, dbref enactor)
 		return 0;
 	} else if (weapon == 2 && !is_m_load) {
 		if (!is_m_active) {
-			notify(enactor, ansi_red(tprintf("No %ss are online.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss are online.", system_name[9]));
 		} else if (!is_m_lock) {
-			notify(enactor, ansi_red(tprintf("No %ss are locked.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss are locked.", system_name[9]));
 		} else if (!is_m_arm) {
-			notify(enactor, ansi_red(tprintf("No %ss are powered.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss are powered.", system_name[9]));
 		} else if (!is_m_arc) {
-			notify(enactor, ansi_red(tprintf("No %ss have targets in firing arc.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss have targets in firing arc.", system_name[9]));
 		} else if (!is_m_range) {
-			notify(enactor, ansi_red(tprintf("No %ss have targets in range.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss have targets in range.", system_name[9]));
 		} else if (!is_m_load) {
-			notify(enactor, ansi_red(tprintf("No %ss are recycled.", system_name[9])));
+			notify_format(enactor, ansi_red("No %ss are recycled.", system_name[9]));
 		}
 		for (i = 0; i < sdb[n].sensor.contacts; ++i) {
 			x = sdb[n].slist.sdb[i];
@@ -609,7 +609,7 @@ int do_set_main_reactor (double level, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].main.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no M/A reactor.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no M/A reactor.", Name(sdb[n].object)));
 	} else if (sdb[n].main.damage <= -1.0) {
 		notify(enactor, ansi_red("M/A reactor controls are inoperative."));
 	} else if (sdb[n].fuel.antimatter <= 0.0) {
@@ -645,7 +645,7 @@ int do_set_aux_reactor (double level, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].aux.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no fusion reactor.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no fusion reactor.", Name(sdb[n].object)));
 	} else if (sdb[n].aux.damage <= -1.0) {
 		notify(enactor, ansi_red("Fusion reactor controls are inoperative."));
 	} else if (sdb[n].fuel.deuterium <= 0.0) {
@@ -677,7 +677,7 @@ int do_set_battery (double level, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].batt.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no batteries.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no batteries.", Name(sdb[n].object)));
 	} else if (sdb[n].batt.damage <= 0.0) {
 		notify(enactor, ansi_red("Batteries are inoperative."));
 	} else if (sdb[n].fuel.reserves <= 0.0) {
@@ -703,7 +703,7 @@ int do_set_lrs (int active, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].sensor.lrs_exist) {
-		notify(enactor, ansi_red(tprintf("%s has no long-range sensors.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no long-range sensors.", Name(sdb[n].object)));
 	} else if (sdb[n].sensor.lrs_damage <= 0.0) {
 		notify(enactor, ansi_red("Long-range sensors are inoperative."));
 	} else {
@@ -739,11 +739,11 @@ int do_set_srs (int active, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].sensor.srs_exist) {
-		notify(enactor, ansi_red(tprintf("%s has no short-range sensors.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no short-range sensors.", Name(sdb[n].object)));
 	} else if (sdb[n].sensor.srs_damage <= 0.0) {
 		notify(enactor, ansi_red("Short-range sensors are inoperative."));
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot use short-range sensors while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot use short-range sensors while cloaked.", Name(sdb[n].object)));
 	} else {
 		if (active) {
 			if (sdb[n].sensor.srs_active) {
@@ -777,11 +777,11 @@ int do_set_ew (int active, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].sensor.ew_exist) {
-		notify(enactor, ansi_red(tprintf("%s has no electronic warfare systems.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no electronic warfare systems.", Name(sdb[n].object)));
 	} else if (sdb[n].sensor.ew_damage <= 0.0) {
 		notify(enactor, ansi_red("Electronic warfare systems are inoperative."));
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot use electronic warfare sensors while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot use electronic warfare sensors while cloaked.", Name(sdb[n].object)));
 	} else {
 		if (active) {
 			if (sdb[n].sensor.ew_active) {
@@ -819,7 +819,7 @@ int do_set_cloak (int active, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].cloak.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no cloaking device.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no cloaking device.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].cloak.damage <= 0.0) {
 		notify(enactor, ansi_red("Cloaking device is inoperative."));
@@ -929,15 +929,15 @@ int do_set_course (double yaw, double pitch, double roll, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s cannot be maneuvered.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot be maneuvered.", Name(sdb[n].object)));
 	} else if (fabs(yaw) > 360.0 || fabs(pitch) > 360.0 || fabs(roll) > 360.0) {
-		notify(enactor, ansi_red(tprintf("That is not a valid course.")));
+		notify_format(enactor, ansi_red("That is not a valid course."));
 	} else {
 		if (sdb[n].status.autopilot) {
 			sdb[n].status.autopilot = 0;
@@ -974,15 +974,15 @@ int do_set_yaw (double yaw, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s cannot be maneuvered.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot be maneuvered.", Name(sdb[n].object)));
 	} else if (fabs(yaw) > 360.0) {
-		notify(enactor, ansi_red(tprintf("That is not a valid yaw value.")));
+		notify_format(enactor, ansi_red("That is not a valid yaw value."));
 	} else {
 		if (sdb[n].status.autopilot) {
 			sdb[n].status.autopilot = 0;
@@ -1007,15 +1007,15 @@ int do_set_pitch (double pitch, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s cannot be maneuvered.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot be maneuvered.", Name(sdb[n].object)));
 	} else if (fabs(pitch) > 360.0) {
-		notify(enactor, ansi_red(tprintf("That is not a valid pitch value.")));
+		notify_format(enactor, ansi_red("That is not a valid pitch value."));
 	} else {
 		if (sdb[n].status.autopilot) {
 			sdb[n].status.autopilot = 0;
@@ -1040,15 +1040,15 @@ int do_set_roll (double roll, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s cannot be maneuvered.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot be maneuvered.", Name(sdb[n].object)));
 	} else if (fabs(roll) > 360.0) {
-		notify(enactor, ansi_red(tprintf("That is not a valid roll value.")));
+		notify_format(enactor, ansi_red("That is not a valid roll value."));
 	} else {
 		if (sdb[n].status.autopilot) {
 			sdb[n].status.autopilot = 0;
@@ -1075,13 +1075,13 @@ int do_set_intercept (int contact, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s cannot be maneuvered.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot be maneuvered.", Name(sdb[n].object)));
 	} else {
 		x = contact2sdb(n, contact);
 		if (error_on_contact(n, x, enactor)) {
@@ -1117,13 +1117,13 @@ int do_set_evade (int contact, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s cannot be maneuvered.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot be maneuvered.", Name(sdb[n].object)));
 	} else {
 		x = contact2sdb(n, contact);
 		if (error_on_contact(n, x, enactor)) {
@@ -1168,13 +1168,13 @@ int do_set_parallel (int contact, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s cannot be maneuvered.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot be maneuvered.", Name(sdb[n].object)));
 	} else {
 		x = contact2sdb(n, contact);
 		if (error_on_contact(n, x, enactor)) {
@@ -1241,9 +1241,9 @@ int do_set_coords_layin (double x, double y, double z, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s cannot be maneuvered.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot be maneuvered.", Name(sdb[n].object)));
 	} else {
 		sdb[n].coords.xd = pc2su(x) + sdb[n].coords.xo;
 		sdb[n].coords.yd = pc2su(y) + sdb[n].coords.yo;
@@ -1264,13 +1264,13 @@ int do_set_coords_engage (dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s cannot be maneuvered.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot be maneuvered.", Name(sdb[n].object)));
 	} else {
 		sdb[n].course.yaw_in = xy2bearing(sdb[n].coords.xd - sdb[n].coords.x, sdb[n].coords.yd - sdb[n].coords.y);
 		sdb[n].course.pitch_in = xyz2elevation(sdb[n].coords.xd - sdb[n].coords.x, sdb[n].coords.yd - sdb[n].coords.y, sdb[n].coords.zd - sdb[n].coords.z);
@@ -1291,7 +1291,7 @@ int do_set_eta (double speed, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s has no engines.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no engines.", Name(sdb[n].object)));
 		return 0;
 	}
 
@@ -1299,7 +1299,7 @@ int do_set_eta (double speed, dbref enactor)
 	if (speed == 0.0) {
 		speed = fabs(sdb[n].move.in);
 		if (speed == 0.0) {
-			notify(enactor, ansi_red(tprintf("%s has no motion.", Name(sdb[n].object))));
+			notify_format(enactor, ansi_red("%s has no motion.", Name(sdb[n].object)));
 			return 0;
 		}
 	}
@@ -1349,15 +1349,15 @@ int do_set_speed (double speed, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && (fabs(speed) >= 1.0)) {
-		notify(enactor, ansi_red(tprintf("%s has no warp engines.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no warp engines.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.impulse_exist && (fabs(speed) < 1.0)) {
-		notify(enactor, ansi_red(tprintf("%s has no impulse engines.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no impulse engines.", Name(sdb[n].object)));
 	} else if (sdb[n].engine.warp_damage <= 0.0 && (fabs(speed) >= 1.0)) {
 		notify(enactor, ansi_red("Warp engines are inoperative."));
 	} else if (sdb[n].engine.impulse_damage <= 0.0 && (speed != 0.0) && (fabs(speed) < 1.0)) {
@@ -1408,16 +1408,16 @@ int do_set_shield (int shield, int active, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].shield.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no shields.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no shields.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].status.docked && active) {
-		notify(enactor, ansi_red(tprintf("%s cannot raise shields while docked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot raise shields while docked.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].status.landed && active) {
-		notify(enactor, ansi_red(tprintf("%s cannot raise shields while landed.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot raise shields while landed.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot raise shields while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot raise shields while cloaked.", Name(sdb[n].object)));
 		return 0;
 	}
 
@@ -1435,11 +1435,11 @@ int do_set_shield (int shield, int active, dbref enactor)
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	for (i = a; i <= b; ++i)
 		if (sdb[n].shield.damage[i] <= 0.0) {
-			notify(enactor, ansi_red(tprintf("%s is inoperative.", unparse_shield(i))));
+			notify_format(enactor, ansi_red("%s is inoperative.", unparse_shield(i)));
 		} else if (sdb[n].shield.active[i] && active) {
-			notify(enactor, ansi_red(tprintf("%s is already online.", unparse_shield(i))));
+			notify_format(enactor, ansi_red("%s is already online.", unparse_shield(i)));
 		} else if (!sdb[n].shield.active[i] && !active) {
-			notify(enactor, ansi_red(tprintf("%s is already offline.", unparse_shield(i))));
+			notify_format(enactor, ansi_red("%s is already offline.", unparse_shield(i)));
 		} else {
 			if (flag)
 				strncat(buffer, "\n", sizeof(buffer) - 1);
@@ -1476,13 +1476,13 @@ int do_set_weapon (int first, int last, int active, int weapon, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (weapon == 1 && !sdb[n].beam.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no %ss.", Name(sdb[n].object), system_name[3])));
+		notify_format(enactor, ansi_red("%s has no %ss.", Name(sdb[n].object), system_name[3]));
 		return 0;
 	} else if (weapon == 2 && !sdb[n].missile.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no %ss.", Name(sdb[n].object), system_name[9])));
+		notify_format(enactor, ansi_red("%s has no %ss.", Name(sdb[n].object), system_name[9]));
 		return 0;
 	} else if (!weapon && !sdb[n].beam.exist && !sdb[n].missile.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no weapons.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no weapons.", Name(sdb[n].object)));
 		return 0;
 	}
 
@@ -1503,14 +1503,14 @@ int do_set_weapon (int first, int last, int active, int weapon, dbref enactor)
 		}
 		for (i = a; i <= b ; ++i)
 			if (sdb[n].blist.damage[i] <= 0.0) {
-				notify(enactor, ansi_red(tprintf("%s %d is inoperative.",
-					unparse_beam(sdb[n].blist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is inoperative.",
+					unparse_beam(sdb[n].blist.name[i]), i + 1));
 			} else if (active && sdb[n].blist.active[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is already online.",
-					unparse_beam(sdb[n].blist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is already online.",
+					unparse_beam(sdb[n].blist.name[i]), i + 1));
 			} else if (!active && !sdb[n].blist.active[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is already offline.",
-					unparse_beam(sdb[n].blist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is already offline.",
+					unparse_beam(sdb[n].blist.name[i]), i + 1));
 			} else if (active) {
 				sdb[n].blist.lock[i] = 0;
 				sdb[n].blist.active[i] = 1;
@@ -1548,14 +1548,14 @@ int do_set_weapon (int first, int last, int active, int weapon, dbref enactor)
 		}
 		for (i = a; i <= b ; ++i)
 			if (sdb[n].mlist.damage[i] <= 0.0) {
-				notify(enactor, ansi_red(tprintf("%s %d is inoperative.",
-					unparse_missile(sdb[n].mlist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is inoperative.",
+					unparse_missile(sdb[n].mlist.name[i]), i + 1));
 			} else if (active && sdb[n].mlist.active[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is already online.",
-					unparse_missile(sdb[n].mlist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is already online.",
+					unparse_missile(sdb[n].mlist.name[i]), i + 1));
 			} else if (!active && !sdb[n].mlist.active[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is already offline.",
-					unparse_missile(sdb[n].mlist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is already offline.",
+					unparse_missile(sdb[n].mlist.name[i]), i + 1));
 			} else if (active) {
 				sdb[n].mlist.lock[i] = 0;
 				sdb[n].mlist.active[i] = 1;
@@ -1644,22 +1644,22 @@ int do_lock_weapon (int first, int last, int contact, int weapon, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (weapon == 1 && !sdb[n].beam.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no %ss.", Name(sdb[n].object), system_name[3])));
+		notify_format(enactor, ansi_red("%s has no %ss.", Name(sdb[n].object), system_name[3]));
 		return 0;
 	} else if (weapon == 2 && !sdb[n].missile.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no %ss.", Name(sdb[n].object), system_name[9])));
+		notify_format(enactor, ansi_red("%s has no %ss.", Name(sdb[n].object), system_name[9]));
 		return 0;
 	} else if (!weapon && !sdb[n].beam.exist && !sdb[n].missile.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no weapons.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no weapons.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot lock weapons while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot lock weapons while cloaked.", Name(sdb[n].object)));
 		return 0;
 	}
 
@@ -1692,14 +1692,14 @@ int do_lock_weapon (int first, int last, int contact, int weapon, dbref enactor)
 		}
 		for (i = a; i <= b ; ++i)
 			if (sdb[n].blist.damage[i] <= 0.0) {
-				notify(enactor, ansi_red(tprintf("%s %d is inoperative.",
-					unparse_beam(sdb[n].blist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is inoperative.",
+					unparse_beam(sdb[n].blist.name[i]), i + 1));
 			} else if (!sdb[n].blist.active[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is not online.",
-					unparse_beam(sdb[n].blist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is not online.",
+					unparse_beam(sdb[n].blist.name[i]), i + 1));
 			} else if (sdb[n].blist.lock[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is already locked.",
-					unparse_beam(sdb[n].blist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is already locked.",
+					unparse_beam(sdb[n].blist.name[i]), i + 1));
 			} else {
 				sdb[n].blist.lock[i] = x;
 				if (!flag_b)
@@ -1726,14 +1726,14 @@ int do_lock_weapon (int first, int last, int contact, int weapon, dbref enactor)
 		}
 		for (i = a; i <= b ; ++i)
 			if (sdb[n].mlist.damage[i] <= 0.0) {
-				notify(enactor, ansi_red(tprintf("%s %d is inoperative.",
-					unparse_missile(sdb[n].mlist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is inoperative.",
+					unparse_missile(sdb[n].mlist.name[i]), i + 1));
 			} else if (!sdb[n].mlist.active[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is not online.",
-					unparse_missile(sdb[n].mlist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is not online.",
+					unparse_missile(sdb[n].mlist.name[i]), i + 1));
 			} else if (sdb[n].mlist.lock[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is already locked.",
-					unparse_missile(sdb[n].mlist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is already locked.",
+					unparse_missile(sdb[n].mlist.name[i]), i + 1));
 			} else {
 				sdb[n].mlist.lock[i] = x;
 				if (!flag_m) {
@@ -1773,19 +1773,19 @@ int do_unlock_weapon (int first, int last, int weapon, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (weapon == 1 && !sdb[n].beam.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no %ss.", Name(sdb[n].object), system_name[3])));
+		notify_format(enactor, ansi_red("%s has no %ss.", Name(sdb[n].object), system_name[3]));
 		return 0;
 	} else if (weapon == 2 && !sdb[n].missile.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no %ss.", Name(sdb[n].object), system_name[9])));
+		notify_format(enactor, ansi_red("%s has no %ss.", Name(sdb[n].object), system_name[9]));
 		return 0;
 	} else if (!weapon && !sdb[n].beam.exist && !sdb[n].missile.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no weapons.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no weapons.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 		return 0;
 	}
 
@@ -1806,14 +1806,14 @@ int do_unlock_weapon (int first, int last, int weapon, dbref enactor)
 		}
 		for (i = a; i <= b ; ++i)
 			if (sdb[n].blist.damage[i] <= 0.0) {
-				notify(enactor, ansi_red(tprintf("%s %d is inoperative.",
-					unparse_beam(sdb[n].blist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is inoperative.",
+					unparse_beam(sdb[n].blist.name[i]), i + 1));
 			} else if (!sdb[n].blist.active[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is not online.",
-					unparse_beam(sdb[n].blist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is not online.",
+					unparse_beam(sdb[n].blist.name[i]), i + 1));
 			} else if (!sdb[n].blist.lock[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is already unlocked.",
-					unparse_beam(sdb[n].blist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is already unlocked.",
+					unparse_beam(sdb[n].blist.name[i]), i + 1));
 			} else {
 				sdb[n].blist.lock[i] = 0;
 				if (!flag_b)
@@ -1840,14 +1840,14 @@ int do_unlock_weapon (int first, int last, int weapon, dbref enactor)
 		}
 		for (i = a; i <= b ; ++i)
 			if (sdb[n].mlist.damage[i] <= 0.0) {
-				notify(enactor, ansi_red(tprintf("%s %d is inoperative.",
-					unparse_missile(sdb[n].mlist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is inoperative.",
+					unparse_missile(sdb[n].mlist.name[i]), i + 1));
 			} else if (!sdb[n].mlist.active[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is not online.",
-					unparse_missile(sdb[n].mlist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is not online.",
+					unparse_missile(sdb[n].mlist.name[i]), i + 1));
 			} else if (!sdb[n].mlist.lock[i]) {
-				notify(enactor, ansi_red(tprintf("%s %d is already unlocked.",
-					unparse_missile(sdb[n].mlist.name[i]), i + 1)));
+				notify_format(enactor, ansi_red("%s %d is already unlocked.",
+					unparse_missile(sdb[n].mlist.name[i]), i + 1));
 			} else {
 				sdb[n].mlist.lock[i] = 0;
 				if (!flag_m) {
@@ -1876,9 +1876,9 @@ int do_set_trans (int active, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].trans.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no transporters.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no transporters.", Name(sdb[n].object)));
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot use transporters while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot use transporters while cloaked.", Name(sdb[n].object)));
 	} else {
 		if (active) {
 			if (sdb[n].trans.damage <= 0.0) {
@@ -1918,9 +1918,9 @@ int do_set_trans_locked (int contact, int target, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].trans.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no transporters.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no transporters.", Name(sdb[n].object)));
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot use transporters while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot use transporters while cloaked.", Name(sdb[n].object)));
 	} else {
 		if (contact == -1) {
 			x = n;
@@ -1967,9 +1967,9 @@ int do_set_trans_unlocked (dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].trans.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no transporters.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no transporters.", Name(sdb[n].object)));
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot use transporters while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot use transporters while cloaked.", Name(sdb[n].object)));
 	} else {
 		if (sdb[n].trans.damage <= 0.0) {
 			notify(enactor, ansi_red("Transporters are inoperative."));
@@ -1996,9 +1996,9 @@ int do_set_tract (int active, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].tract.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no tractor beams.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no tractor beams.", Name(sdb[n].object)));
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot use tractor beams while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot use tractor beams while cloaked.", Name(sdb[n].object)));
 	} else {
 		if (active) {
 			if (sdb[n].tract.damage <= 0.0) {
@@ -2049,21 +2049,21 @@ int do_set_tract_locked (int contact, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].tract.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no tractor beam.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no tractor beam.", Name(sdb[n].object)));
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.tractoring) {
-		notify(enactor, ansi_red(tprintf("%s is already tractoring %s.", Name(sdb[n].object), Name(sdb[sdb[n].status.tractoring].object))));
+		notify_format(enactor, ansi_red("%s is already tractoring %s.", Name(sdb[n].object), Name(sdb[sdb[n].status.tractoring].object)));
 	} else if (sdb[n].status.tractored) {
-		notify(enactor, ansi_red(tprintf("%s is being tractored by %s.", Name(sdb[n].object), Name(sdb[sdb[n].status.tractored].object))));
+		notify_format(enactor, ansi_red("%s is being tractored by %s.", Name(sdb[n].object), Name(sdb[sdb[n].status.tractored].object)));
 	} else if (sdb[n].tract.damage <= 0.0) {
 		notify(enactor, ansi_red("Tractor beam is inoperative."));
 	} else if (!sdb[n].tract.active) {
 		notify(enactor, ansi_red("Tractor beam is not online."));
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot use tractor beams while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot use tractor beams while cloaked.", Name(sdb[n].object)));
 	} else {
 		x = contact2sdb(n, contact);
 		if (error_on_contact(n, x, enactor)) {
@@ -2141,9 +2141,9 @@ int do_set_tract_unlocked (dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].tract.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no tractor beam.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no tractor beam.", Name(sdb[n].object)));
 	} else if (sdb[n].cloak.active && sdb[n].tech.cloak < 2.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot use tractor beams while cloaked.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot use tractor beams while cloaked.", Name(sdb[n].object)));
 	} else if (sdb[n].tract.damage <= 0.0) {
 		notify(enactor, ansi_red("Tractor beam is inoperative."));
 	} else if (!sdb[n].tract.active) {
@@ -2323,7 +2323,7 @@ int do_set_active (dbref enactor)
 	} else if (sdb[n].status.crippled == 2) {
 		notify(enactor, ansi_red("Space object destroyed."));
 	} else if (sdb[n].status.active) {
-		notify(enactor, ansi_red(tprintf("%s systems are already active.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s systems are already active.", Name(sdb[n].object)));
 	} else {
 		do_all_console_notify(n, ansi_cmd(enactor, "All systems initializing and starting up"));
 		do_ship_notify(n, tprintf("%s activates all systems.", Name(sdb[n].object)));
@@ -2401,9 +2401,9 @@ int do_set_inactive (dbref enactor)
 	} else if (sdb[n].status.crippled == 2) {
 		notify(enactor, ansi_red("Space object destroyed."));
 	} else if (!sdb[n].status.active) {
-		notify(enactor, ansi_red(tprintf("%s systems are already inactive.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s systems are already inactive.", Name(sdb[n].object)));
 	} else if (sdb[n].power.total != 0) {
-		notify(enactor, ansi_red(tprintf("%s power systems are still online.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s power systems are still online.", Name(sdb[n].object)));
 	} else {
 		do_all_console_notify(n, ansi_cmd(enactor, "All systems shutting down"));
 		do_ship_notify(n, tprintf("%s deactivates all systems.",Name(sdb[n].object)));
@@ -2476,7 +2476,7 @@ int do_set_docking_doors (int active, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].structure.has_docking_bay) {
-		notify(enactor, ansi_red(tprintf("%s has no docking bay.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no docking bay.", Name(sdb[n].object)));
 	} else {
 		if (active) {
 			if (sdb[n].status.open_docking) {
@@ -2508,7 +2508,7 @@ int do_set_landing_doors (int active, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].structure.has_landing_pad) {
-		notify(enactor, ansi_red(tprintf("%s has no landing bay.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no landing bay.", Name(sdb[n].object)));
 	} else {
 		if (active) {
 			if (sdb[n].status.open_landing) {
@@ -2552,19 +2552,19 @@ int do_set_dock (int contact, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].structure.can_dock) {
-		notify(enactor, ansi_red(tprintf("%s is incapable of docking.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is incapable of docking.", Name(sdb[n].object)));
 /* check if the tractoree can dock   ok'd 8/23/00 */
 	} else if (trac && !sdb[trac].structure.can_dock) {
-		notify(enactor, ansi_red(tprintf("The ship you are tractoring (%s) is incapable of docking.",Name(sdb[trac].object))));
+		notify_format(enactor, ansi_red("The ship you are tractoring (%s) is incapable of docking.",Name(sdb[trac].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (sdb[n].status.tractored) {
-		notify(enactor, ansi_red(tprintf("%s cannot dock while being tractored.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot dock while being tractored.", Name(sdb[n].object)));
 	/* We don't need this really, but i'll leave it just in case you want to revert */
 /*	} else if (sdb[n].status.tractoring) {
 		notify(enactor, ansi_red(tprintf("%s cannot dock while using its tractor beam.", Name(sdb[n].object)))); */
 	} else if (fabs(sdb[n].move.out) >= 1.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot dock while at warp.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot dock while at warp.", Name(sdb[n].object)));
 	} else {
 		x = contact2sdb(n, contact);
 		if (error_on_contact(n, x, enactor)) {
@@ -2572,18 +2572,18 @@ int do_set_dock (int contact, dbref enactor)
 		} else if (sdb2range(n, x) > MAX_DOCKING_DISTANCE) {
 			notify(enactor, ansi_red("That is too far away to dock with."));
 		} else if (!sdb[x].structure.has_docking_bay) {
-			notify(enactor, ansi_red(tprintf("%s does not have a dock.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s does not have a dock.", Name(sdb[x].object)));
 		} else if (!sdb[x].status.open_docking) {
-			notify(enactor, ansi_red(tprintf("%s's docking bay doors are closed.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s's docking bay doors are closed.", Name(sdb[x].object)));
 /* check size on dock. include the tractoree! */
 		} else if ((tsize + sdb[n].structure.displacement + sdb[x].structure.cargo_mass) > sdb[x].structure.cargo_hold) {
-				notify(enactor, ansi_red(tprintf("%s does not have enough room.", Name(sdb[x].object))));
+				notify_format(enactor, ansi_red("%s does not have enough room.", Name(sdb[x].object)));
 		} else if (sdb[n].shield.active[0] || sdb[n].shield.active[1] || sdb[n].shield.active[2] || sdb[n].shield.active[3] || sdb[n].shield.active[4] || sdb[n].shield.active[5]) {
-		    	notify(enactor, ansi_red(tprintf("%s must lower all shields to dock.", Name(sdb[n].object))));
+		    	notify_format(enactor, ansi_red("%s must lower all shields to dock.", Name(sdb[n].object)));
 		} else if (sdb2dissipation(x, sdb2shield(x, n)) != 0.0) {
-			notify(enactor, ansi_red(tprintf("%s's facing shield must be lowered.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s's facing shield must be lowered.", Name(sdb[x].object)));
 		} else if (sdb[x].status.tractored) {
-			notify(enactor, ansi_red(tprintf("%s is being tractored.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s is being tractored.", Name(sdb[x].object)));
 		} else {
 			if (sdb[n].status.docked) {
 				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
@@ -2746,9 +2746,9 @@ int do_set_undock (dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is not in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is not in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!SpaceObj(sdb[l].object) || !GoodObject(sdb[l].object)) {
 		notify(enactor, ansi_red("Undocking error."));
 		write_spacelog(enactor, n, "BUG: Bad undocking location Object");
@@ -2762,7 +2762,7 @@ int do_set_undock (dbref enactor)
 			notify(enactor, ansi_red("Undocking error."));
 			write_spacelog(enactor, n, "BUG: Bad undocking location SDB");
 		} else if (!sdb[x].status.open_docking) {
-			notify(enactor, ansi_red(tprintf("%s's docking bay doors are closed.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s's docking bay doors are closed.", Name(sdb[x].object)));
 		} else {
 			moveit(sdb[n].object, Location(sdb[x].object), 1, enactor, "aspace");
 			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[x].object))));
@@ -2843,15 +2843,15 @@ int do_set_land (int contact, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].structure.can_land) {
-		notify(enactor, ansi_red(tprintf("%s is incapable of landing.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is incapable of landing.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (sdb[n].status.tractored) {
-		notify(enactor, ansi_red(tprintf("%s cannot land while being tractored.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot land while being tractored.", Name(sdb[n].object)));
 	} else if (sdb[n].status.tractoring) {
-		notify(enactor, ansi_red(tprintf("%s cannot land while using its tractor beam.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot land while using its tractor beam.", Name(sdb[n].object)));
 	} else if (fabs(sdb[n].move.out) >= 1.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot land while at warp.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot land while at warp.", Name(sdb[n].object)));
 	} else {
 		x = contact2sdb(n, contact);
 		if (error_on_contact(n, x, enactor)) {
@@ -2859,17 +2859,17 @@ int do_set_land (int contact, dbref enactor)
 		} else if (sdb2range(n, x) > MAX_LANDING_DISTANCE) {
 			notify(enactor, ansi_red("That is too far away to land on."));
 		} else if (!sdb[x].structure.has_landing_pad) {
-			notify(enactor, ansi_red(tprintf("%s does not have a landing pad.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s does not have a landing pad.", Name(sdb[x].object)));
 		} else if (!sdb[x].status.open_landing) {
-			notify(enactor, ansi_red(tprintf("%s's landing bay doors are closed.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s's landing bay doors are closed.", Name(sdb[x].object)));
 		} else if ((sdb[n].structure.displacement + sdb[x].structure.cargo_mass) > sdb[x].structure.cargo_hold) {
-			notify(enactor, ansi_red(tprintf("%s does not have enough room.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s does not have enough room.", Name(sdb[x].object)));
 		} else if (sdb[n].shield.active[0] || sdb[n].shield.active[1] || sdb[n].shield.active[2] || sdb[n].shield.active[3] || sdb[n].shield.active[4] || sdb[n].shield.active[5]) {
-			notify(enactor, ansi_red(tprintf("%s must lower all shields to land.", Name(sdb[n].object))));
+			notify_format(enactor, ansi_red("%s must lower all shields to land.", Name(sdb[n].object)));
 		} else if (sdb2dissipation(x, sdb2shield(x, n)) != 0.0) {
-			notify(enactor, ansi_red(tprintf("%s's facing shield must be lowered.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s's facing shield must be lowered.", Name(sdb[x].object)));
 		} else if (sdb[x].status.tractored) {
-			notify(enactor, ansi_red(tprintf("%s is being tractored.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s is being tractored.", Name(sdb[x].object)));
 		} else {
 			if (sdb[n].status.docked) {
 				console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s undocking from %s", Name(sdb[n].object), Name(sdb[l].object))));
@@ -2955,9 +2955,9 @@ int do_set_launch (dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is not on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is not on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!SpaceObj(sdb[l].object) || !GoodObject(sdb[l].object)) {
 		notify(enactor, ansi_red("Launching error."));
 		write_spacelog(enactor, n, "BUG: Bad launching location Object");
@@ -2971,7 +2971,7 @@ int do_set_launch (dbref enactor)
 			notify(enactor, ansi_red("Launching error."));
 			write_spacelog(enactor, n, "BUG: Bad launching location SDB");
 		} else if (!sdb[x].status.open_landing) {
-			notify(enactor, ansi_red(tprintf("%s's landing bay doors are closed.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s's landing bay doors are closed.", Name(sdb[x].object)));
 		} else {
 			moveit(sdb[n].object, Location(sdb[x].object), 1, enactor, "aspace");
 			console_message(n, "helm science tactical", ansi_cmd(enactor, tprintf("%s launching from %s", Name(sdb[n].object), Name(sdb[x].object))));
@@ -3094,15 +3094,15 @@ int do_set_enter_wormhole (int contact, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].structure.type != 1) {
-		notify(enactor, ansi_red(tprintf("%s is much too large to enter.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is much too large to enter.", Name(sdb[n].object)));
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (fabs(sdb[n].move.out) >= 1.0) {
-		notify(enactor, ansi_red(tprintf("%s cannot gate while at warp.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot gate while at warp.", Name(sdb[n].object)));
 	} else {
 		x = contact2sdb(n, contact);
 		if (error_on_contact(n, x, enactor)) {
@@ -3111,7 +3111,7 @@ int do_set_enter_wormhole (int contact, dbref enactor)
 			notify(enactor, ansi_red("That is not an anomaly."));
 		} else if (sdb2range(n, x) > MAX_WORMHOLE_DISTANCE) {
 		} else if (sdb[x].move.out >= 1.0) {
-			notify(enactor, ansi_red(tprintf("%s is moving too fast.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s is moving too fast.", Name(sdb[x].object)));
 		} else if (!SpaceObj(sdb[sdb[x].status.link].object) || !GoodObject(sdb[sdb[x].status.link].object)) {
 			notify(enactor, ansi_red("Gating error."));
 			write_spacelog(enactor, x, "BUG: Bad gating linked Object");
@@ -3124,10 +3124,10 @@ int do_set_enter_wormhole (int contact, dbref enactor)
 				t = 0;
 			if (t) {
 				if (sdb[t].structure.type != 1) {
-					notify(enactor, ansi_red(tprintf("%s is much too large to enter.", Name(sdb[t].object))));
+					notify_format(enactor, ansi_red("%s is much too large to enter.", Name(sdb[t].object)));
 					return 0;
 				} else if (sdb2range(t, x) > MAX_WORMHOLE_DISTANCE) {
-					notify(enactor, ansi_red(tprintf("%s is too far away to enter.", Name(sdb[t].object))));
+					notify_format(enactor, ansi_red("%s is too far away to enter.", Name(sdb[t].object)));
 					return 0;
 				} else
 					up_wormhole(t, x);
@@ -3160,10 +3160,10 @@ int do_set_fix_damage (char *sys1, char *sys2, int type, char *name, dbref enact
 		notify(enactor, ansi_red("Space object destroyed."));
 		return 0;
 	} else if (!sdb[n].status.active) {
-		notify(enactor, ansi_red(tprintf("%s systems are inactive.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s systems are inactive.", Name(sdb[n].object)));
 		return 0;
 	} else if (sdb[n].structure.max_repair <= 0) {
-		notify(enactor, ansi_red(tprintf("%s has no repair capacity.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no repair capacity.", Name(sdb[n].object)));
 		return 0;
 	}
 
@@ -3183,7 +3183,7 @@ int do_set_fix_damage (char *sys1, char *sys2, int type, char *name, dbref enact
 			write_spacelog(enactor, x, "BUG:Repair recipient has bad TYPE");
 			return 0;
 		} else if (!sdb[x].status.connected) {
-			notify(enactor, ansi_red(tprintf("%s is not connected.", Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s is not connected.", Name(sdb[x].object)));
 			return 0;
 		} else if (!SpaceObj(sdb[x].object) || !GoodObject(sdb[x].object)) {
 			notify(enactor, ansi_red("That is not a valid repair recipient."));
@@ -3354,13 +3354,13 @@ int do_set_fix_damage (char *sys1, char *sys2, int type, char *name, dbref enact
 	}
 
 	if (*dmg >= 1.0) {
-		notify(enactor, ansi_red(tprintf("%s on %s has no damage to repair.",
-		  system_name[num], Name(sdb[x].object))));
+		notify_format(enactor, ansi_red("%s on %s has no damage to repair.",
+		  system_name[num], Name(sdb[x].object)));
 		*dmg = 1.0;
 		return 0;
 	} else if ((*dmg <= -1.0) && (!sdb[n].structure.has_docking_bay) && num) {
-		notify(enactor, ansi_red(tprintf("%s on %s has been totally destroyed.",
-		  system_name[num], Name(sdb[x].object))));
+		notify_format(enactor, ansi_red("%s on %s has been totally destroyed.",
+		  system_name[num], Name(sdb[x].object)));
 		return 0;
 	}
 
@@ -3463,7 +3463,7 @@ int do_set_shield_freq (double frequency, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].shield.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no shields.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no shields.", Name(sdb[n].object)));
 	} else if (frequency < 1.0 || frequency >= 1000.0) {
 		notify(enactor, ansi_red("Valid shield frequencies are from 1.00 to 999.999 GHz."));
 	} else {
@@ -3485,7 +3485,7 @@ int do_set_cloak_freq (double frequency, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].cloak.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no cloaking device.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no cloaking device.", Name(sdb[n].object)));
 	} else if (frequency < 1.0 || frequency >= 1000.0) {
 		notify(enactor, ansi_red("Valid cloaking device frequencies are from 1.00 to 999.999 GHz."));
 	} else {
@@ -3507,7 +3507,7 @@ int do_set_beam_freq (double frequency, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].beam.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no beam weapons.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no beam weapons.", Name(sdb[n].object)));
 	} else if (frequency < 1.0 || frequency >= 1000.0) {
 		notify(enactor, ansi_red("Valid beam weapon frequencies are from 1.00 to 999.999 GHz."));
 	} else {
@@ -3528,7 +3528,7 @@ int do_set_missile_freq (double frequency, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].missile.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no missile weapons.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no missile weapons.", Name(sdb[n].object)));
 	} else if (frequency < 1.0 || frequency >= 1000.0) {
 		notify(enactor, ansi_red("Valid missile weapon frequencies are from 1.00 to 999.999 GHz."));
 	} else {
@@ -3549,7 +3549,7 @@ int do_set_trans_freq (double frequency, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].trans.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no transporters.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no transporters.", Name(sdb[n].object)));
 	} else if (frequency < 1.0 || frequency >= 1000.0) {
 		notify(enactor, ansi_red("Valid transporter frequencies are from 1.00 to 999.999 GHz."));
 	} else {
@@ -3570,7 +3570,7 @@ int do_set_tract_freq (double frequency, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].tract.exist) {
-		notify(enactor, ansi_red(tprintf("%s has no tractor beam.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s has no tractor beam.", Name(sdb[n].object)));
 	} else if (frequency < 1.0 || frequency >= 1000.0) {
 		notify(enactor, ansi_red("Valid tractor beam frequency is from 1.00 to 999.999 GHz."));
 	} else {
@@ -3619,7 +3619,7 @@ int do_set_refuel (char *name, char *fuel, double tons, dbref enactor)
 		notify(enactor, ansi_red("That is not a valid fuel recipient."));
 		write_spacelog(enactor, x, "BUG:Fuel recipient has bad TYPE");
 	} else if (!sdb[x].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is not connected.", Name(sdb[x].object))));
+		notify_format(enactor, ansi_red("%s is not connected.", Name(sdb[x].object)));
 	} else if (!SpaceObj(sdb[x].object) || !GoodObject(sdb[x].object)) {
 		notify(enactor, ansi_red("That is not a valid fuel recipient."));
 		write_spacelog(enactor, x, "BUG:Fuel recipient has bad flags");
@@ -3628,14 +3628,14 @@ int do_set_refuel (char *name, char *fuel, double tons, dbref enactor)
 		available = sdb[n].fuel.antimatter;
 		capacity = sdb2max_antimatter(x) - sdb[x].fuel.antimatter;
 		if (amount > available) {
-			notify(enactor, ansi_red(tprintf("%s has only %f tons of antimatter available",
-				Name(sdb[n].object), available / 1000000.0)));
+			notify_format(enactor, ansi_red("%s has only %f tons of antimatter available",
+				Name(sdb[n].object), available / 1000000.0));
 		} else if (capacity <= 0) {
-			notify(enactor, ansi_red(tprintf("%s has no antimatter capacity",
-				Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s has no antimatter capacity",
+				Name(sdb[x].object)));
 		} else if (amount > capacity) {
-			notify(enactor, ansi_red(tprintf("%s has only %f tons of antimatter capacity",
-				Name(sdb[x].object), capacity / 1000000.0)));
+			notify_format(enactor, ansi_red("%s has only %f tons of antimatter capacity",
+				Name(sdb[x].object), capacity / 1000000.0));
 		} else {
 			sdb[n].fuel.antimatter -= amount;
 			sdb[x].fuel.antimatter += amount;
@@ -3652,14 +3652,14 @@ int do_set_refuel (char *name, char *fuel, double tons, dbref enactor)
 		available = sdb[n].fuel.deuterium;
 		capacity = sdb2max_deuterium(x) - sdb[x].fuel.deuterium;
 		if (amount > available) {
-			notify(enactor, ansi_red(tprintf("%s has only %f tons of deuterium available",
-				Name(sdb[n].object), available / 1000000.0)));
+			notify_format(enactor, ansi_red("%s has only %f tons of deuterium available",
+				Name(sdb[n].object), available / 1000000.0));
 		} else if (capacity <= 0) {
-			notify(enactor, ansi_red(tprintf("%s has no deuterium capacity",
-				Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s has no deuterium capacity",
+				Name(sdb[x].object)));
 		} else if (amount > capacity) {
-			notify(enactor, ansi_red(tprintf("%s has only %f tons of deuterium capacity",
-				Name(sdb[x].object), capacity / 1000000.0)));
+			notify_format(enactor, ansi_red("%s has only %f tons of deuterium capacity",
+				Name(sdb[x].object), capacity / 1000000.0));
 		} else {
 			sdb[n].fuel.deuterium -= amount;
 			sdb[x].fuel.deuterium += amount;
@@ -3676,14 +3676,14 @@ int do_set_refuel (char *name, char *fuel, double tons, dbref enactor)
 		available = sdb[n].fuel.reserves;
 		capacity = sdb2max_reserve(x) - sdb[x].fuel.reserves;
 		if (amount > available) {
-			notify(enactor, ansi_red(tprintf("%s has only %f GW hours of reserves available",
-				Name(sdb[n].object), available / 3600.0)));
+			notify_format(enactor, ansi_red("%s has only %f GW hours of reserves available",
+				Name(sdb[n].object), available / 3600.0));
 		} else if (capacity <= 0) {
-			notify(enactor, ansi_red(tprintf("%s has no reserve capacity",
-				Name(sdb[x].object))));
+			notify_format(enactor, ansi_red("%s has no reserve capacity",
+				Name(sdb[x].object)));
 		} else if (amount > capacity) {
-			notify(enactor, ansi_red(tprintf("%s has only %f GW hours of reserves capacity",
-				Name(sdb[x].object), capacity / 3600.0)));
+			notify_format(enactor, ansi_red("%s has only %f GW hours of reserves capacity",
+				Name(sdb[x].object), capacity / 3600.0));
 		} else {
 			sdb[n].fuel.reserves -= amount;
 			sdb[x].fuel.reserves += amount;
@@ -3726,7 +3726,7 @@ int do_set_defuel (char *fuel, double tons, dbref enactor)
 	x = sdb[n].location;
 	if (GoodSDB(x)) {
 		if (!sdb[n].status.connected) {
-			notify(enactor, ansi_red(tprintf("%s is not connected.", Name(sdb[n].object))));
+			notify_format(enactor, ansi_red("%s is not connected.", Name(sdb[n].object)));
 		} else if (f == 1) {
 			amount = tons * 1000000.0;
 			available = sdb[n].fuel.antimatter;
@@ -3734,11 +3734,11 @@ int do_set_defuel (char *fuel, double tons, dbref enactor)
 			if (amount > available)
 				amount = available;
 			if (capacity <= 0) {
-				notify(enactor, ansi_red(tprintf("%s has no antimatter capacity",
-					Name(sdb[x].object))));
+				notify_format(enactor, ansi_red("%s has no antimatter capacity",
+					Name(sdb[x].object)));
 			} else if (amount > capacity) {
-				notify(enactor, ansi_red(tprintf("%s has only %f tons of antimatter capacity",
-					Name(sdb[x].object), capacity / 1000000.0)));
+				notify_format(enactor, ansi_red("%s has only %f tons of antimatter capacity",
+					Name(sdb[x].object), capacity / 1000000.0));
 			} else {
 				sdb[n].fuel.antimatter -= amount;
 				sdb[x].fuel.antimatter += amount;
@@ -3757,11 +3757,11 @@ int do_set_defuel (char *fuel, double tons, dbref enactor)
 			if (amount > available)
 				amount = available;
 			if (capacity <= 0) {
-				notify(enactor, ansi_red(tprintf("%s has no deuterium capacity",
-					Name(sdb[x].object))));
+				notify_format(enactor, ansi_red("%s has no deuterium capacity",
+					Name(sdb[x].object)));
 			} else if (amount > capacity) {
-				notify(enactor, ansi_red(tprintf("%s has only %f tons of deuterium capacity",
-					Name(sdb[x].object), capacity / 1000000.0)));
+				notify_format(enactor, ansi_red("%s has only %f tons of deuterium capacity",
+					Name(sdb[x].object), capacity / 1000000.0));
 			} else {
 				sdb[n].fuel.deuterium -= amount;
 				sdb[x].fuel.deuterium += amount;
@@ -3780,11 +3780,11 @@ int do_set_defuel (char *fuel, double tons, dbref enactor)
 			if (amount > available)
 				amount = available;
 			if (capacity <= 0) {
-				notify(enactor, ansi_red(tprintf("%s has no reserve capacity",
-					Name(sdb[x].object))));
+				notify_format(enactor, ansi_red("%s has no reserve capacity",
+					Name(sdb[x].object)));
 			} else if (amount > capacity) {
-				notify(enactor, ansi_red(tprintf("%s has only %f GW hours of reserves capacity",
-					Name(sdb[x].object), capacity / 3600.0)));
+				notify_format(enactor, ansi_red("%s has only %f GW hours of reserves capacity",
+					Name(sdb[x].object), capacity / 3600.0));
 			} else {
 				sdb[n].fuel.reserves -= amount;
 				sdb[x].fuel.reserves += amount;
@@ -3840,13 +3840,13 @@ int do_set_autopilot (int flag, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (sdb[n].status.docked) {
-		notify(enactor, ansi_red(tprintf("%s is in dock.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is in dock.", Name(sdb[n].object)));
 	} else if (sdb[n].status.landed) {
-		notify(enactor, ansi_red(tprintf("%s is on a landing pad.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is on a landing pad.", Name(sdb[n].object)));
 	} else if (sdb[n].status.connected) {
-		notify(enactor, ansi_red(tprintf("%s is still connected.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s is still connected.", Name(sdb[n].object)));
 	} else if (!sdb[n].engine.warp_exist && !sdb[n].engine.impulse_exist) {
-		notify(enactor, ansi_red(tprintf("%s cannot be maneuvered.", Name(sdb[n].object))));
+		notify_format(enactor, ansi_red("%s cannot be maneuvered.", Name(sdb[n].object)));
 	} else if (sdb[n].status.autopilot) {
 		if (flag) {
 			notify(enactor, ansi_red("Autopilot is already engaged."));
@@ -3861,7 +3861,7 @@ int do_set_autopilot (int flag, dbref enactor)
 			notify(enactor, ansi_red("Autopilot is already disengaged."));
 		} else if (sdb[n].coords.xd == sdb[n].coords.x && sdb[n].coords.yd ==
 		  sdb[n].coords.y && sdb[n].coords.zd == sdb[n].coords.z) {
-			notify(enactor, ansi_red(tprintf("%s is already there.", Name(sdb[n].object))));
+			notify_format(enactor, ansi_red("%s is already there.", Name(sdb[n].object)));
 		} else {
 			sdb[n].status.autopilot = 100;
 			console_message(n, "helm",
