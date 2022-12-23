@@ -314,7 +314,7 @@ int do_sensor_report (int contact, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].sensor.lrs_exist && !sdb[n].sensor.srs_exist) {
-		notify(enactor, ansi_red(tprintf("%s has no sensors.", Name(sdb[n].object))));
+		notify_format(enactor, "%s has no sensors.", Name(sdb[n].object));
 	} else if (!sdb[n].sensor.contacts) {
 		notify(enactor, ansi_red("There are no sensor contacts."));
 	} else if (error_on_contact(n, x, enactor)) {
@@ -496,7 +496,7 @@ int do_beam_status (dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].beam.banks) {
-		notify(enactor, ansi_red(tprintf("%s has no beam weapons.", Name(sdb[n].object))));
+		notify_format(enactor, "%s has no beam weapons.", Name(sdb[n].object));
 	} else {
 		snprintf(buffer, sizeof(buffer), "%s%s--[%sTactical/Beam Status Report%s]------------------------------------------------%s%s\n",
 			ANSI_BLUE, ANSI_HILITE, ANSI_YELLOW, ANSI_BLUE, ANSI_WHITE, ANSI_NORMAL);
@@ -518,7 +518,7 @@ int do_missile_status (dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].missile.tubes) {
-		notify(enactor, ansi_red(tprintf("%s has no missile weapons.", Name(sdb[n].object))));
+		notify_format(enactor, "%s has no missile weapons.", Name(sdb[n].object));
 	} else {
 		snprintf(buffer, sizeof(buffer), "%s%s--[%sTactical/Missile Status Report%s]---------------------------------------------%s%s\n",
 			ANSI_BLUE, ANSI_HILITE, ANSI_YELLOW, ANSI_BLUE, ANSI_WHITE, ANSI_NORMAL);
@@ -776,7 +776,7 @@ int do_damage_status (int type, char *name, dbref enactor)
 		notify(enactor, ansi_red("Space object destroyed."));
 		return 0;
 	} else if (!sdb[n].status.active) {
-		notify(enactor, ansi_red(tprintf("%s systems are inactive.", Name(sdb[n].object))));
+		notify_format(enactor, "%s systems are inactive.", Name(sdb[n].object));
 		return 0;
 	}
 
@@ -796,7 +796,7 @@ int do_damage_status (int type, char *name, dbref enactor)
 			write_spacelog(enactor, x, "BUG:Subject has bad TYPE");
 			return 0;
 		} else if (!sdb[x].status.connected) {
-			notify(enactor, ansi_red(tprintf("%s is not connected.", Name(sdb[x].object))));
+			notify_format(enactor, "%s is not connected.", Name(sdb[x].object));
 			return 0;
 		} else if (!SpaceObj(sdb[x].object) || !GoodObject(sdb[x].object)) {
 			notify(enactor, ansi_red("That is not a valid subject."));
@@ -1053,7 +1053,7 @@ int do_scanner_report (int a, char *s, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].sensor.srs_exist) {
-		notify(enactor, ansi_red(tprintf("%s has no short-range sensors.", Name(sdb[n].object))));
+		notify_format(enactor, "%s has no short-range sensors.", Name(sdb[n].object));
 	} else if (!sdb[n].sensor.srs_active) {
 		notify(enactor, ansi_red("Short-range sensors are inactive."));
 	} else if (!sdb[n].sensor.contacts) {
@@ -1263,7 +1263,7 @@ int do_planet_report (const char *s, int t, dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].sensor.lrs_exist) {
-		notify(enactor, ansi_red(tprintf("%s has no long-range sensors.", Name(sdb[n].object))));
+		notify_format(enactor, "%s has no long-range sensors.", Name(sdb[n].object));
 	} else if (!sdb[n].sensor.lrs_active) {
 		notify(enactor, ansi_red("Long-range sensors are inactive."));
 	} else {

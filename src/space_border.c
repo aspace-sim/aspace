@@ -315,7 +315,7 @@ int do_border_report (dbref enactor)
 	if (error_on_console(enactor)) {
 		return 0;
 	} else if (!sdb[n].sensor.lrs_exist) {
-		notify(enactor, ansi_red(tprintf("%s has no long-range sensors.", Name(sdb[n].object))));
+		notify_format(enactor, "%s has no long-range sensors.", Name(sdb[n].object));
 	} else if (!sdb[n].sensor.lrs_active) {
 		notify(enactor, ansi_red("Long-range sensors are inactive."));
 	} else {

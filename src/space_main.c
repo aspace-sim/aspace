@@ -533,7 +533,7 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 						cdb[i].lower = MIN_COMMS_FREQUENCY;
 						cdb[i].upper = MAX_COMMS_FREQUENCY;
 						safe_chr('1', buff, bp);
-						notify(executor, tprintf("#%d/%d: object added.", cdb[i].object, i));
+						notify_format(executor, "#%d/%d: object added.", cdb[i].object, i);
 						return;
 					}
 				safe_str("#-1 OUT OF CDB SPACE", buff, bp);
@@ -542,22 +542,22 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 				for (i = MIN_COMMS_OBJECTS; i <= MAX_COMMS_OBJECTS; ++i)
 					if (cdb[i].object) {
 						if (!GoodObject(cdb[i].object) || !Hasprivs(Owner(cdb[i].object))) {
-							notify(executor, tprintf("#%d/%d: bad object deleted.", cdb[i].object, i));
+							notify_format(executor, "#%d/%d: bad object deleted.", cdb[i].object, i);
 							cdb[i].object = 0;
 							cdb[i].lower = 0.0;
 							cdb[i].upper = 0.0;
 						} else {
 							max_comms_objects = i;
 							if (cdb[i].lower < MIN_COMMS_FREQUENCY) {
-								notify(executor, tprintf("#%d/%d: bad lower bandpass fixed.", cdb[i].object, i));
+								notify_format(executor, "#%d/%d: bad lower bandpass fixed.", cdb[i].object, i);
 								cdb[i].lower = MIN_COMMS_FREQUENCY;
 							}
 							if (cdb[i].upper > MAX_COMMS_FREQUENCY) {
-								notify(executor, tprintf("#%d/%d: bad upper bandpass fixed.", cdb[i].object, i));
+								notify_format(executor, "#%d/%d: bad upper bandpass fixed.", cdb[i].object, i);
 								cdb[i].upper = MAX_COMMS_FREQUENCY;
 							}
 							if (cdb[i].upper < cdb[i].lower) {
-								notify(executor, tprintf("#%d/%d: bad bandpass fixed.", cdb[i].object, i));
+								notify_format(executor, "#%d/%d: bad bandpass fixed.", cdb[i].object, i);
 								cdb[i].upper = cdb[i].lower;
 							}
 						}
@@ -575,7 +575,7 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 			case 'd': /* delete from CDB <void> */
 				for (i = MIN_COMMS_OBJECTS; i <= max_comms_objects; ++i)
 					if (cdb[i].object == executor) {
-						notify(executor, tprintf("#%d/%d: object deleted.", cdb[i].object, i));
+						notify_format(executor, "#%d/%d: object deleted.", cdb[i].object, i);
 						cdb[i].object = 0;
 						cdb[i].lower = 0.0;
 						cdb[i].upper = 0.0;
@@ -604,7 +604,7 @@ FUNCTION(local_fun_cdb) /* cdb (<function>[,<field>[,<field>[,<field>[,<field>[,
 						if (cdb[i].upper < cdb[i].lower)
 							cdb[i].upper = cdb[i].lower;
 						safe_str(tprintf("%f %f", cdb[i].lower, cdb[i].upper), buff, bp);
-						notify(executor, tprintf("#%d/%d: bandpass set to %f (lower) and %f (upper).", cdb[i].object, i, cdb[i].lower, cdb[i].upper));
+						notify_format(executor, "#%d/%d: bandpass set to %f (lower) and %f (upper).", cdb[i].object, i, cdb[i].lower, cdb[i].upper);
 						return;
 					}
 				safe_str("#-1 OBJECT NOT IN CDB", buff, bp);
