@@ -139,9 +139,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].beam.exist) {
-		for (i = 0; i < sdb[x].beam.banks; ++i)
+		for (i = 0; i < sdb[x].beam.banks; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].blist.active[i]), sizeof(buffer) - 1);
-			result = atr_add(ship, BEAM_ACTIVE_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+			result = atr_add(ship, BEAM_ACTIVE_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));\
+		}
 	} else {
 		atr_clr(ship, (char *) BEAM_ACTIVE_ATTR_NAME, GOD);
 		result = 0;
@@ -155,9 +156,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].beam.exist) {
-		for (i = 0; i < sdb[x].beam.banks; ++i)
+		for (i = 0; i < sdb[x].beam.banks; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].blist.name[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, BEAM_NAME_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) BEAM_NAME_ATTR_NAME, GOD);
 		result = 0;
@@ -171,9 +173,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].beam.exist) {
-		for (i = 0; i < sdb[x].beam.banks; ++i)
+		for (i = 0; i < sdb[x].beam.banks; ++i) {
 			strncat(buffer, tprintf("%f ", sdb[x].blist.damage[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, BEAM_DAMAGE_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) BEAM_DAMAGE_ATTR_NAME, GOD);
 		result = 0;
@@ -187,9 +190,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].beam.exist) {
-		for (i = 0; i < sdb[x].beam.banks; ++i)
+		for (i = 0; i < sdb[x].beam.banks; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].blist.bonus[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, BEAM_BONUS_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) BEAM_BONUS_ATTR_NAME, GOD);
 		result = 0;
@@ -203,9 +207,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].beam.exist) {
-		for (i = 0; i < sdb[x].beam.banks; ++i)
+		for (i = 0; i < sdb[x].beam.banks; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].blist.cost[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, BEAM_COST_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) BEAM_COST_ATTR_NAME, GOD);
 		result = 0;
@@ -219,9 +224,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].beam.exist) {
-		for (i = 0; i < sdb[x].beam.banks; ++i)
+		for (i = 0; i < sdb[x].beam.banks; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].blist.range[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, BEAM_RANGE_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) BEAM_RANGE_ATTR_NAME, GOD);
 		result = 0;
@@ -235,9 +241,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].beam.exist) {
-		for (i = 0; i < sdb[x].beam.banks; ++i)
+		for (i = 0; i < sdb[x].beam.banks; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].blist.arcs[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, BEAM_ARCS_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) BEAM_ARCS_ATTR_NAME, GOD);
 		result = 0;
@@ -251,9 +258,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].beam.exist) {
-		for (i = 0; i < sdb[x].beam.banks; ++i)
+		for (i = 0; i < sdb[x].beam.banks; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].blist.lock[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, BEAM_LOCK_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) BEAM_LOCK_ATTR_NAME, GOD);
 		result = 0;
@@ -267,9 +275,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].beam.exist) {
-		for (i = 0; i < sdb[x].beam.banks; ++i)
+		for (i = 0; i < sdb[x].beam.banks; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].blist.load[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, BEAM_LOAD_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) BEAM_LOAD_ATTR_NAME, GOD);
 		result = 0;
@@ -283,9 +292,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].beam.exist) {
-		for (i = 0; i < sdb[x].beam.banks; ++i)
+		for (i = 0; i < sdb[x].beam.banks; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].blist.recycle[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, BEAM_RECYCLE_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) BEAM_RECYCLE_ATTR_NAME, GOD);
 		result = 0;
@@ -313,9 +323,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].missile.exist) {
-		for (i = 0; i < sdb[x].missile.tubes; ++i)
+		for (i = 0; i < sdb[x].missile.tubes; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].mlist.active[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, MISSILE_ACTIVE_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) MISSILE_ACTIVE_ATTR_NAME, GOD);
 		result = 0;
@@ -329,9 +340,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].missile.exist) {
-		for (i = 0; i < sdb[x].missile.tubes; ++i)
+		for (i = 0; i < sdb[x].missile.tubes; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].mlist.name[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, MISSILE_NAME_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) MISSILE_NAME_ATTR_NAME, GOD);
 		result = 0;
@@ -345,9 +357,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].missile.exist) {
-		for (i = 0; i < sdb[x].missile.tubes; ++i)
+		for (i = 0; i < sdb[x].missile.tubes; ++i) {
 			strncat(buffer, tprintf("%f ", sdb[x].mlist.damage[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, MISSILE_DAMAGE_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) MISSILE_DAMAGE_ATTR_NAME, GOD);
 		result = 0;
@@ -361,9 +374,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].missile.exist) {
-		for (i = 0; i < sdb[x].missile.tubes; ++i)
+		for (i = 0; i < sdb[x].missile.tubes; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].mlist.warhead[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, MISSILE_WARHEAD_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) MISSILE_WARHEAD_ATTR_NAME, GOD);
 		result = 0;
@@ -377,9 +391,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].missile.exist) {
-		for (i = 0; i < sdb[x].missile.tubes; ++i)
+		for (i = 0; i < sdb[x].missile.tubes; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].mlist.cost[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, MISSILE_COST_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) MISSILE_COST_ATTR_NAME, GOD);
 		result = 0;
@@ -393,9 +408,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].missile.exist) {
-		for (i = 0; i < sdb[x].missile.tubes; ++i)
+		for (i = 0; i < sdb[x].missile.tubes; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].mlist.range[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, MISSILE_RANGE_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) MISSILE_RANGE_ATTR_NAME, GOD);
 		result = 0;
@@ -409,9 +425,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].missile.exist) {
-		for (i = 0; i < sdb[x].missile.tubes; ++i)
+		for (i = 0; i < sdb[x].missile.tubes; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].mlist.arcs[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, MISSILE_ARCS_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) MISSILE_ARCS_ATTR_NAME, GOD);
 		result = 0;
@@ -425,9 +442,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].missile.exist) {
-		for (i = 0; i < sdb[x].missile.tubes; ++i)
+		for (i = 0; i < sdb[x].missile.tubes; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].mlist.lock[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, MISSILE_LOCK_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) MISSILE_LOCK_ATTR_NAME, GOD);
 		result = 0;
@@ -441,9 +459,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].missile.exist) {
-		for (i = 0; i < sdb[x].missile.tubes; ++i)
+		for (i = 0; i < sdb[x].missile.tubes; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].mlist.load[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, MISSILE_LOAD_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) MISSILE_LOAD_ATTR_NAME, GOD);
 		result = 0;
@@ -457,9 +476,10 @@ int do_space_db_write (dbref ship, dbref executor)
 
 	strncpy(buffer, "", sizeof(buffer) - 1);
 	if (sdb[x].missile.exist) {
-		for (i = 0; i < sdb[x].missile.tubes; ++i)
+		for (i = 0; i < sdb[x].missile.tubes; ++i) {
 			strncat(buffer, tprintf("%d ", sdb[x].mlist.recycle[i]), sizeof(buffer) - 1);
 			result = atr_add(ship, MISSILE_RECYCLE_ATTR_NAME, buffer, GOD, (AF_MDARK + AF_WIZARD + AF_NOPROG));
+		}
 	} else {
 		atr_clr(ship, (char *) MISSILE_RECYCLE_ATTR_NAME, GOD);
 		result = 0;

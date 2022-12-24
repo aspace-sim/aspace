@@ -1109,8 +1109,10 @@ int do_space_db_iterate (void)
 					if (sdb[n].power.batt > 0.0 || sdb[n].alloc.miscellaneous > 0.0)
 						up_reserve();
 					if (sdb[n].power.version)
+					{
 						up_total_power();
 						up_tract_status();
+					}
 					if (sdb[n].beam.in != sdb[n].beam.out)
 						up_beam_io();
 					if (sdb[n].missile.in != sdb[n].missile.out)

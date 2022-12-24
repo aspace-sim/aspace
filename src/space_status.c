@@ -389,8 +389,10 @@ int do_eng_status (dbref enactor)
 			if (sdb[n].engine.warp_exist)
 				strncat(buffer, format_Warp_Maximum(n), sizeof(buffer) - 1);
 			if (sdb[n].engine.impulse_exist)
+			{
 				strncat(buffer, format_Impulse_Maximum(n), sizeof(buffer) - 1);
 				strncat(buffer, "\n", sizeof(buffer) - 1);
+			}
 		}
 		if (sdb[n].main.exist || sdb[n].aux.exist || sdb[n].batt.exist) {
 			strncat(buffer, format_l_line(), sizeof(buffer) - 1);
@@ -461,10 +463,12 @@ int do_helm_status (dbref enactor)
 			strncat(buffer, "\n", sizeof(buffer) - 1);
 			if (sdb[n].engine.warp_exist)
 				strncat(buffer, format_Warp_Maximum(n), sizeof(buffer) - 1);
-			if (sdb[n].engine.impulse_exist)
-				strncat(buffer, format_Impulse_Maximum(n), sizeof(buffer) - 1);
-				strncat(buffer, "\n", sizeof(buffer) - 1);
-		}
+                        if (sdb[n].engine.impulse_exist) {
+                                strncat(buffer, format_Impulse_Maximum(n),
+                                        sizeof(buffer) - 1);
+                                strncat(buffer, "\n", sizeof(buffer) - 1);
+                        }
+                }
 		if (sdb[n].cloak.exist || sdb[n].shield.exist) {
 			if (sdb[n].shield.exist)
 				strncat(buffer, format_Shield_Freq(n), sizeof(buffer) - 1);
@@ -803,7 +807,7 @@ int do_damage_status (int type, char *name, dbref enactor)
 			write_spacelog(enactor, x, "BUG:Subject has bad flags");
 			return 0;
 		}
-	} else
+	} else {
 		x = n;
 
 		snprintf(buffer, sizeof(buffer), "%s%s--[%sDamage Control Status Report%s]-----------------------------------------------%s%s\n",
@@ -918,7 +922,7 @@ int do_damage_status (int type, char *name, dbref enactor)
 		  sdb[n].structure.repair, sdb[n].structure.max_repair,
 		  unparse_percent_3(sdb[n].structure.repair / sdb[n].structure.max_repair)), sizeof(buffer) - 1);
 		strncat(buffer, format_l_end(), sizeof(buffer) - 1);
-
+	}
 	notify(enactor, buffer);
 	sdb[n].status.time = sdb[n].move.time;
 	return 1;

@@ -622,13 +622,15 @@ int dbref2sdb(dbref x)
 {
 	register int i = 0;
 	
-	if (!GoodObject(x)) 
+	if (!GoodObject(x))
 		return 0;
 
-		for (i = MIN_SPACE_OBJECTS; i <= max_space_objects; ++i)
+	for (i = MIN_SPACE_OBJECTS; i <= max_space_objects; ++i) {
 		if (sdb[i].structure.type) 
 			if (sdb[i].object == x)
 				return i;
+	}
+
 	return 0;
 }
 // Returns 1 if both are within 0.001 of the same IFF frequency
@@ -637,7 +639,7 @@ int sdb2friendly(int n1, int n2)
 	if (!GoodSDB(n1) || !GoodSDB(n2)) 
 		return 0;
 
-		if (fabs(sdb[n1].iff.frequency - sdb[n2].iff.frequency ) > 0.001)
+	if (fabs(sdb[n1].iff.frequency - sdb[n2].iff.frequency ) > 0.001)
 		return 1;
 	else
 		return 0;

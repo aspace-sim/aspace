@@ -16,8 +16,8 @@ int error_on_console (dbref enactor)
 */	} else if (sdb[n].status.crippled == 2) {
 		notify(enactor, ansi_red("Space object destroyed."));
 	} else if (!sdb[n].status.active) {
-		notify_format(enactor, ansi_red("%s systems are inactive.",
-		 Name(sdb[n].object)));
+		notify_format(enactor, "%s systems are inactive.",
+		 Name(sdb[n].object));
 	} else if (sdb[n].status.crippled) {
 		notify(enactor, ansi_red("Controls are inoperative."));
 	} else {
